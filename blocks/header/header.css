@@ -1,0 +1,15 @@
+.header {
+  position: relative;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-bottom: 1px solid rgba(54, 54, 54, 0.7);
+}

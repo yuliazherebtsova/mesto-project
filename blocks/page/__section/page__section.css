@@ -1,0 +1,10 @@
+.page__section {
+  max-width: 880px; /* ширина по макету с учетом padding по бокам 48+48, а затем обернули в border-box*/
+  margin: 0 auto;
+}
+
+@media (max-width: 917px) {
+  .page__section {
+    padding: 0 19px;
+  }
+}

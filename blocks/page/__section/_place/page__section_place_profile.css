@@ -1,0 +1,9 @@
+.page__section_place_profile {
+  margin-bottom: 50px;
+}
+
+@media (max-width: 767px) {
+  .page__section_place_profile {
+    margin-bottom: 36px;
+  }
+}

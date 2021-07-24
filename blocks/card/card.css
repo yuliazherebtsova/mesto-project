@@ -1,0 +1,11 @@
+.card {
+  display: grid;
+  grid-template: 282px min-content / 1fr min-content;
+  row-gap: 25px;
+  padding-bottom: 30px;
+  min-width: 282px;
+  min-height: 361px;
+  background: #fff;
+  border-radius: 10px;
+  box-sizing: border-box;
+}

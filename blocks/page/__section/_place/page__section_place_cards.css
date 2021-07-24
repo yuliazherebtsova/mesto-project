@@ -1,0 +1,9 @@
+.page__section_place_cards {
+  margin-bottom: 67px;
+}
+
+@media (max-width: 767px) {
+  .page__section_place_cards {
+    margin-bottom: 48px;
+  }
+}

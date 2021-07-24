@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Верстка форм: Mesto, второй проект второго спринта">
+  <meta name="keywords" content="путешествия, интересные места, фотографии">
+  <meta name="author" content="Yulia Zherebtsova">
+  <link rel="stylesheet" href="./pages/index.css">
+  <link rel="icon" href="./images/card-like-button-icon-active.svg">
+  <title>Mesto</title>
+</head>
+
+<body class="page">
+  <header class="header page__section page__section_place_header">
+    <a href=# class="header__logo link"></a>
+  </header>
+  <main class="content">
+    <section class="profile page__section page__section_place_profile"
+      aria-label="Блок с информацией о профиле пользователя">
+      <img src="./images/profile-avatar.jpg" alt="Аватар профиля пользователя" class="profile__avatar">
+      <div class="profile__info">
+        <h1 class="profile__title">Жак-Ив Кусто</h1>
+        <p class="profile__subtitle">Исследователь океана</p>
+        <button class="profile__edit-button" type="button" aria-label="Редактировать профиль"></button>
+      </div>
+      <button class="profile__add-button" type="button" aria-label="Добавить место"></button>
+    </section>
+    <section class="cards page__section page__section_place_cards" aria-label="Сетка карточек с интересными местами">
+      <ul class="cards__list list">
+        <li class="card">
+          <img src="./images/cards-gent.jpg" alt="Руль велосипеда" class="card__image">
+          <h2 class="card__title">Гент, Бельгия</h2>
+          <button class="card__like-button card__like-button_active" type="button" aria-label="Поставить лайк"></button>
+        </li>
+        <li class="card">
+          <img src="./images/cards-basel.jpg" alt="Здание вокзала с закругленной крышей" class="card__image">
+          <h2 class="card__title">Базель, Швейцария</h2>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+        </li>
+        <li class="card">
+          <img src="./images/cards-tallin.jpg" alt="Католическая церковь вид сквозь деревья" class="card__image">
+          <h2 class="card__title">Таллин, Эстония</h2>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+        </li>
+        <li class="card">
+          <img src="./images/cards-tbilisi.jpg" alt="Деревянная дверь старого дома с решеткой" class="card__image">
+          <h2 class="card__title">Тбилиси, Грузия</h2>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+        </li>
+        <li class="card">
+          <img src="./images/cards-paris.jpg" alt="Нотр-Дам де Пари центральная роза" class="card__image">
+          <h2 class="card__title">Париж, Франция</h2>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+        </li>
+        <li class="card">
+          <img src="./images/cards-barcelona.jpg" alt="Саграда Фамилия издалека" class="card__image">
+          <h2 class="card__title">Барселона</h2>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+        </li>
+      </ul>
+    </section>
+  </main>
+  <footer class="footer page__section page__section_place_footer">
+    <p class="footer__copyright">&copy;2021. Yulia Zherebtsova</p>
+  </footer>
+
+  <div class="popup">
+    <div class="popup__container">
+      <button class="popup__close-button" aria-label="Закрыть"></button>
+      <h2 class="popup__heading">Редактировать профиль</h2>
+      <form class="form" name="editForm">
+        <fieldset class="form__input-container">
+          <input type="text" class="form__field" id="name" name="name" placeholder="Имя"
+            value="Жак-Ив Кусто Исследователь океана" required>
+          <input type="text" class="form__field" id="occupation" name="occupation" placeholder="О себе"
+            value="Исследователь океана" required>
+        </fieldset>
+        <button class="form__submit-button" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+</body>
+
+</html>

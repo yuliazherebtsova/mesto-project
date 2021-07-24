@@ -1,0 +1,56 @@
+@import url('../vendor/normalize.css');
+@import url('../vendor/fonts/fonts.css');
+/* vendor css */
+
+@import url('../blocks/page/page.css');
+@import url('../blocks/page/__section/page__section.css');
+@import url('../blocks/page/__section/_place/page__section_place_profile.css');
+@import url('../blocks/page/__section/_place/page__section_place_cards.css');
+@import url('../blocks/page/__section/_place/page__section_place_header.css');
+/* page */
+
+@import url('../blocks/link/link.css');
+/* link */
+
+@import url('../blocks/list/list.css');
+/* list */
+
+@import url('../blocks/header/header.css');
+@import url('../blocks/header/__logo/header__logo.css');
+/* header */
+
+@import url('../blocks/profile/profile.css');
+@import url('../blocks/profile/__avatar/profile__avatar.css');
+@import url('../blocks/profile/__info/profile__into.css');
+@import url('../blocks/profile/__title/profile__title.css');
+@import url('../blocks/profile/__subtitle/profile__subtitle.css');
+@import url('../blocks/profile/__edit-button/profile__edit-button.css');
+@import url('../blocks/profile/__add-button/profile__add-button.css');
+/* profile */
+
+@import url('../blocks/cards/__list/cards__list.css');
+/* cards */
+
+@import url('../blocks/card/card.css');
+@import url('../blocks/card/__image/card__image.css');
+@import url('../blocks/card/__title/card__title.css');
+@import url('../blocks/card/__like-button/card__like-button.css');
+@import url('../blocks/card/__like-button/_active/card__like-button_active.css');
+/* card */
+
+@import url('../blocks/footer/footer.css');
+@import url('../blocks/footer/__copyright/footer__copyright.css');
+/* footer */
+
+@import url('../blocks/popup/popup.css');
+@import url('../blocks/popup/_opened/popup_opened.css');
+@import url('../blocks/popup/__heading/popup__heading.css');
+@import url('../blocks/popup/__container/popup__container.css');
+@import url('../blocks/popup/__close-button/popup__close-button.css');
+/* popup */
+
+@import url('../blocks/form/form.css');
+@import url('../blocks/form/__input-container/form__input-container.css');
+@import url('../blocks/form/__field/form__field.css');
+@import url('../blocks/form/__submit-button/form__submit-button.css');
+/* form */
