@@ -1,29 +1,65 @@
-const profile = document.querySelector('.profile')
+const container = document.querySelector('.content');
+const profile = container.querySelector('.profile')
 const profileTitle = profile.querySelector('.profile__title')
 const profileSubtitle = profile.querySelector('.profile__subtitle')
 const editProfileButton = profile.querySelector('.profile__edit-button');
-const popup = document.querySelector('.popup');
-const closePopupButton = popup.querySelector('.popup__close-button');
+const addCardButton = profile.querySelector('.profile__add-button');
+const editProfilePopup = document.querySelector('.popup_type_edit-profile');
+const addCardPopup = document.querySelector('.popup_type_add-card');
 const editForm = document.querySelector('#editForm');
+const addForm = document.querySelector('#addForm');
+const cardContainer = container.querySelector('.cards__list');
+
 
 editProfileButton.addEventListener('click', function () {
+  // открытие окна редактирования профиля
   editForm.elements['name'].value = profileTitle.textContent;
   editForm.elements['occupation'].value = profileSubtitle.textContent;
   // отображаем в окне уже введенную информацию о профиле
-  popup.classList.add('popup_opened');
+  editProfilePopup.classList.add('popup_opened');
+  editProfilePopup.querySelector('.popup__close-button').addEventListener('click', function () {
+    editProfilePopup.classList.remove('popup_opened');
+  });
 });
 
-closePopupButton.addEventListener('click', function () {
-  popup.classList.remove('popup_opened');
+addCardButton.addEventListener('click', function () {
+  debugger;
+  // открытие формы добавления карточки
+  // addForm.elements['place'].value = '';
+  // addForm.elements['picture'].value = '';
+  addCardPopup.classList.add('popup_opened');
+  addCardPopup.querySelector('.popup__close-button').addEventListener('click', function () {
+    addCardPopup.classList.remove('popup_opened');
+  });
 });
 
-// Прикрепляем обработчик к форме, он будет следить за событием “submit” - «отправка»
 editForm.addEventListener('submit', function (evt) {
+  // редактирование и сохранение данных профиля
   evt.preventDefault();
-  // Эта строчка отменяет стандартную отправку формы.
-  // Так мы можем определить свою логику отправки.
-
+  // отменяет стандартную отправку формы, мы можем определить свою логику отправки
   profileTitle.textContent = editForm.elements['name'].value;
   profileSubtitle.textContent = editForm.elements['occupation'].value;
-  popup.classList.remove('popup_opened');
+  editProfilePopup.classList.remove('popup_opened');
+});
+
+function addCard(placeValue, pictureSrc) {
+  // создание карточки
+  const cardTemplate = document.querySelector('#card-template').content;
+  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+  cardElement.querySelector('.card__title').textContent = placeValue;
+  cardElement.querySelector('.card__image').src = pictureSrc;
+  cardElement.querySelector('.card__image').alt = placeValue;
+  cardElement.querySelector('.card__like-button').addEventListener('click', function (evt) {
+    evt.target.classList.toggle('card__like-button_active');
+  });
+  cardContainer.prepend(cardElement);
+}
+
+addForm.addEventListener('submit', function (evt) {
+  // добавление карточки в разметку
+  evt.preventDefault();
+  const placeName = addForm.elements['place'].value;
+  const pictureSrc = addForm.elements['picture'].value;
+  addCard(placeName, pictureSrc);
+  addCardPopup.classList.remove('popup_opened');
 });

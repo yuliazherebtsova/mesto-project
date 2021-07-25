@@ -31,8 +31,9 @@
       <ul class="cards__list list">
         <li class="card">
           <img src="./images/cards-gent.jpg" alt="Руль велосипеда" class="card__image">
+          <button class="card__delete-button" type="button" aria-label="Удалить"></button>
           <h2 class="card__title">Гент, Бельгия</h2>
-          <button class="card__like-button card__like-button_active" type="button" aria-label="Поставить лайк"></button>
+          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
         </li>
         <li class="card">
           <img src="./images/cards-basel.jpg" alt="Здание вокзала с закругленной крышей" class="card__image">
@@ -66,7 +67,7 @@
     <p class="footer__copyright">&copy;2021. Yulia Zherebtsova</p>
   </footer>
 
-  <div class="popup">
+  <div class="popup popup_type_edit-profile">
     <div class="popup__container">
       <button class="popup__close-button" aria-label="Закрыть"></button>
       <h2 class="popup__heading">Редактировать профиль</h2>
@@ -79,6 +80,27 @@
       </form>
     </div>
   </div>
+  <div class="popup popup_type_add-card">
+    <div class="popup__container">
+      <button class="popup__close-button" aria-label="Закрыть"></button>
+      <h2 class="popup__heading">Новое место</h2>
+      <form class="form" id="addForm" name="addForm">
+        <fieldset class="form__input-container">
+          <input type="text" class="form__field" id="place" name="place" placeholder="Название" required>
+          <input type="text" class="form__field" id="picture" name="picture" placeholder="Ссылка на картинку" required>
+        </fieldset>
+        <button class="form__submit-button" type="submit">Создать</button>
+      </form>
+    </div>
+  </div>
+  <template id="card-template">
+    <li class="card">
+      <img class="card__image">
+      <button class="card__delete-button" type="button" aria-label="Удалить"></button>
+      <h2 class="card__title"></h2>
+      <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+    </li>
+  </template>
   <script src="script.js"></script>
 </body>
 

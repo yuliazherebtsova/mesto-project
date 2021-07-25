@@ -8,3 +8,7 @@
 .link:hover {
   opacity: 0.6;
 }
+
+.link:visited {
+  opacity: 1;
+}
