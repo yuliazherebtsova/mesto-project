@@ -12,43 +12,48 @@ const cardContainer = container.querySelector('.cards__list');
 
 
 editProfileButton.addEventListener('click', function () {
-  // открытие окна редактирования профиля
+  //  открытие окна редактирования профиля
 
   editForm.elements['name'].value = profileTitle.textContent;
   editForm.elements['occupation'].value = profileSubtitle.textContent;
   // отображаем в окне уже введенную информацию о профиле
 
   editProfilePopup.classList.add('popup_opened');
+  // отображаем попап
 
   editProfilePopup.querySelector('.popup__close-button').addEventListener('click', function () {
     editProfilePopup.classList.remove('popup_opened');
   });
+  // добавляем слушатель событию нажатия на кнопку закрытия окна редактирования профиля
 
 });
 
 addCardButton.addEventListener('click', function () {
   // открытие формы добавления карточки
 
-  addForm.elements['place'].value = '';
-  addForm.elements['picture'].value = '';
-
   addCardPopup.classList.add('popup_opened');
+  // отображаем попап
 
   addCardPopup.querySelector('.popup__close-button').addEventListener('click', function () {
     addCardPopup.classList.remove('popup_opened');
+    // добавляем слушатель событию нажатия на кнопку закрытия окна добавления карточки
   });
 
 });
 
 editForm.addEventListener('submit', function (evt) {
   // редактирование и сохранение данных профиля
+
   evt.preventDefault();
-  // отменяет стандартную отправку формы, мы можем определить свою логику отправки
+  // отменяет стандартную отправку формы, которая перезагружает страницу,
+  // теперь можем определить свою логику отправки
 
   profileTitle.textContent = editForm.elements['name'].value;
   profileSubtitle.textContent = editForm.elements['occupation'].value;
+  // сохраняем введенные данные в блоке информации о профиле
 
   editProfilePopup.classList.remove('popup_opened');
+  // закрываем попап
 
 });
 
@@ -56,32 +61,45 @@ function addCard(placeValue, pictureSrc) {
   // создание карточки
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+  // создаем новую карточку по шаблону
 
   cardElement.querySelector('.card__title').textContent = placeValue;
   cardElement.querySelector('.card__image').src = pictureSrc;
   cardElement.querySelector('.card__image').alt = placeValue;
+  // заполняем шаблон карточки данными из формы создания
 
   cardElement.querySelector('.card__like-button').addEventListener('click', function (evt) {
     evt.target.classList.toggle('card__like-button_active');
   });
+  // создаем слушатель на событие постановки / снятия лайка
 
   cardElement.querySelector('.card__delete-button').addEventListener('click', function (evt) {
     evt.target.parentElement.remove();
   });
+  // создаем слушатель на событие нажатия на кнопку "Удалить" в карточке
+
 
   cardContainer.prepend(cardElement);
+  // добавляем карточку в начало списка
 
 }
 
 addForm.addEventListener('submit', function (evt) {
   // добавление карточки в разметку
+
   evt.preventDefault();
 
   const placeName = addForm.elements['place'].value;
   const pictureSrc = addForm.elements['picture'].value;
 
   addCard(placeName, pictureSrc);
+  // добавляем новую карточку в разметку
 
   addCardPopup.classList.remove('popup_opened');
+  // закрываем попап
+
+  addForm.elements['place'].value = '';
+  addForm.elements['picture'].value = '';
+  // после добавлении новой карточки поля формы очищаются
 
 });
