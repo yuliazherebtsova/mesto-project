@@ -1,9 +1,15 @@
 .popup {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed; /* вырываем попап из потока, т.к он живет отдельно */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, .5);
-  display: none;
+
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0.3s 0s, opacity 0.3s 0s linear;
 }
