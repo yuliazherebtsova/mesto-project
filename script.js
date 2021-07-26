@@ -1,3 +1,8 @@
+/*
+* 1. Close a div by clicking outside
+* 2. чеклист
+* 3. валидатор
+*/
 const container = document.querySelector('.content');
 const profile = container.querySelector('.profile')
 const profileTitle = profile.querySelector('.profile__title')
@@ -10,6 +15,32 @@ const editForm = document.querySelector('#editForm');
 const addForm = document.querySelector('#addForm');
 const cardContainer = container.querySelector('.cards__list');
 
+const initialCards = [
+  {
+    name: 'Барселона',
+    link: './images/cards-barcelona.jpg'
+  },
+  {
+    name: 'Париж, Франция',
+    link: './images/cards-paris.jpg'
+  },
+  {
+    name: 'Тбилиси, Грузия',
+    link: './images/cards-tbilisi.jpg'
+  },
+  {
+    name: 'Таллин, Эстония',
+    link: './images/cards-tallin.jpg'
+  },
+  {
+    name: 'Базель, Швейцария',
+    link: './images/cards-basel.jpg'
+  },
+  {
+    name: 'Гент, Бельгия',
+    link: './images/cards-gent.jpg'
+  }
+];
 
 editProfileButton.addEventListener('click', function () {
   //  открытие окна редактирования профиля
@@ -103,3 +134,13 @@ addForm.addEventListener('submit', function (evt) {
   // после добавлении новой карточки поля формы очищаются
 
 });
+
+function loadInitialCards(cards) {
+// функция загрузки начальных карточек
+  cards.forEach(element => {
+    addCard(element.name, element.link);
+  });
+};
+
+loadInitialCards(initialCards);
+// загружаем карточки из заранее заготовленного массива

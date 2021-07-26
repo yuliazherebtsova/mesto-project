@@ -1,0 +1,19 @@
+.popup__container_type_image-preview {
+  max-width: 75vw;
+  max-height: 75vh;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+
+@media (max-width: 767px) {
+  .popup__container_type_image-preview {
+    min-width: 240px;
+    min-height: 300px;
+    margin: 0 40px;
+    padding: 0;
+  }
+}
+
+

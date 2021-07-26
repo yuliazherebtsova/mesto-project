@@ -1,0 +1,10 @@
+.popup__image-title {
+  margin: 10px 0 0 0;
+  padding: 0;
+  max-width: 290px;
+  font-size: 12px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}

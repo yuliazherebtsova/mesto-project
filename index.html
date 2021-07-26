@@ -29,37 +29,6 @@
     </section>
     <section class="cards page__section page__section_place_cards" aria-label="Сетка карточек с интересными местами">
       <ul class="cards__list list">
-        <li class="card">
-          <img src="./images/cards-gent.jpg" alt="Руль велосипеда" class="card__image">
-          <h2 class="card__title">Гент, Бельгия</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-          <button class="card__delete-button" type="button" aria-label="Удалить"></button>
-        </li>
-        <li class="card">
-          <img src="./images/cards-basel.jpg" alt="Здание вокзала с закругленной крышей" class="card__image">
-          <h2 class="card__title">Базель, Швейцария</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-        </li>
-        <li class="card">
-          <img src="./images/cards-tallin.jpg" alt="Католическая церковь вид сквозь деревья" class="card__image">
-          <h2 class="card__title">Таллин, Эстония</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-        </li>
-        <li class="card">
-          <img src="./images/cards-tbilisi.jpg" alt="Деревянная дверь старого дома с решеткой" class="card__image">
-          <h2 class="card__title">Тбилиси, Грузия</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-        </li>
-        <li class="card">
-          <img src="./images/cards-paris.jpg" alt="Нотр-Дам де Пари центральная роза" class="card__image">
-          <h2 class="card__title">Париж, Франция</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-        </li>
-        <li class="card">
-          <img src="./images/cards-barcelona.jpg" alt="Саграда Фамилия издалека" class="card__image">
-          <h2 class="card__title">Барселона</h2>
-          <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
-        </li>
       </ul>
     </section>
   </main>
@@ -91,6 +60,15 @@
         </fieldset>
         <button class="form__submit-button" type="submit">Создать</button>
       </form>
+    </div>
+  </div>
+  <div class="popup popup_type_image-preview popup_opened">
+    <div class="popup__container popup__container_type_image-preview">
+      <button class="popup__close-button popup__close-button_type_image-preview" aria-label="Закрыть"></button>
+      <figure class="popup__figure">
+        <img src="./images/Image.jpg" alt="#" class="popup__image">
+        <figcaption class="popup__image-title">Горный Алтай</figcaption>
+      </figure>
     </div>
   </div>
   <template id="card-template">
