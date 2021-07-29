@@ -158,15 +158,3 @@ function setMultipleEventListeners(elements) {
 
 setMultipleEventListeners(popupCloseButtons);
 // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
-
-addCardPopup.querySelector('.popup__close-button').addEventListener('click', (evt) => {
-  // добавляем слушатель событию нажатия на кнопку закрытия окна добавления карточки
-  const popup = evt.target.closest('.popup');
-  closePopup(popup);
-});
-
-imagePreviewPopup.querySelector('.popup__close-button').addEventListener('click', (evt) => {
-  // добавляем слушатель событию нажатия на кнопку закрытия окна предпросмотра фото
-  const popup = evt.target.closest('.popup');
-  closePopup(popup);
-});
