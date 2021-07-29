@@ -1,15 +1,17 @@
 const profile = document.querySelector('.profile');
 const profileTitle = profile.querySelector('.profile__title');
 const profileSubtitle = profile.querySelector('.profile__subtitle');
-const editProfileButton = profile.querySelector('.profile__edit-button');
-const addCardButton = profile.querySelector('.profile__add-button');
-const editProfilePopup = document.querySelector('.popup_type_edit-profile');
-const imagePreviewPopup = document.querySelector('.popup_type_image-preview');
-const addCardPopup = document.querySelector('.popup_type_add-card');
-const editFormName = document.querySelector('#editForm').elements['name'];
-const editFormOccupation = document.querySelector('#editForm').elements['occupation'];
-const addFormPlace = document.querySelector('#addForm').elements['place'];
-const addFormPicture = document.querySelector('#addForm').elements['picture'];
+const buttonEditProfile = profile.querySelector('.profile__edit-button');
+const buttonAddCard = profile.querySelector('.profile__add-button');
+const popupEditProfile = document.querySelector('.popup_type_edit-profile');
+const popupPreviewImage = document.querySelector('.popup_type_image-preview');
+const popupAddCard = document.querySelector('.popup_type_add-card');
+const formEditProfile = document.querySelector('#formEditProfile');
+const formEditNameField = document.querySelector('#formEditProfile').elements['name'];
+const formEditOccupationField = document.querySelector('#formEditProfile').elements['occupation'];
+const formAddCard = document.querySelector('#formAddCard');
+const formAddPlaceField = document.querySelector('#formAddCard').elements['place'];
+const formAddPictureField = document.querySelector('#formAddCard').elements['picture'];
 const cardContainer = document.querySelector('.cards__list');
 const popupCloseButtons = document.querySelectorAll('.popup__close-button');
 
@@ -98,54 +100,54 @@ loadInitialCards(initialCards);
 
 function renderImagePreview(image, title) {
   // функция отрисовки окна предпросмотра фото
-  const popupImage = imagePreviewPopup.querySelector('.popup__image');
-  const popupImageTitle = imagePreviewPopup.querySelector('.popup__image-title');
+  const popupImage = popupPreviewImage.querySelector('.popup__image');
+  const popupImageTitle = popupPreviewImage.querySelector('.popup__image-title');
   popupImage.src = image;
   popupImage.alt = title;
   popupImageTitle.textContent = title;
-  openPopup(imagePreviewPopup);
+  openPopup(popupPreviewImage);
   // открываем окно предпросмотра фото
 }
 
-editProfileButton.addEventListener('click', () => {
+buttonEditProfile.addEventListener('click', () => {
   //  открытие окна редактирования профиля
-  editFormName.value = profileTitle.textContent;
-  editFormOccupation.value = profileSubtitle.textContent;
+  formEditNameField.value = profileTitle.textContent;
+  formEditOccupationField.value = profileSubtitle.textContent;
   // отображаем в окне уже введенную информацию о профиле
-  openPopup(editProfilePopup);
+  openPopup(popupEditProfile);
 });
 
-addCardButton.addEventListener('click', () => {
+buttonAddCard.addEventListener('click', () => {
   // открытие формы добавления карточки
-  openPopup(addCardPopup);
+  openPopup(popupAddCard);
 });
 
-editForm.addEventListener('submit', (evt) => {
+formEditProfile.addEventListener('submit', (evt) => {
   // редактирование и сохранение данных профиля
   const popup = evt.target.closest('.popup');
   evt.preventDefault();
   // отменяет стандартную отправку формы, которая перезагружает страницу,
   // теперь можем определить свою логику отправк
-  profileTitle.textContent = editFormName.value;
-  profileSubtitle.textContent = editFormOccupation.value;
+  profileTitle.textContent = formEditNameField.value;
+  profileSubtitle.textContent = formEditOccupationField.value;
   // сохраняем введенные данные в блоке информации о профиле
   closePopup(popup);
 });
 
-addForm.addEventListener('submit', (evt) => {
+formAddCard.addEventListener('submit', (evt) => {
   // добавление карточки в разметку
   evt.preventDefault();
-  const placeName = addFormPlace.value;
-  const pictureSrc = addFormPicture.value;
+  const placeName = formAddPlaceField.value;
+  const pictureSrc = formAddPictureField.value;
   const newCard = createCard(placeName, pictureSrc);
   // создаем новую карточку
   renderCard(newCard);
   // добавляем карточку на страницу в начало списка
-  addFormPlace.value = '';
-  addFormPicture.value = '';
+  formAddPlaceField.value = '';
+  formAddPictureField.value = '';
   // после добавлении новой карточки поля формы очищаются,
   // новая форма не значений, введенных ранее
-  closePopup(addCardPopup);
+  closePopup(popupAddCard);
 });
 
 function setMultipleEventListeners(elements) {
