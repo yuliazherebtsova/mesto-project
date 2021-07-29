@@ -116,10 +116,8 @@ formAddCard.addEventListener('submit', (evt) => {
   // создаем новую карточку
   renderCard(newCard);
   // добавляем карточку на страницу в начало списка
-  formAddPlaceField.value = '';
-  formAddPictureField.value = '';
-  // после добавлении новой карточки поля формы очищаются,
-  // новая форма не значений, введенных ранее
+  formAddCard.reset();
+  // после добавлении новой карточки поля формы очищаются
   closePopup(popupAddCard);
 });
 
