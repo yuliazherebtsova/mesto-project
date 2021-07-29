@@ -25,14 +25,14 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
-function createCard(placeValue, pictureSrc) {
+function createCard(cardData) {
   // функция создания карточки
   const cardTemplate = document.querySelector('#card-template').content;
   const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
   // создаем новую карточку по шаблону
-  cardElement.querySelector('.card__title').textContent = placeValue;
-  cardElement.querySelector('.card__image').src = pictureSrc;
-  cardElement.querySelector('.card__image').alt = placeValue;
+  cardElement.querySelector('.card__title').textContent = cardData.name;
+  cardElement.querySelector('.card__image').src = cardData.link;
+  cardElement.querySelector('.card__image').alt = cardData.name;
   // заполняем шаблон карточки данными из формы создания
 
   cardElement.querySelector('.card__like-button').addEventListener('click', (evt) => {
@@ -63,7 +63,7 @@ function renderCard(card) {
 function loadInitialCards(cards) {
   // функция загрузки начальных карточек на страницу
   cards.forEach(element => {
-    const newCard = createCard(element.name, element.link);
+    const newCard = createCard(element);
     renderCard(newCard);
   });
 };
@@ -110,9 +110,12 @@ formEditProfile.addEventListener('submit', (evt) => {
 formAddCard.addEventListener('submit', (evt) => {
   // добавление карточки в разметку
   evt.preventDefault();
-  const placeName = formAddPlaceField.value;
-  const pictureSrc = formAddPictureField.value;
-  const newCard = createCard(placeName, pictureSrc);
+  const cardData = {
+    name: formAddPlaceField.value,
+    link: formAddPictureField.value
+  }
+  // создает объект с данными карточки
+  const newCard = createCard(cardData);
   // создаем новую карточку
   renderCard(newCard);
   // добавляем карточку на страницу в начало списка
