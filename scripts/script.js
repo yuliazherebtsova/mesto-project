@@ -3,6 +3,7 @@ const profileTitle = profile.querySelector('.profile__title');
 const profileSubtitle = profile.querySelector('.profile__subtitle');
 const buttonEditProfile = profile.querySelector('.profile__edit-button');
 const buttonAddCard = profile.querySelector('.profile__add-button');
+const popups = document.querySelectorAll('.popup');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupPreviewImage = document.querySelector('.popup_type_image-preview');
 const popupAddCard = document.querySelector('.popup_type_add-card');
@@ -128,9 +129,14 @@ function setMultipleEventListeners(elements) {
   // функция добавления слушателей для события клика сразу нескольким DOM элементам
   const elementsArray = Array.from(elements);
   elementsArray.forEach(element => element.addEventListener('click', (evt) => {
-    closePopup(evt.target.closest('.popup'));
+    if (evt.target === evt.currentTarget)
+    // если нажатие произошло на внешней области окна, оно также закроется
+      closePopup(evt.target.closest('.popup'));
   }));
 }
 
 setMultipleEventListeners(popupCloseButtons);
 // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
+
+setMultipleEventListeners(popups);
+// добавляем возможность закрывать диалоговые окна путем нажатия на его внешнюю область
