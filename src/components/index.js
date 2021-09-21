@@ -162,7 +162,7 @@ function setMultipleClickListeners(elements) {
 //     if (evt.key === 'Escape')
 //       // если нажата клавиша Ecs, то попап закроется
 //       closePopup(evt.target.closest('.popup'));
-//   }));
+//   }));q
 // }
 
 window.addEventListener('keydown', function (evt) {
