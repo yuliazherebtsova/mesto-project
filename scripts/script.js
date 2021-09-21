@@ -130,7 +130,7 @@ function setMultipleEventListeners(elements) {
   const elementsArray = Array.from(elements);
   elementsArray.forEach(element => element.addEventListener('click', (evt) => {
     if (evt.target === evt.currentTarget)
-    // если нажатие произошло на внешней области окна, оно также закроется
+    // если нажатие произошло оверлей, оно также закроется
       closePopup(evt.target.closest('.popup'));
   }));
 }
@@ -139,4 +139,4 @@ setMultipleEventListeners(popupCloseButtons);
 // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
 
 setMultipleEventListeners(popups);
-// добавляем возможность закрывать диалоговые окна путем нажатия на его внешнюю область
+// добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
