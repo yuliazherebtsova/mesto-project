@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Верстка форм: Mesto, второй проект второго спринта">
+  <meta name="keywords" content="путешествия, интересные места, фотографии">
+  <meta name="author" content="Yulia Zherebtsova">
+  <link rel="stylesheet" href="./pages/index.css">
+  <link rel="icon" href="./images/card-like-button-icon-active.svg">
+  <title>Mesto</title>
+</head>
+
+<body class="page">
+  <header class="header page__section page__section_place_header">
+    <a href=# class="header__logo link"></a>
+  </header>
+  <main class="content">
+    <section class="profile page__section page__section_place_profile"
+      aria-label="Блок с информацией о профиле пользователя">
+      <img src="./images/profile-avatar.jpg" alt="Аватар профиля пользователя" class="profile__avatar">
+      <div class="profile__info">
+        <h1 class="profile__title">Жак-Ив Кусто</h1>
+        <p class="profile__subtitle">Исследователь океана</p>
+        <button class="profile__edit-button" type="button" aria-label="Редактировать профиль"></button>
+      </div>
+      <button class="profile__add-button" type="button" aria-label="Добавить место"></button>
+    </section>
+    <section class="cards page__section page__section_place_cards" aria-label="Сетка карточек с интересными местами">
+      <ul class="cards__list list">
+      </ul>
+    </section>
+  </main>
+  <footer class="footer page__section page__section_place_footer">
+    <p class="footer__copyright">&copy;2021. Yulia Zherebtsova</p>
+  </footer>
+
+  <div class="popup popup_type_edit-profile">
+    <div class="popup__container">
+      <button class="popup__close-button" aria-label="Закрыть"></button>
+      <h2 class="popup__heading">Редактировать профиль</h2>
+      <form class="form" id="formEditProfile" name="formEditProfile">
+        <fieldset class="form__input-container">
+          <input type="text" class="form__field" id="name" name="name" placeholder="Имя" required>
+          <input type="text" class="form__field" id="occupation" name="occupation" placeholder="О себе" required>
+        </fieldset>
+        <button class="form__submit-button" type="submit">Сохранить</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_add-card">
+    <div class="popup__container">
+      <button class="popup__close-button" aria-label="Закрыть"></button>
+      <h2 class="popup__heading">Новое место</h2>
+      <form class="form" id="formAddCard" name="formAddCard">
+        <fieldset class="form__input-container">
+          <input type="text" class="form__field" id="place" name="place" placeholder="Название" required>
+          <input type="text" class="form__field" id="picture" name="picture" placeholder="Ссылка на картинку" required>
+        </fieldset>
+        <button class="form__submit-button" type="submit">Создать</button>
+      </form>
+    </div>
+  </div>
+  <div class="popup popup_type_image-preview">
+    <div class="popup__container popup__container_type_image-preview">
+      <button class="popup__close-button popup__close-button_type_image-preview" aria-label="Закрыть"></button>
+      <figure class="popup__figure">
+        <img src="#" alt="#" class="popup__image">
+        <figcaption class="popup__image-title"></figcaption>
+      </figure>
+    </div>
+  </div>
+  <template id="card-template">
+    <li class="card">
+      <img class="card__image">
+      <h2 class="card__title"></h2>
+      <button class="card__like-button" type="button" aria-label="Поставить лайк"></button>
+      <button class="card__delete-button" type="button" aria-label="Удалить"></button>
+    </li>
+  </template>
+  <script src="./components/initial-cards.js"></script>
+  <script src="./components/index.js"></script>
+</body>
+
+</html>
