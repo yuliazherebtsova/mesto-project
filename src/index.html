@@ -40,12 +40,20 @@
     <div class="popup__container">
       <button class="popup__close-button" aria-label="Закрыть"></button>
       <h2 class="popup__heading">Редактировать профиль</h2>
-      <form class="form" id="formEditProfile" name="formEditProfile">
+      <form class="form" id="formEditProfile" name="formEditProfile" novalidate>
         <fieldset class="form__input-container">
-          <input type="text" class="form__field" id="name" name="name" placeholder="Имя" required>
-          <input type="text" class="form__field" id="occupation" name="occupation" placeholder="О себе" required>
+          <label class="form__field">
+            <input type="text" class="form__field-input" id="name" name="name" placeholder="Имя" required minlength="2"
+              maxlength="40">
+            <span class="form__field-error name-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="text" class="form__field-input" id="occupation" name="occupation" placeholder="О себе" required
+              minlength="2" maxlength="200">
+            <span class="form__field-error occupation-error"></span>
+          </label>
+          <button class="form__submit-button" type="submit">Сохранить</button>
         </fieldset>
-        <button class="form__submit-button" type="submit">Сохранить</button>
       </form>
     </div>
   </div>
@@ -55,10 +63,13 @@
       <h2 class="popup__heading">Новое место</h2>
       <form class="form" id="formAddCard" name="formAddCard">
         <fieldset class="form__input-container">
-          <input type="text" class="form__field" id="place" name="place" placeholder="Название" required>
-          <input type="text" class="form__field" id="picture" name="picture" placeholder="Ссылка на картинку" required>
+          <input type="text" class="form__field-input" id="place" name="place" placeholder="Название" required>
+          <span class="form__field-error occupation-error"></span>
+          <input type="text" class="form__field-input" id="picture" name="picture" placeholder="Ссылка на картинку"
+            required>
+            <span class="form__field-error occupation-error"></span>
+          <button class="form__submit-button" type="submit">Создать</button>
         </fieldset>
-        <button class="form__submit-button" type="submit">Создать</button>
       </form>
     </div>
   </div>

@@ -1,0 +1,31 @@
+.form__field-input {
+  min-width: 358px;
+  margin: 0 0 13px 0;
+  padding: 0 0 10px;
+  font-size: 14px;
+  line-height: 1.21;
+  border: 0;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.form__field-input:last-child {
+  margin-bottom: 0;
+}
+
+.form__field-input:focus {
+  outline: none;
+  border-bottom: 1px solid #000;
+}
+
+@media (max-width: 767px) {
+  .form__field-input {
+    min-width: 238px;
+  }
+  .form__field-input:last-child {
+    margin-bottom: 45px;
+  }
+}
+

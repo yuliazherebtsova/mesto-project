@@ -1,0 +1,13 @@
+.form__field-error {
+  position: absolute;
+  top: 35px;
+  left: 0;
+  opacity: 0;
+  max-width: 352px;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 12px;
+  line-height: 15px;
+  color: #FF0000;
+}
