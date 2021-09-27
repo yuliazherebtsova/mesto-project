@@ -35,11 +35,15 @@ const popupCloseButtons = document.querySelectorAll('.popup__close-button');
 function openPopup(popup) {
   // функция открытия диалогового окна
   popup.classList.add('popup_opened');
+  window.addEventListener('keydown', popupEscHandler);
+  // при открытии диалогового окна создаем слушатель на закрытие по Ecs
 }
 
 function closePopup(popup) {
   // функция закрытия диалогового окна
   popup.classList.remove('popup_opened');
+  window.removeEventListener('keydown',popupEscHandler);
+  // при закрытии диалогового окна снимаем слушатель по Ecs
 }
 
 function createCard(cardData) {
@@ -149,27 +153,19 @@ function setMultipleClickListeners(elements) {
       // если нажатие произошло оверлей, оно также закроется
       closePopup(evt.target.closest('.popup'));
   }));
-
-  elementsArray.forEach(element => element.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape')
-      // если нажата клавиша Ecs, то попап закроется
-      closePopup(evt.target.closest('.popup'));
-  }));
 }
 
-window.addEventListener('keydown', function (evt) {
+const popupEscHandler = evt => {
   // добавляем возможность закрывать диалоговые окна путем нажатия на кнопку Ecs
-  if (evt.key === 'Escape') {
+  if (evt.key === 'Escape')
     popups.forEach(popup => closePopup(popup));
-  }
-})
+};
 
 setMultipleClickListeners(popupCloseButtons);
 // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
 
 setMultipleClickListeners(popups);
 // добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
-
 
 
 // ****************************** Валидация форм ***********************************
@@ -188,7 +184,7 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
   errorElement.textContent = '';
 };
 
-const checkInputValidity = (formElement, inputElement, {inputErrorClass, errorClass}) => {
+const checkInputValidity = (formElement, inputElement, { inputErrorClass, errorClass }) => {
   if (!inputElement.validity.valid) {
     showInputError(formElement, inputElement, inputElement.validationMessage, inputErrorClass, errorClass);
   } else {
@@ -221,7 +217,7 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   }
 };
 
-const setEventListeners = (formElement, buttonElement, {inputSelector, inactiveButtonClass, ...rest}) => {
+const setEventListeners = (formElement, buttonElement, { inputSelector, inactiveButtonClass, ...rest }) => {
   // Найдём все поля формы и сделаем из них массив
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   // Вызовем toggleButtonState, чтобы не ждать ввода данных в поля
@@ -236,7 +232,7 @@ const setEventListeners = (formElement, buttonElement, {inputSelector, inactiveB
   });
 };
 
-const enableValidation = ({formSelector, fieldsetSelector, submitButtonSelector, ...rest}) => {
+const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector, ...rest }) => {
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
   const formList = Array.from(document.querySelectorAll(formSelector));
