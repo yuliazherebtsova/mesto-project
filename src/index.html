@@ -52,8 +52,8 @@
               minlength="2" maxlength="200">
             <span class="form__field-error occupation-error"></span>
           </label>
-          <button class="form__submit-button" type="submit">Сохранить</button>
         </fieldset>
+        <button class="form__submit-button" type="submit">Сохранить</button>
       </form>
     </div>
   </div>
@@ -63,13 +63,19 @@
       <h2 class="popup__heading">Новое место</h2>
       <form class="form" id="formAddCard" name="formAddCard">
         <fieldset class="form__input-container">
-          <input type="text" class="form__field-input" id="place" name="place" placeholder="Название" required>
-          <span class="form__field-error occupation-error"></span>
-          <input type="text" class="form__field-input" id="picture" name="picture" placeholder="Ссылка на картинку"
-            required>
-            <span class="form__field-error occupation-error"></span>
-          <button class="form__submit-button" type="submit">Создать</button>
+          <label class="form__field">
+            <input type="text" class="form__field-input" id="place" name="place" placeholder="Название места" required
+              minlength="2" maxlength="30">
+            <span class="form__field-error place-error"></span>
+          </label>
+          <label class="form__field">
+            <input type="url"
+              pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+              class="form__field-input" id="picture" name="picture" placeholder="Ссылка на картинку" required>
+            <span class="form__field-error picture-error"></span>
+          </label>
         </fieldset>
+        <button class="form__submit-button" type="submit">Создать</button>
       </form>
     </div>
   </div>

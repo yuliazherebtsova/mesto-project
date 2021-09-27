@@ -11,10 +11,6 @@
   overflow: hidden;
 }
 
-.form__field-input:last-child {
-  margin-bottom: 0;
-}
-
 .form__field-input:focus {
   outline: none;
   border-bottom: 1px solid #000;
@@ -23,9 +19,6 @@
 @media (max-width: 767px) {
   .form__field-input {
     min-width: 238px;
-  }
-  .form__field-input:last-child {
-    margin-bottom: 45px;
   }
 }
 

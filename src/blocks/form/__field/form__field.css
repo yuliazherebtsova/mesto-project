@@ -3,3 +3,13 @@
   padding: 0;
   position: relative;
 }
+
+.form__field:last-child {
+  margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .form__field {
+    margin-bottom: 45px;
+  }
+}

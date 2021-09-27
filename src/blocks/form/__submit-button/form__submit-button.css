@@ -1,7 +1,7 @@
 .form__submit-button {
   min-width: 358px;
   min-height: 50px;
-  margin: 19px 0 0 0;
+  margin: 35px 0 0 0;
   padding: 0;
   border: 0;
   font-size: 18px;
@@ -25,6 +25,7 @@
 
 @media (max-width: 767px) {
   .form__submit-button {
+    margin-top: 50px;
     min-width: 238px;
     min-height: 46px;
     font-size: 14px;

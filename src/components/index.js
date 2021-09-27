@@ -223,11 +223,9 @@ const toggleButtonState = (inputList, buttonElement) => {
   }
 };
 
-const setEventListeners = (formElement) => {
+const setEventListeners = (formElement, buttonElement) => {
   // Найдём все поля формы и сделаем из них массив
   const inputList = Array.from(formElement.querySelectorAll('.form__field-input'));
-  // Найдём в текущей форме кнопку отправки
-  const buttonElement = formElement.querySelector('.form__submit-button');
   // Вызовем toggleButtonState, чтобы не ждать ввода данных в поля
   toggleButtonState(inputList, buttonElement);
 
@@ -241,18 +239,26 @@ const setEventListeners = (formElement) => {
 };
 
 const enableValidation = () => {
+  // Найдём все формы с указанным классом в DOM,
+  // сделаем из них массив методом Array.from
   const formList = Array.from(document.querySelectorAll('.form'));
 
+  // Переберём полученную коллекцию
   formList.forEach((formElement) => {
     formElement.addEventListener('submit', function (evt) {
+      // У каждой формы отменим стандартное поведение
       evt.preventDefault();
     });
 
+    // Надем все наборы полей в выбранной форме
     const fieldsetList = Array.from(formElement.querySelectorAll('.form__input-container'));
     fieldsetList.forEach((fieldSet) => {
-      setEventListeners(fieldSet);
+      // Найдём в текущей форме кнопку отправки
+      const buttonElement = formElement.querySelector('.form__submit-button');
+      setEventListeners(fieldSet, buttonElement);
     });
   });
 };
 
+// Включим валидацию формы
 enableValidation();
