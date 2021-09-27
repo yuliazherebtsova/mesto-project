@@ -192,16 +192,7 @@ const hideInputError = (formElement, inputElement) => {
 
 const checkInputValidity = (formElement, inputElement) => {
   if (!inputElement.validity.valid) {
-    const insertedValue = inputElement.value;
-    let validationMessage;
-    if (!insertedValue)
-      validationMessage = "Вы пропустили это поле."
-      else {
-        if (insertedValue.length < 2) {
-          validationMessage = "Введите больше 2-х символов."
-        }
-      }
-      showInputError(formElement, inputElement, validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage);
   } else {
     hideInputError(formElement, inputElement);
   }
