@@ -174,27 +174,25 @@ setMultipleClickListeners(popups);
 
 // ****************************** Валидация форм ***********************************
 
-const buttonElement = document.querySelectorAll
-
-const showInputError = (formElement, inputElement, errorMessage) => {
+const showInputError = (formElement, inputElement, errorMessage, inputErrorClass, errorClass) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.add('form__field-input_type_error');
+  inputElement.classList.add(inputErrorClass);
   errorElement.textContent = errorMessage;
-  errorElement.classList.add('form__field-error_active');
+  errorElement.classList.add(errorClass);
 };
 
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
-  inputElement.classList.remove('form__field-input_type_error');
-  errorElement.classList.remove('form__field-error_active');
+  inputElement.classList.remove(inputErrorClass);
+  errorElement.classList.remove(errorClass);
   errorElement.textContent = '';
 };
 
-const checkInputValidity = (formElement, inputElement) => {
+const checkInputValidity = (formElement, inputElement, {inputErrorClass, errorClass}) => {
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage);
+    showInputError(formElement, inputElement, inputElement.validationMessage, inputErrorClass, errorClass);
   } else {
-    hideInputError(formElement, inputElement);
+    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
   }
 };
 
@@ -212,36 +210,36 @@ const hasInvalidInput = (inputList) => {
 
 // Функция принимает массив полей ввода
 // и элемент кнопки, состояние которой нужно мнять
-const toggleButtonState = (inputList, buttonElement) => {
+const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
     // сделай кнопку неактивной
-    buttonElement.classList.add('form__submit-button_inactive');
+    buttonElement.classList.add(inactiveButtonClass);
   } else {
     // иначе сделай кнопку активной
-    buttonElement.classList.remove('form__submit-button_inactive');
+    buttonElement.classList.remove(inactiveButtonClass);
   }
 };
 
-const setEventListeners = (formElement, buttonElement) => {
+const setEventListeners = (formElement, buttonElement, {inputSelector, inactiveButtonClass, ...rest}) => {
   // Найдём все поля формы и сделаем из них массив
-  const inputList = Array.from(formElement.querySelectorAll('.form__field-input'));
+  const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   // Вызовем toggleButtonState, чтобы не ждать ввода данных в поля
-  toggleButtonState(inputList, buttonElement);
+  toggleButtonState(inputList, buttonElement, inactiveButtonClass);
 
   inputList.forEach((inputElement) => {
     inputElement.addEventListener('input', function () {
-      checkInputValidity(formElement, inputElement);
+      checkInputValidity(formElement, inputElement, rest);
       // Вызовем toggleButtonState и передадим ей массив полей и кнопку
-      toggleButtonState(inputList, buttonElement);
+      toggleButtonState(inputList, buttonElement, inactiveButtonClass);
     });
   });
 };
 
-const enableValidation = () => {
+const enableValidation = ({formSelector, fieldsetSelector, submitButtonSelector, ...rest}) => {
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
-  const formList = Array.from(document.querySelectorAll('.form'));
+  const formList = Array.from(document.querySelectorAll(formSelector));
 
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
@@ -251,14 +249,24 @@ const enableValidation = () => {
     });
 
     // Надем все наборы полей в выбранной форме
-    const fieldsetList = Array.from(formElement.querySelectorAll('.form__input-container'));
+    const fieldsetList = Array.from(formElement.querySelectorAll(fieldsetSelector));
     fieldsetList.forEach((fieldSet) => {
       // Найдём в текущей форме кнопку отправки
-      const buttonElement = formElement.querySelector('.form__submit-button');
-      setEventListeners(fieldSet, buttonElement);
+      const buttonElement = formElement.querySelector(submitButtonSelector);
+      setEventListeners(fieldSet, buttonElement, rest);
     });
   });
 };
 
 // Включим валидацию формы
-enableValidation();
+// все настройки передаются при вызове
+
+enableValidation({
+  formSelector: '.form',
+  fieldsetSelector: '.form__input-container',
+  inputSelector: '.form__field-input',
+  submitButtonSelector: '.form__submit-button',
+  inactiveButtonClass: 'form__submit-button_inactive',
+  inputErrorClass: 'form__field-input_type_error',
+  errorClass: 'form__field-error_active'
+});
