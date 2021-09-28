@@ -1,8 +1,5 @@
 .form__field-error {
-  position: absolute;
-  top: 35px;
-  left: 0;
-  opacity: 0;
+  display: none;
   max-width: 352px;
   font-family: 'Inter', 'Arial', sans-serif;
   font-style: normal;

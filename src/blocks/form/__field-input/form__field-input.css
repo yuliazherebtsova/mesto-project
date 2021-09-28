@@ -1,6 +1,6 @@
 .form__field-input {
   min-width: 358px;
-  margin: 0 0 13px 0;
+  margin: 0 0 5px 0;
   padding: 0 0 10px;
   font-size: 14px;
   line-height: 1.21;
@@ -19,6 +19,7 @@
 @media (max-width: 767px) {
   .form__field-input {
     min-width: 238px;
+    margin-bottom: 15px;
   }
 }
 
