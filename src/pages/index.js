@@ -19,7 +19,7 @@ const profileTitle = profile.querySelector('.profile__title');
 const profileSubtitle = profile.querySelector('.profile__subtitle');
 const buttonEditProfile = profile.querySelector('.profile__edit-button');
 const buttonAddCard = profile.querySelector('.profile__add-button');
-const popups = Array.from(document.querySelectorAll('.popup'));
+const popups = document.querySelectorAll('.popup');
 const popupEditProfile = document.querySelector('.popup_type_edit-profile');
 const popupPreviewImage = document.querySelector('.popup_type_image-preview');
 const popupAddCard = document.querySelector('.popup_type_add-card');
@@ -30,7 +30,7 @@ const formAddCard = document.querySelector('#formAddCard');
 const formAddPlaceField = document.querySelector('#formAddCard').elements['place'];
 const formAddPictureField = document.querySelector('#formAddCard').elements['picture'];
 const cardContainer = document.querySelector('.cards__list');
-const popupCloseButtons = Array.from(document.querySelectorAll('.popup__close-button'));
+const popupCloseButtons = document.querySelectorAll('.popup__close-button');
 
 function openPopup(popup) {
   // функция открытия диалогового окна
