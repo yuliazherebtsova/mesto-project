@@ -1,9 +1,3 @@
 .form__field-error_active {
-  display: block;
-}
-
-@media (max-width: 767px) {
-  .form__field-error_active {
-    max-width: 238px;
-  }
+  opacity: 1.0;
 }

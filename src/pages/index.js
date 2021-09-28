@@ -256,7 +256,8 @@ const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector
 
 // Включим валидацию формы
 // все настройки передаются при вызове
-const config = {
+
+enableValidation({
   formSelector: '.form',
   fieldsetSelector: '.form__input-container',
   inputSelector: '.form__field-input',
@@ -264,5 +265,4 @@ const config = {
   inactiveButtonClass: 'form__submit-button_inactive',
   inputErrorClass: 'form__field-input_type_error',
   errorClass: 'form__field-error_active'
-}
-enableValidation(config);
+});
