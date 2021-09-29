@@ -1,17 +1,24 @@
 /*
-Требования к модульности кода. К этому моменту вы напишите много разных функций.
-Если собрать их все в одной файле index.js — читать его станет очень сложно не только вам,
-но и наставнику или код-ревьюерам. Поэтому код следует разделить на разные модули. Создайте отдельную директорию для хранения скриптов внутри директории src/, можете назвать её components/. Разбейте функции по нескольким файлам:
-функциональность валидации форм вынесите в файл validate.js;
-функции для работы с карточками проекта Mesto вынесите в файл card.js;
-работу модальных окон — в файл modal.js;
-утилитарные функции, которые используются в работе сразу нескольких других функций, —
-в файл utils.js;
-инициализацию JS-кода, добавление слушателей и другие важные участки оставьте в файле index.js.
-Чтобы было чуточку понятнее — пример выше с вызовом функции enableValidation должен
-находиться в файле index.js. А все другие функции, включая декларирование
-функции enableValidation и валидации форм, — в отдельном файле validate.js.
-Используйте директивы export/import.
+TODO
+
+* 1. Разделить код на файлы *.js
+* Требования к модульности кода. К этому моменту вы напишите много разных функций.
+* Если собрать их все в одной файле index.js — читать его станет очень сложно не только вам,
+* но и наставнику или код-ревьюерам. Поэтому код следует разделить на разные модули. Создайте отдельную директорию для хранения скриптов внутри директории src/, можете назвать её components/. Разбейте функции по нескольким файлам:
+* функциональность валидации форм вынесите в файл validate.js;
+* функции для работы с карточками проекта Mesto вынесите в файл card.js;
+* работу модальных окон — в файл modal.js;
+* утилитарные функции, которые используются в работе сразу нескольких других функций, —
+* в файл utils.js;
+* инициализацию JS-кода, добавление слушателей и другие важные участки оставьте в файле index.js.
+* Чтобы было чуточку понятнее — пример выше с вызовом функции enableValidation должен
+* находиться в файле index.js. А все другие функции, включая декларирование
+* функции enableValidation и валидации форм, — в отдельном файле validate.js.
+* Используйте директивы export/import.
+
+* 2. валидаторы
+
+
 */
 
 const profile = document.querySelector('.profile');
@@ -42,8 +49,12 @@ function openPopup(popup) {
 function closePopup(popup) {
   // функция закрытия диалогового окна
   popup.classList.remove('popup_opened');
+  const form =   popup.querySelector('.form');
+  if (form) form.reset();
+  // очищаем поля формы, если она была закрыта, но не отправлена
   window.removeEventListener('keydown',popupEscHandler);
   // при закрытии диалогового окна снимаем слушатель по Ecs
+
 }
 
 function createCard(cardData) {
@@ -105,9 +116,9 @@ function renderImagePreview(image, title) {
 
 buttonEditProfile.addEventListener('click', () => {
   //  открытие окна редактирования профиля
-  // formEditNameField.value = profileTitle.textContent;
-  // formEditOccupationField.value = profileSubtitle.textContent;
-  // // отображаем в окне уже введенную информацию о профиле
+  formEditNameField.value = profileTitle.textContent;
+  formEditOccupationField.value = profileSubtitle.textContent;
+  // отображаем в окне уже введенную информацию о профиле
   openPopup(popupEditProfile);
 });
 
@@ -170,14 +181,14 @@ setMultipleClickListeners(popups);
 
 // ****************************** Валидация форм ***********************************
 
-const showInputError = (formElement, inputElement, errorMessage, inputErrorClass, errorClass) => {
+const showInputError = ({formElement, inputElement}, {errorMessage, inputErrorClass, errorClass}) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(errorClass);
 };
 
-const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) => {
+const hideInputError = ({formElement, inputElement}, {inputErrorClass, errorClass}) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(inputErrorClass);
   errorElement.classList.remove(errorClass);
@@ -185,10 +196,23 @@ const hideInputError = (formElement, inputElement, inputErrorClass, errorClass) 
 };
 
 const checkInputValidity = (formElement, inputElement, { inputErrorClass, errorClass }) => {
+  const elements = {
+    formElement,
+    inputElement,
+  }
   if (!inputElement.validity.valid) {
-    showInputError(formElement, inputElement, inputElement.validationMessage, inputErrorClass, errorClass);
+    const errorConfig = {
+      errorMessage: inputElement.validationMessage,
+      inputErrorClass,
+      errorClass
+    };
+    showInputError(elements, errorConfig);
   } else {
-    hideInputError(formElement, inputElement, inputErrorClass, errorClass);
+    const errorConfig = {
+      inputErrorClass,
+      errorClass
+    };
+    hideInputError(elements, errorConfig);
   }
 };
 
@@ -205,7 +229,7 @@ const hasInvalidInput = (inputList) => {
 };
 
 // Функция принимает массив полей ввода
-// и элемент кнопки, состояние которой нужно мнять
+// и элемент кнопки, состояние которой нужно менять
 const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   // Если есть хотя бы один невалидный инпут
   if (hasInvalidInput(inputList)) {
@@ -256,8 +280,7 @@ const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector
 
 // Включим валидацию формы
 // все настройки передаются при вызове
-
-enableValidation({
+const config = {
   formSelector: '.form',
   fieldsetSelector: '.form__input-container',
   inputSelector: '.form__field-input',
@@ -265,4 +288,6 @@ enableValidation({
   inactiveButtonClass: 'form__submit-button_inactive',
   inputErrorClass: 'form__field-input_type_error',
   errorClass: 'form__field-error_active'
-});
+};
+
+enableValidation(config);
