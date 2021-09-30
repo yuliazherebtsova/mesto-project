@@ -16,13 +16,13 @@ TODO
 * функции enableValidation и валидации форм, — в отдельном файле validate.js.
 * Используйте директивы export/import.
 
-* 2. валидаторы
-
 * 3. чек-лист: https://code.s3.yandex.net/web-plus/checklists/checklist-5.1/index.html
 
 * 4 ТЗ: https://practicum.yandex.ru/learn/web-plus/courses/467b7164-c86d-4b1f-a89f-52f063a355b4/sprints/10786/topics/11997b4c-d767-4cac-b899-d9ed1fe9c7c6/lessons/e641ad29-f337-4d20-80e8-790918e40ec7/
 
 */
+import './index.css'; // импорт главного файла стилей
+import initialCards from '../components/initial-cards.js';
 
 const profile = document.querySelector(".profile");
 const profileTitle = profile.querySelector(".profile__title");
@@ -130,36 +130,37 @@ buttonEditProfile.addEventListener("click", () => {
   openPopup(popupEditProfile);
 });
 
-function clearFormAddCard() {
-  // в форме создания нового места очищаем введенную ранее информацию
-  // (необходимо в случае если форма не была отправлена, а просто была закрыта)
-  formAddPlaceField.value = "";
-  formAddPictureField.value = "";
-  const config = {
-    formSelector: "#formAddCard",
-    fieldsetSelector: ".form__input-container",
-    inputSelector: ".form__field-input",
-    submitButtonSelector: ".form__submit-button",
-    inactiveButtonClass: "form__submit-button_inactive",
-    inputErrorClass: "form__field-input_type_error",
-    errorClass: "form__field-error_active",
-  };
-  enableValidation(config);
-  // перезапускаем валидацию, кнопка "Сохранить" становится неактивна
-  hideInputError(
-    // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
-    { formElement: formAddCard, inputElement: formAddPlaceField },
-    config
-  );
-  hideInputError(
-    { formElement: formAddCard, inputElement: formAddPictureField },
-    config
-  );
-}
+// function clearFormAddCard() {
+//   // в форме создания нового места очищаем введенную ранее информацию
+//   // (необходимо в случае если форма не была отправлена, а просто была закрыта)
+//   formAddPlaceField.value = "";
+//   formAddPictureField.value = "";
+//   const config = {
+//     formSelector: "#formAddCard",
+//     fieldsetSelector: ".form__input-container",
+//     inputSelector: ".form__field-input",
+//     submitButtonSelector: ".form__submit-button",
+//     inactiveButtonClass: "form__submit-button_inactive",
+//     inputErrorClass: "form__field-input_type_error",
+//     errorClass: "form__field-error_active",
+//   };
+//   enableValidation(config);
+//   // перезапускаем валидацию, кнопка "Сохранить" становится неактивна
+//   hideInputError(
+//     // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
+//     { formElement: formAddCard, inputElement: formAddPlaceField },
+//     config
+//   );
+//   hideInputError(
+//     { formElement: formAddCard, inputElement: formAddPictureField },
+//     config
+//   );
+// }
 
 buttonAddCard.addEventListener("click", () => {
-  clearFormAddCard();
   // открытие формы добавления карточки
+  ////clearFormAddCard();
+
   openPopup(popupAddCard);
 });
 

@@ -1,4 +1,10 @@
 const path = require("path");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+// учит «Вебпак» работать с html-файлами
+const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+// каждый раз при сборке проекта удаляет содержимое папки dist
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// учит «Вебпак» работать с css-файлами
 
 module.exports = {
   entry: { main: "./src/pages/index.js" },
@@ -34,6 +40,35 @@ module.exports = {
         // исключает папку node_modules, файлы в ней обрабатывать не нужно
         exclude: "/node_modules/",
       },
+      // добавили правило для обработки файлов
+      {
+        // регулярное выражение, которое ищет все файлы с такими расширениями
+        test: /\.(png|svg|jpg|gif|woff(2)?|eot|ttf|otf)$/,
+        type: "asset/resource",
+      },
+      {
+        // применять это правило только к CSS-файлам
+        test: /\.css$/,
+        // при обработке этих файлов нужно использовать
+        // MiniCssExtractPlugin.loader и css-loader
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: { importLoaders: 1 },
+            // Эта опция описана в документации сss-loader (https://webpack.js.org/loaders/css-loader/#importloaders).
+            // Значение 1 говорит о том, что некоторые трансформации PostCSS нужно применить до css-loader
+          },
+          "postcss-loader",
+        ],
+      },
     ],
   },
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/pages/index.html", // путь к файлу index.html
+    }),
+    new CleanWebpackPlugin(),
+    new MiniCssExtractPlugin(), // подключение плагина для объединения файлов
+  ],
 };

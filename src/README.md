@@ -13,5 +13,5 @@
 
 ## Ссылка на проект:
 
-https://yuliazherebtsova.github.io/mesto/
+https://yuliazherebtsova.github.io/mesto/ (пока недоступно)
 

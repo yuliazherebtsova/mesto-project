@@ -1,26 +1,33 @@
-const initialCards = [
+import barca from '../images/cards-barcelona.jpg';
+import paris from '../images/cards-paris.jpg';
+import tbil from '../images/cards-tbilisi.jpg';
+import tall from '../images/cards-tallin.jpg';
+import basel from '../images/cards-basel.jpg';
+import gent from '../images/cards-gent.jpg';
+
+export default [
   {
     name: 'Барселона',
-    link: './images/cards-barcelona.jpg'
+    link: barca
   },
   {
     name: 'Париж, Франция',
-    link: './images/cards-paris.jpg'
+    link: paris
   },
   {
     name: 'Тбилиси, Грузия',
-    link: './images/cards-tbilisi.jpg'
+    link: tbil
   },
   {
     name: 'Таллин, Эстония',
-    link: './images/cards-tallin.jpg'
+    link: tall
   },
   {
     name: 'Базель, Швейцария',
-    link: './images/cards-basel.jpg'
+    link: basel
   },
   {
     name: 'Гент, Бельгия',
-    link: './images/cards-gent.jpg'
+    link: gent
   }
 ];

@@ -9,8 +9,10 @@
     />
     <meta name="keywords" content="путешествия, интересные места, фотографии" />
     <meta name="author" content="Yulia Zherebtsova" />
-    <link rel="stylesheet" href="./pages/index.css" />
-    <link rel="icon" href="./images/card-like-button-icon-active.svg" />
+    <link
+      rel="icon"
+      href="<%=require('../images/card-like-button-icon-active.svg')%>"
+    />
     <title>Mesto</title>
   </head>
 
@@ -24,7 +26,7 @@
         aria-label="Блок с информацией о профиле пользователя"
       >
         <img
-          src="./images/profile-avatar.jpg"
+          src="<%=require('../images/profile-avatar.jpg')%>"
           alt="Аватар профиля пользователя"
           class="profile__avatar"
         />
@@ -146,7 +148,7 @@
     </div>
     <template id="card-template">
       <li class="card">
-        <img class="card__image" />
+        <img src="#" alt="#" class="card__image" />
         <h2 class="card__title"></h2>
         <button
           class="card__like-button"
@@ -160,7 +162,5 @@
         ></button>
       </li>
     </template>
-    <script src="./components/initial-cards.js"></script>
-    <script src="./pages/index.js"></script>
   </body>
 </html>
