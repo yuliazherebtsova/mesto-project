@@ -18,12 +18,11 @@ TODO
 
 * 2. валидаторы
 
+* 3. чек-лист: https://code.s3.yandex.net/web-plus/checklists/checklist-5.1/index.html
+
+* 4 ТЗ: https://practicum.yandex.ru/learn/web-plus/courses/467b7164-c86d-4b1f-a89f-52f063a355b4/sprints/10786/topics/11997b4c-d767-4cac-b899-d9ed1fe9c7c6/lessons/e641ad29-f337-4d20-80e8-790918e40ec7/
 
 */
-
-
-console.log('Hello, World!')
-
 
 const profile = document.querySelector('.profile');
 const profileTitle = profile.querySelector('.profile__title');
@@ -53,12 +52,8 @@ function openPopup(popup) {
 function closePopup(popup) {
   // функция закрытия диалогового окна
   popup.classList.remove('popup_opened');
-  const form =   popup.querySelector('.form');
-  if (form) form.reset();
-  // очищаем поля формы, если она была закрыта, но не отправлена
   window.removeEventListener('keydown',popupEscHandler);
   // при закрытии диалогового окна снимаем слушатель по Ecs
-
 }
 
 function createCard(cardData) {
@@ -120,13 +115,30 @@ function renderImagePreview(image, title) {
 
 buttonEditProfile.addEventListener('click', () => {
   //  открытие окна редактирования профиля
-  formEditNameField.value = profileTitle.textContent;
-  formEditOccupationField.value = profileSubtitle.textContent;
-  // отображаем в окне уже введенную информацию о профиле
   openPopup(popupEditProfile);
 });
 
+function clearFormAddCard() {
+ // в форме создания нового места очищаем введенную ранее информацию
+  // (необходимо в случае если форма не была отправлена, а просто закрыта)
+  formAddPlaceField.value = '';
+  formAddPictureField.value = '';
+  const config = {
+    formSelector: '#formAddCard' ,
+    fieldsetSelector: '.form__input-container',
+    inputSelector: '.form__field-input',
+    submitButtonSelector: '.form__submit-button',
+    inactiveButtonClass: 'form__submit-button_inactive',
+    inputErrorClass: 'form__field-input_type_error',
+    errorClass: 'form__field-error_active'
+  };
+  enableValidation(config);
+  hideInputError({formElement: formAddCard, inputElement: formAddPlaceField}, config);
+  hideInputError({formElement: formAddCard, inputElement: formAddPictureField}, config);
+}
+
 buttonAddCard.addEventListener('click', () => {
+  clearFormAddCard();
   // открытие формы добавления карточки
   openPopup(popupAddCard);
 });
@@ -160,7 +172,7 @@ formAddCard.addEventListener('submit', (evt) => {
   closePopup(popupAddCard);
 });
 
-function setMultipleClickListeners(elements) {
+function setMultipleListeners(elements) {
   // функция добавления слушателей для события клика сразу нескольким DOM элементам
   const elementsArray = Array.from(elements);
   elementsArray.forEach(element => element.addEventListener('click', (evt) => {
@@ -176,10 +188,10 @@ const popupEscHandler = evt => {
     popups.forEach(popup => closePopup(popup));
 };
 
-setMultipleClickListeners(popupCloseButtons);
+setMultipleListeners(popupCloseButtons);
 // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
 
-setMultipleClickListeners(popups);
+setMultipleListeners(popups);
 // добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
 
 
@@ -272,7 +284,7 @@ const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector
       evt.preventDefault();
     });
 
-    // Надем все наборы полей в выбранной форме
+    // Найдем все наборы полей в выбранной форме
     const fieldsetList = Array.from(formElement.querySelectorAll(fieldsetSelector));
     fieldsetList.forEach((fieldSet) => {
       // Найдём в текущей форме кнопку отправки
@@ -281,6 +293,12 @@ const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector
     });
   });
 };
+
+function preloadInfo() {
+  // отображаем в окне уже введенную ранее информацию о профиле
+  formEditNameField.value = profileTitle.textContent;
+  formEditOccupationField.value = profileSubtitle.textContent;
+}
 
 // Включим валидацию формы
 // все настройки передаются при вызове
@@ -294,4 +312,5 @@ const config = {
   errorClass: 'form__field-error_active'
 };
 
+preloadInfo();
 enableValidation(config);

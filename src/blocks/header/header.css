@@ -4,7 +4,7 @@
   justify-content: flex-start;
 }
 
-.header::after {
+.header:after {
   content: '';
   position: absolute;
   top: 0;
