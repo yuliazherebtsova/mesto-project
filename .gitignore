@@ -171,7 +171,9 @@ $RECYCLE.BIN/
 *.lnk
 
 # VSCode
+.vscode/settings.json
 .vscode/*
+**/.vscode/
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json

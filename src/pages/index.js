@@ -24,59 +24,69 @@ TODO
 
 */
 
-const profile = document.querySelector('.profile');
-const profileTitle = profile.querySelector('.profile__title');
-const profileSubtitle = profile.querySelector('.profile__subtitle');
-const buttonEditProfile = profile.querySelector('.profile__edit-button');
-const buttonAddCard = profile.querySelector('.profile__add-button');
-const popups = Array.from(document.querySelectorAll('.popup'));
-const popupEditProfile = document.querySelector('.popup_type_edit-profile');
-const popupPreviewImage = document.querySelector('.popup_type_image-preview');
-const popupAddCard = document.querySelector('.popup_type_add-card');
-const formEditProfile = document.querySelector('#formEditProfile');
-const formEditNameField = document.querySelector('#formEditProfile').elements['name'];
-const formEditOccupationField = document.querySelector('#formEditProfile').elements['occupation'];
-const formAddCard = document.querySelector('#formAddCard');
-const formAddPlaceField = document.querySelector('#formAddCard').elements['place'];
-const formAddPictureField = document.querySelector('#formAddCard').elements['picture'];
-const cardContainer = document.querySelector('.cards__list');
-const popupCloseButtons = Array.from(document.querySelectorAll('.popup__close-button'));
+const profile = document.querySelector(".profile");
+const profileTitle = profile.querySelector(".profile__title");
+const profileSubtitle = profile.querySelector(".profile__subtitle");
+const buttonEditProfile = profile.querySelector(".profile__edit-button");
+const buttonAddCard = profile.querySelector(".profile__add-button");
+const popups = Array.from(document.querySelectorAll(".popup"));
+const popupEditProfile = document.querySelector(".popup_type_edit-profile");
+const popupPreviewImage = document.querySelector(".popup_type_image-preview");
+const popupAddCard = document.querySelector(".popup_type_add-card");
+const formEditProfile = document.querySelector("#formEditProfile");
+const formEditNameField =
+  document.querySelector("#formEditProfile").elements["name"];
+const formEditOccupationField =
+  document.querySelector("#formEditProfile").elements["occupation"];
+const formAddCard = document.querySelector("#formAddCard");
+const formAddPlaceField =
+  document.querySelector("#formAddCard").elements["place"];
+const formAddPictureField =
+  document.querySelector("#formAddCard").elements["picture"];
+const cardContainer = document.querySelector(".cards__list");
+const popupCloseButtons = Array.from(
+  document.querySelectorAll(".popup__close-button")
+);
 
 function openPopup(popup) {
   // функция открытия диалогового окна
-  popup.classList.add('popup_opened');
-  window.addEventListener('keydown', popupEscHandler);
+  popup.classList.add("popup_opened");
+  window.addEventListener("keydown", popupEscHandler);
   // при открытии диалогового окна создаем слушатель на закрытие по Ecs
 }
 
 function closePopup(popup) {
   // функция закрытия диалогового окна
-  popup.classList.remove('popup_opened');
-  window.removeEventListener('keydown',popupEscHandler);
+  popup.classList.remove("popup_opened");
+  window.removeEventListener("keydown", popupEscHandler);
   // при закрытии диалогового окна снимаем слушатель по Ecs
 }
 
 function createCard(cardData) {
   // функция создания карточки
-  const cardTemplate = document.querySelector('#card-template').content;
-  const cardElement = cardTemplate.querySelector('.card').cloneNode(true);
+  const cardTemplate = document.querySelector("#card-template").content;
+  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   // создаем новую карточку по шаблону
-  cardElement.querySelector('.card__title').textContent = cardData.name;
-  cardElement.querySelector('.card__image').src = cardData.link;
-  cardElement.querySelector('.card__image').alt = cardData.name;
+  cardElement.querySelector(".card__title").textContent = cardData.name;
+  cardElement.querySelector(".card__image").src = cardData.link;
+  cardElement.querySelector(".card__image").alt = cardData.name;
   // заполняем шаблон карточки данными из формы создания
 
-  cardElement.querySelector('.card__like-button').addEventListener('click', (evt) => {
-    // создаем слушатель на событие постановки / снятия лайка
-    evt.target.classList.toggle('card__like-button_active');
-  });
+  cardElement
+    .querySelector(".card__like-button")
+    .addEventListener("click", (evt) => {
+      // создаем слушатель на событие постановки / снятия лайка
+      evt.target.classList.toggle("card__like-button_active");
+    });
 
-  cardElement.querySelector('.card__delete-button').addEventListener('click', (evt) => {
-    // создаем слушатель на событие нажатия на кнопку "Удалить" в карточке
-    evt.target.parentElement.remove();
-  });
+  cardElement
+    .querySelector(".card__delete-button")
+    .addEventListener("click", (evt) => {
+      // создаем слушатель на событие нажатия на кнопку "Удалить" в карточке
+      evt.target.parentElement.remove();
+    });
 
-  cardElement.querySelector('.card__image').addEventListener('click', (evt) => {
+  cardElement.querySelector(".card__image").addEventListener("click", (evt) => {
     // создаем слушатель на событие нажатия на превью фото в карточке
     const clickedImageSrc = evt.target.src;
     const clickedImageTitle = evt.target.nextElementSibling.textContent;
@@ -93,19 +103,21 @@ function renderCard(card) {
 
 function loadInitialCards(cards) {
   // функция загрузки начальных карточек на страницу
-  cards.forEach(element => {
+  cards.forEach((element) => {
     const newCard = createCard(element);
     renderCard(newCard);
   });
-};
+}
 
 loadInitialCards(initialCards);
 // при загрузке страницы загружаем карточки из заранее заготовленного массива
 
 function renderImagePreview(image, title) {
   // функция отрисовки окна предпросмотра фото
-  const popupImage = popupPreviewImage.querySelector('.popup__image');
-  const popupImageTitle = popupPreviewImage.querySelector('.popup__image-title');
+  const popupImage = popupPreviewImage.querySelector(".popup__image");
+  const popupImageTitle = popupPreviewImage.querySelector(
+    ".popup__image-title"
+  );
   popupImage.src = image;
   popupImage.alt = title;
   popupImageTitle.textContent = title;
@@ -113,39 +125,45 @@ function renderImagePreview(image, title) {
   // открываем окно предпросмотра фото
 }
 
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   //  открытие окна редактирования профиля
   openPopup(popupEditProfile);
 });
 
 function clearFormAddCard() {
- // в форме создания нового места очищаем введенную ранее информацию
+  // в форме создания нового места очищаем введенную ранее информацию
   // (необходимо в случае если форма не была отправлена, а просто закрыта)
-  formAddPlaceField.value = '';
-  formAddPictureField.value = '';
+  formAddPlaceField.value = "";
+  formAddPictureField.value = "";
   const config = {
-    formSelector: '#formAddCard' ,
-    fieldsetSelector: '.form__input-container',
-    inputSelector: '.form__field-input',
-    submitButtonSelector: '.form__submit-button',
-    inactiveButtonClass: 'form__submit-button_inactive',
-    inputErrorClass: 'form__field-input_type_error',
-    errorClass: 'form__field-error_active'
+    formSelector: "#formAddCard",
+    fieldsetSelector: ".form__input-container",
+    inputSelector: ".form__field-input",
+    submitButtonSelector: ".form__submit-button",
+    inactiveButtonClass: "form__submit-button_inactive",
+    inputErrorClass: "form__field-input_type_error",
+    errorClass: "form__field-error_active",
   };
   enableValidation(config);
-  hideInputError({formElement: formAddCard, inputElement: formAddPlaceField}, config);
-  hideInputError({formElement: formAddCard, inputElement: formAddPictureField}, config);
+  hideInputError(
+    { formElement: formAddCard, inputElement: formAddPlaceField },
+    config
+  );
+  hideInputError(
+    { formElement: formAddCard, inputElement: formAddPictureField },
+    config
+  );
 }
 
-buttonAddCard.addEventListener('click', () => {
+buttonAddCard.addEventListener("click", () => {
   clearFormAddCard();
   // открытие формы добавления карточки
   openPopup(popupAddCard);
 });
 
-formEditProfile.addEventListener('submit', (evt) => {
+formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
-  const popup = evt.target.closest('.popup');
+  const popup = evt.target.closest(".popup");
   evt.preventDefault();
   // отменяет стандартную отправку формы, которая перезагружает страницу,
   // теперь можем определить свою логику отправк
@@ -155,13 +173,13 @@ formEditProfile.addEventListener('submit', (evt) => {
   closePopup(popup);
 });
 
-formAddCard.addEventListener('submit', (evt) => {
+formAddCard.addEventListener("submit", (evt) => {
   // добавление карточки в разметку
   evt.preventDefault();
   const cardData = {
     name: formAddPlaceField.value,
-    link: formAddPictureField.value
-  }
+    link: formAddPictureField.value,
+  };
   // создает объект с данными карточки
   const newCard = createCard(cardData);
   // создаем новую карточку
@@ -175,17 +193,18 @@ formAddCard.addEventListener('submit', (evt) => {
 function setMultipleListeners(elements) {
   // функция добавления слушателей для события клика сразу нескольким DOM элементам
   const elementsArray = Array.from(elements);
-  elementsArray.forEach(element => element.addEventListener('click', (evt) => {
-    if (evt.target === evt.currentTarget)
-      // если нажатие произошло оверлей, оно также закроется
-      closePopup(evt.target.closest('.popup'));
-  }));
+  elementsArray.forEach((element) =>
+    element.addEventListener("click", (evt) => {
+      if (evt.target === evt.currentTarget)
+        // если нажатие произошло оверлей, оно также закроется
+        closePopup(evt.target.closest(".popup"));
+    })
+  );
 }
 
-const popupEscHandler = evt => {
+const popupEscHandler = (evt) => {
   // добавляем возможность закрывать диалоговые окна путем нажатия на кнопку Ecs
-  if (evt.key === 'Escape')
-    popups.forEach(popup => closePopup(popup));
+  if (evt.key === "Escape") popups.forEach((popup) => closePopup(popup));
 };
 
 setMultipleListeners(popupCloseButtons);
@@ -194,39 +213,48 @@ setMultipleListeners(popupCloseButtons);
 setMultipleListeners(popups);
 // добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
 
-
 // ****************************** Валидация форм ***********************************
 
-const showInputError = ({formElement, inputElement}, {errorMessage, inputErrorClass, errorClass}) => {
+const showInputError = (
+  { formElement, inputElement },
+  { errorMessage, inputErrorClass, errorClass }
+) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.add(inputErrorClass);
   errorElement.textContent = errorMessage;
   errorElement.classList.add(errorClass);
 };
 
-const hideInputError = ({formElement, inputElement}, {inputErrorClass, errorClass}) => {
+const hideInputError = (
+  { formElement, inputElement },
+  { inputErrorClass, errorClass }
+) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-error`);
   inputElement.classList.remove(inputErrorClass);
   errorElement.classList.remove(errorClass);
-  errorElement.textContent = '';
+  errorElement.textContent = "";
 };
 
-const checkInputValidity = (formElement, inputElement, { inputErrorClass, errorClass }) => {
+const checkInputValidity = (
+  formElement,
+  inputElement,
+  { inputErrorClass, errorClass }
+) => {
   const elements = {
     formElement,
     inputElement,
-  }
+  };
   if (!inputElement.validity.valid) {
     const errorConfig = {
       errorMessage: inputElement.validationMessage,
       inputErrorClass,
-      errorClass
+      errorClass,
     };
     showInputError(elements, errorConfig);
   } else {
     const errorConfig = {
       inputErrorClass,
-      errorClass
+      errorClass,
     };
     hideInputError(elements, errorConfig);
   }
@@ -241,7 +269,7 @@ const hasInvalidInput = (inputList) => {
     // hasInvalidInput вернёт true
 
     return !inputElement.validity.valid;
-  })
+  });
 };
 
 // Функция принимает массив полей ввода
@@ -257,14 +285,18 @@ const toggleButtonState = (inputList, buttonElement, inactiveButtonClass) => {
   }
 };
 
-const setEventListeners = (formElement, buttonElement, { inputSelector, inactiveButtonClass, ...rest }) => {
+const setEventListeners = (
+  formElement,
+  buttonElement,
+  { inputSelector, inactiveButtonClass, ...rest }
+) => {
   // Найдём все поля формы и сделаем из них массив
   const inputList = Array.from(formElement.querySelectorAll(inputSelector));
   // Вызовем toggleButtonState, чтобы не ждать ввода данных в поля
   toggleButtonState(inputList, buttonElement, inactiveButtonClass);
 
   inputList.forEach((inputElement) => {
-    inputElement.addEventListener('input', function () {
+    inputElement.addEventListener("input", function () {
       checkInputValidity(formElement, inputElement, rest);
       // Вызовем toggleButtonState и передадим ей массив полей и кнопку
       toggleButtonState(inputList, buttonElement, inactiveButtonClass);
@@ -272,20 +304,27 @@ const setEventListeners = (formElement, buttonElement, { inputSelector, inactive
   });
 };
 
-const enableValidation = ({ formSelector, fieldsetSelector, submitButtonSelector, ...rest }) => {
+const enableValidation = ({
+  formSelector,
+  fieldsetSelector,
+  submitButtonSelector,
+  ...rest
+}) => {
   // Найдём все формы с указанным классом в DOM,
   // сделаем из них массив методом Array.from
   const formList = Array.from(document.querySelectorAll(formSelector));
 
   // Переберём полученную коллекцию
   formList.forEach((formElement) => {
-    formElement.addEventListener('submit', function (evt) {
+    formElement.addEventListener("submit", function (evt) {
       // У каждой формы отменим стандартное поведение
       evt.preventDefault();
     });
 
     // Найдем все наборы полей в выбранной форме
-    const fieldsetList = Array.from(formElement.querySelectorAll(fieldsetSelector));
+    const fieldsetList = Array.from(
+      formElement.querySelectorAll(fieldsetSelector)
+    );
     fieldsetList.forEach((fieldSet) => {
       // Найдём в текущей форме кнопку отправки
       const buttonElement = formElement.querySelector(submitButtonSelector);
@@ -303,13 +342,13 @@ function preloadInfo() {
 // Включим валидацию формы
 // все настройки передаются при вызове
 const config = {
-  formSelector: '.form',
-  fieldsetSelector: '.form__input-container',
-  inputSelector: '.form__field-input',
-  submitButtonSelector: '.form__submit-button',
-  inactiveButtonClass: 'form__submit-button_inactive',
-  inputErrorClass: 'form__field-input_type_error',
-  errorClass: 'form__field-error_active'
+  formSelector: ".form",
+  fieldsetSelector: ".form__input-container",
+  inputSelector: ".form__field-input",
+  submitButtonSelector: ".form__submit-button",
+  inactiveButtonClass: "form__submit-button_inactive",
+  inputErrorClass: "form__field-input_type_error",
+  errorClass: "form__field-error_active",
 };
 
 preloadInfo();
