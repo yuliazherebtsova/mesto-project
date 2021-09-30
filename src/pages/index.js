@@ -132,7 +132,7 @@ buttonEditProfile.addEventListener("click", () => {
 
 function clearFormAddCard() {
   // в форме создания нового места очищаем введенную ранее информацию
-  // (необходимо в случае если форма не была отправлена, а просто закрыта)
+  // (необходимо в случае если форма не была отправлена, а просто была закрыта)
   formAddPlaceField.value = "";
   formAddPictureField.value = "";
   const config = {
@@ -145,7 +145,9 @@ function clearFormAddCard() {
     errorClass: "form__field-error_active",
   };
   enableValidation(config);
+  // перезапускаем валидацию, кнопка "Сохранить" становится неактивна
   hideInputError(
+    // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
     { formElement: formAddCard, inputElement: formAddPlaceField },
     config
   );
