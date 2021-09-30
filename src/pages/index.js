@@ -21,6 +21,10 @@ TODO
 
 */
 
+
+console.log('Hello, World!')
+
+
 const profile = document.querySelector('.profile');
 const profileTitle = profile.querySelector('.profile__title');
 const profileSubtitle = profile.querySelector('.profile__subtitle');
