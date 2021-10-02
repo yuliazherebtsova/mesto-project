@@ -1,9 +1,12 @@
+// Webpack изменяет имена файлов при сборке, поэтому явные пути к картинкам будут неправильными
 import barca from "../images/cards-barcelona.jpg";
 import paris from "../images/cards-paris.jpg";
 import tbil from "../images/cards-tbilisi.jpg";
 import tall from "../images/cards-tallin.jpg";
 import basel from "../images/cards-basel.jpg";
 import gent from "../images/cards-gent.jpg";
+// теперь картинки можно импортировать,
+// вебпак добавит в переменные правильные пути
 
 export const initialCards = [
   {

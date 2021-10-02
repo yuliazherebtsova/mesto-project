@@ -21,7 +21,7 @@ function closePopup(popup) {
 const popupEscHandler = (evt) => {
   // добавляем возможность закрывать диалоговые окна путем нажатия на кнопку Ecs
   // (слушатель в отдельной функции, чтобы снять его после закрытия попапа)
-  if (evt.key === "Escape") popups.forEach((popup) => closePopup(popup));
+  if (evt.key === "Escape") closePopup(document.querySelector('.popup_opened'));
 };
 
 export { popupSelector, popups, popupCloseButtons, openPopup, closePopup };

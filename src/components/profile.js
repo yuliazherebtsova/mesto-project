@@ -5,16 +5,23 @@ const formEditNameField =
 const formEditOccupationField =
   document.querySelector("#formEditProfile").elements["occupation"];
 
-function saveProfileInfo() {
+function saveProfileInfo({ name, occupation }) {
   // сохраняем введенные данные в блоке информации о профиле
-  profileTitle.textContent = formEditNameField.value;
-  profileSubtitle.textContent = formEditOccupationField.value;
+  profileTitle.textContent = name;
+  profileSubtitle.textContent = occupation;
 }
 
-function loadProfileInfo() {
+function loadProfileInfo({ name, occupation }) {
   // отображаем в окне уже введенную ранее информацию о профиле
-  formEditNameField.value = profileTitle.textContent;
-  formEditOccupationField.value = profileSubtitle.textContent;
+  formEditNameField.value = name;
+  formEditOccupationField.value = occupation;
 }
 
-export { saveProfileInfo, loadProfileInfo };
+export {
+  saveProfileInfo,
+  loadProfileInfo,
+  profileTitle,
+  profileSubtitle,
+  formEditNameField,
+  formEditOccupationField,
+};

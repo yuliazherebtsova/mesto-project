@@ -28,8 +28,8 @@ function createCard(cardData) {
 
   cardElement.querySelector(".card__image").addEventListener("click", (evt) => {
     // создаем слушатель на событие нажатия на превью фото в карточке
-    const clickedImageSrc = evt.target.src;
-    const clickedImageTitle = evt.target.nextElementSibling.textContent;
+    const clickedImageSrc = cardData.link;
+    const clickedImageTitle = cardData.name;
     renderImagePreview(clickedImageSrc, clickedImageTitle);
   });
 
@@ -56,7 +56,7 @@ export { createCard, renderCard, loadInitialCards };
 //   // (необходимо в случае если форма не была отправлена, а просто была закрыта)
 //   formAddPlaceField.value = "";
 //   formAddPictureField.value = "";
-//   const config = {
+//   const validationConfig = {
 //     formSelector: "#formAddCard",
 //     fieldsetSelector: ".form__input-container",
 //     inputSelector: ".form__field-input",
@@ -65,15 +65,15 @@ export { createCard, renderCard, loadInitialCards };
 //     inputErrorClass: "form__field-input_type_error",
 //     errorClass: "form__field-error_active",
 //   };
-//   enableValidation(config);
+//   enableValidation(validationConfig);
 //   // перезапускаем валидацию, кнопка "Сохранить" становится неактивна
 //   hideInputError(
-//     // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
+//   // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
 //     { formElement: formAddCard, inputElement: formAddPlaceField },
-//     config
+//     validationConfig
 //   );
 //   hideInputError(
 //     { formElement: formAddCard, inputElement: formAddPictureField },
-//     config
+//     validationConfig
 //   );
 // }

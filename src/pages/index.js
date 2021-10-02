@@ -10,7 +10,14 @@ import {
   closePopup,
 } from "../components/modal.js";
 // функции работы с модальными окнами
-import { saveProfileInfo, loadProfileInfo } from "../components/profile.js";
+import {
+  saveProfileInfo,
+  loadProfileInfo,
+  profileTitle,
+  profileSubtitle,
+  formEditNameField,
+  formEditOccupationField,
+} from "../components/profile.js";
 // функции работы с данными профиля
 import enableValidation from "../components/validate.js";
 // функции валидации форм
@@ -20,7 +27,6 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -32,10 +38,12 @@ const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
-
-// Включим валидацию формы
-// все настройки передаются при вызове
-const config = {
+let profileInfoToLoad = {
+  // информация о профиле для отображения при открытии формы редактирования
+  name: profileTitle.textContent,
+  occupation: profileSubtitle.textContent,
+};
+const validationConfig = {
   formSelector: ".form",
   fieldsetSelector: ".form__input-container",
   inputSelector: ".form__field-input",
@@ -44,16 +52,28 @@ const config = {
   inputErrorClass: "form__field-input_type_error",
   errorClass: "form__field-error_active",
 };
+// настройки валидации форм
 
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
-  saveProfileInfo();
+  const profileInfoToSave = {
+    name: formEditNameField.value,
+    occupation: formEditOccupationField.value,
+  };
+  saveProfileInfo(profileInfoToSave);
   closePopup(evt.target.closest(popupSelector));
 });
 
 buttonEditProfile.addEventListener("click", () => {
   //  открытие окна редактирования профиля
+  let profileInfoToLoad = {
+    // обновляем информацию о профиле для отображения при открытии формы редактирования
+    name: profileTitle.textContent,
+    occupation: profileSubtitle.textContent,
+  };
+  loadProfileInfo(profileInfoToLoad);
+  // загружаем информацию о профиле для отображения в форме редактирования при открытии
   openPopup(popupEditProfile);
 });
 
@@ -76,7 +96,6 @@ popupCloseButtons.forEach((el) => {
 buttonAddCard.addEventListener("click", () => {
   // открытие формы добавления карточки
   ////clearFormAddCard();
-
   openPopup(popupAddCard);
 });
 
@@ -94,14 +113,19 @@ formAddCard.addEventListener("submit", (evt) => {
   // добавляем карточку на страницу в начало списка
   formAddCard.reset();
   // после добавлении новой карточки поля формы очищаются
+  const sumbitButton = formAddCard.querySelector(
+    validationConfig.submitButtonSelector
+  );
+  sumbitButton.classList.add(validationConfig.inactiveButtonClass);
+  // кнопку "Сохранить" делаем неактивной
   closePopup(popupAddCard);
 });
 
 loadInitialCards(initialCards);
 // при загрузке страницы загружаем карточки из заранее заготовленного массива
 
-loadProfileInfo();
-// загружаем информацию о профиле для отображения в форме редактирования при открытии
+loadProfileInfo(profileInfoToLoad);
+// загружаем информацию о профиле перед включением валидации
 
-enableValidation(config);
+enableValidation(validationConfig);
 // включаем валидацию форм
