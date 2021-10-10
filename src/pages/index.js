@@ -113,10 +113,10 @@ formAddCard.addEventListener("submit", (evt) => {
   // добавляем карточку на страницу в начало списка
   formAddCard.reset();
   // после добавлении новой карточки поля формы очищаются
-  const sumbitButton = formAddCard.querySelector(
+  const submitButton = formAddCard.querySelector(
     validationConfig.submitButtonSelector
   );
-  sumbitButton.classList.add(validationConfig.inactiveButtonClass);
+  submitButton.classList.add(validationConfig.inactiveButtonClass);
   // кнопку "Сохранить" делаем неактивной
   closePopup(popupAddCard);
 });
