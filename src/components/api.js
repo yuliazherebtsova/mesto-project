@@ -1,21 +1,28 @@
-// const config = {
-//   baseUrl: 'https://nomoreparties.co/v1/cohort-42',
-//   headers: {
-//     authorization: 'c56e30dc-2883-4270-a59e-b2f7bae969c6',
-//     'Content-Type': 'application/json'
-//   }
-// }
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
+  headers: {
+    authorization: "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5",
+    "Content-Type": "application/json",
+  },
+};
+console.log(config);
 
-// export const getInitialCards = () => {
-//   return fetch(`${config.baseUrl}/cards`, {
-//     config.headers
-//   })
-//     .then(res => {
-//       if (res.ok) {
-//         return res.json();
-//       }
+export const getInitialCards = () => {
+  return fetch(`${config.baseUrl}/cards`, {
+    headers: config.headers,
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
 
-//       // если ошибка, отклоняем промис
-//       return Promise.reject(`Ошибка: ${res.status}`);
-//     });
-// }
+      // если ошибка, отклоняем промис
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((data) => {
+      console.log(data); // если мы попали в этот then, data — это объект
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

@@ -27,6 +27,7 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
+import { getInitialCards } from "../components/api.js";
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -129,3 +130,5 @@ loadProfileInfo(profileInfoToLoad);
 
 enableValidation(validationConfig);
 // включаем валидацию форм
+
+getInitialCards();
