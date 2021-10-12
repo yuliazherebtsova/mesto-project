@@ -6,6 +6,7 @@ const formEditNameField =
 const formEditOccupationField =
   document.querySelector("#formEditProfile").elements["occupation"];
 import { getProfileInfo } from "../components/api.js";
+// методы работы с api сервера
 
 function saveProfileInfo({ name, occupation }) {
   // сохраняем введенные данные в блоке информации о профиле
@@ -14,20 +15,24 @@ function saveProfileInfo({ name, occupation }) {
 }
 
 function renderProfileInfoOnModal({ name, occupation }) {
-  // отображаем в окне уже введенную ранее информацию о профиле
+  // отображаем в окне редактирования введенную ранее информацию о профиле
   formEditNameField.value = name;
   formEditOccupationField.value = occupation;
 }
 
 function renderProfileInfoOnPage() {
-  // отображаем в окне уже введенную ранее информацию о профиле
-  getProfileInfo().then((res) => {
+  // отображаем на главной введенную ранее информацию о профиле
+  getProfileInfo()
     // загружаем инфо с сервера, метод асинхронный
-    const { name, about, avatar } = res;
-    profileTitle.textContent = name;
-    profileSubtitle.textContent = about;
-    profileAvatar.src = avatar;
-  });
+    .then((res) => {
+      const { name, about, avatar } = res;
+      profileTitle.textContent = name;
+      profileSubtitle.textContent = about;
+      profileAvatar.src = avatar;
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
 }
 
 export {

@@ -28,7 +28,7 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-import { getInitialCards, getProfileInfo } from "../components/api.js";
+import { getInitialCards } from "../components/api.js";
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -40,7 +40,7 @@ const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
-let profileInfoToLoad = {
+let profileInfoToRender = {
   // информация о профиле для отображения при открытии формы редактирования
   name: profileTitle.textContent,
   occupation: profileSubtitle.textContent,
@@ -74,9 +74,13 @@ buttonEditProfile.addEventListener("click", () => {
     name: profileTitle.textContent,
     occupation: profileSubtitle.textContent,
   };
-  renderProfileInfo(profileInfoToRender);
-  // загружаем информацию о профиле для отображения в форме редактирования при открытии
-
+  renderProfileInfoOnModal(profileInfoToRender);
+  // отображаем информацию о профиле в форме редактирования при открытии
+  const submitProfileButton = formEditProfile.querySelector(
+    validationConfig.submitButtonSelector
+  );
+  submitProfileButton.classList.remove(validationConfig.inactiveButtonClass);
+  // кнопку "Сохранить" делаем активной
   openPopup(popupEditProfile);
 });
 
@@ -116,10 +120,10 @@ formAddCard.addEventListener("submit", (evt) => {
   // добавляем карточку на страницу в начало списка
   formAddCard.reset();
   // после добавлении новой карточки поля формы очищаются
-  const submitButton = formAddCard.querySelector(
+  const submitCardButton = formAddCard.querySelector(
     validationConfig.submitButtonSelector
   );
-  submitButton.classList.add(validationConfig.inactiveButtonClass);
+  submitCardButton.classList.add(validationConfig.inactiveButtonClass);
   // кнопку "Сохранить" делаем неактивной
   closePopup(popupAddCard);
 });
@@ -128,7 +132,7 @@ loadInitialCards(initialCards);
 // при загрузке страницы загружаем карточки из заранее заготовленного массива
 
 renderProfileInfoOnPage();
-// загружаем информацию о профиле перед включением валидации
+// загружаем информацию о профиле с сервера
 
 enableValidation(validationConfig);
 // включаем валидацию форм
