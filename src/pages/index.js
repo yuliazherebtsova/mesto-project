@@ -11,13 +11,11 @@ import {
 } from "../components/modal.js";
 // функции работы с модальными окнами
 import {
-  saveProfileInfo,
+  editProfileInfo,
   renderProfileInfoOnModal,
   renderProfileInfoOnPage,
   profileTitle,
   profileSubtitle,
-  formEditNameField,
-  formEditOccupationField,
 } from "../components/profile.js";
 // функции работы с данными профиля
 import enableValidation from "../components/validate.js";
@@ -40,11 +38,6 @@ const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
-let profileInfoToRender = {
-  // информация о профиле для отображения при открытии формы редактирования
-  name: profileTitle.textContent,
-  occupation: profileSubtitle.textContent,
-};
 const validationConfig = {
   formSelector: ".form",
   fieldsetSelector: ".form__input-container",
@@ -59,20 +52,16 @@ const validationConfig = {
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
-  const profileInfoToSave = {
-    name: formEditNameField.value,
-    occupation: formEditOccupationField.value,
-  };
-  saveProfileInfo(profileInfoToSave);
+  editProfileInfo();
   closePopup(evt.target.closest(popupSelector));
 });
 
 buttonEditProfile.addEventListener("click", () => {
   //  открытие окна редактирования профиля
-  let profileInfoToRender = {
-    // обновляем информацию о профиле для отображения при открытии формы редактирования
+  const profileInfoToRender = {
+    // информация о профиле для отображения при открытии формы редактирования
     name: profileTitle.textContent,
-    occupation: profileSubtitle.textContent,
+    about: profileSubtitle.textContent,
   };
   renderProfileInfoOnModal(profileInfoToRender);
   // отображаем информацию о профиле в форме редактирования при открытии
@@ -80,7 +69,7 @@ buttonEditProfile.addEventListener("click", () => {
     validationConfig.submitButtonSelector
   );
   submitProfileButton.classList.remove(validationConfig.inactiveButtonClass);
-  // кнопку "Сохранить" делаем активной
+  // кнопку "Сохранить" делаем активной #TODO вынести в функцию makeButtonActive()
   openPopup(popupEditProfile);
 });
 
@@ -124,7 +113,7 @@ formAddCard.addEventListener("submit", (evt) => {
     validationConfig.submitButtonSelector
   );
   submitCardButton.classList.add(validationConfig.inactiveButtonClass);
-  // кнопку "Сохранить" делаем неактивной
+  // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
   closePopup(popupAddCard);
 });
 

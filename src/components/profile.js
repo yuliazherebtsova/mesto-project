@@ -3,21 +3,33 @@ const profileSubtitle = document.querySelector(".profile__subtitle");
 const profileAvatar = document.querySelector(".profile__avatar");
 const formEditNameField =
   document.querySelector("#formEditProfile").elements["name"];
-const formEditOccupationField =
-  document.querySelector("#formEditProfile").elements["occupation"];
-import { getProfileInfo } from "../components/api.js";
+const formEditAboutField =
+  document.querySelector("#formEditProfile").elements["about"];
+import { getProfileInfo, updateProfileInfo } from "../components/api.js";
 // методы работы с api сервера
 
-function saveProfileInfo({ name, occupation }) {
-  // сохраняем введенные данные в блоке информации о профиле
-  profileTitle.textContent = name;
-  profileSubtitle.textContent = occupation;
+function editProfileInfo() {
+  // редактируем существующие данные профиля с сохранением на сервере
+  const profileInfo = {
+    name: formEditNameField.value,
+    about: formEditAboutField.value,
+  };
+  updateProfileInfo(profileInfo)
+    // загружаем инфо с сервера, метод асинхронный
+    .then((res) => {
+      const { name, about } = res;
+      profileTitle.textContent = name;
+      profileSubtitle.textContent = about;
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
 }
 
-function renderProfileInfoOnModal({ name, occupation }) {
-  // отображаем в окне редактирования введенную ранее информацию о профиле
+function renderProfileInfoOnModal({ name, about }) {
+  // отображаем введенную ранее информацию о профиле в окне редактирования
   formEditNameField.value = name;
-  formEditOccupationField.value = occupation;
+  formEditAboutField.value = about;
 }
 
 function renderProfileInfoOnPage() {
@@ -36,11 +48,11 @@ function renderProfileInfoOnPage() {
 }
 
 export {
-  saveProfileInfo,
+  editProfileInfo,
   renderProfileInfoOnModal,
   renderProfileInfoOnPage,
   profileTitle,
   profileSubtitle,
   formEditNameField,
-  formEditOccupationField,
+  formEditAboutField,
 };

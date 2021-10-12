@@ -7,6 +7,7 @@ const config = {
 };
 
 const getInitialCards = () => {
+  // загрузка начальных карточек с сервера
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
@@ -26,6 +27,7 @@ const getInitialCards = () => {
 };
 
 const getProfileInfo = () => {
+  // загрузка данных профиля
   return fetch(`${config.baseUrl}/users/me`, {
     headers: config.headers,
   })
@@ -43,4 +45,29 @@ const getProfileInfo = () => {
     });
 };
 
-export { getInitialCards, getProfileInfo };
+const updateProfileInfo = ({ name, about }) => {
+  // обновление данных профиля после редактирования
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      name: name,
+      about: about,
+    }),
+  })
+    .then((res) => {
+      if (res.ok) {
+        console.log(res);
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export { getInitialCards, getProfileInfo, updateProfileInfo };
