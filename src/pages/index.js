@@ -24,7 +24,7 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-import { getInitialCards, postNewCard } from "../components/api.js";
+import { postNewCard } from "../components/api.js";
 // функции работы с api сервера
 
 const formEditProfile = document.querySelector("#formEditProfile");
@@ -124,11 +124,11 @@ formAddCard.addEventListener("submit", (evt) => {
   closePopup(popupAddCard);
 });
 
-loadInitialCards();
-// при загрузке страницы загружаем карточки с сервера
-
 renderProfileInfoOnPage();
 // загружаем информацию о профиле с сервера
+
+loadInitialCards();
+// загружаем карточки с сервера
 
 enableValidation(validationConfig);
 // включаем валидацию форм
