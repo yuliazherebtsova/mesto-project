@@ -5,9 +5,8 @@ const config = {
     "Content-Type": "application/json",
   },
 };
-console.log(config);
 
-export const getInitialCards = () => {
+const getInitialCards = () => {
   return fetch(`${config.baseUrl}/cards`, {
     headers: config.headers,
   })
@@ -15,7 +14,6 @@ export const getInitialCards = () => {
       if (res.ok) {
         return res.json();
       }
-
       // если ошибка, отклоняем промис
       return Promise.reject(`Ошибка: ${res.status}`);
     })
@@ -26,3 +24,23 @@ export const getInitialCards = () => {
       console.log(err);
     });
 };
+
+const getProfileInfo = () => {
+  return fetch(`${config.baseUrl}/users/me`, {
+    headers: config.headers,
+  })
+    .then((res) => {
+      if (res.ok) {
+        return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
+export { getInitialCards, getProfileInfo };

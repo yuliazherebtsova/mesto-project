@@ -12,7 +12,8 @@ import {
 // функции работы с модальными окнами
 import {
   saveProfileInfo,
-  loadProfileInfo,
+  renderProfileInfoOnModal,
+  renderProfileInfoOnPage,
   profileTitle,
   profileSubtitle,
   formEditNameField,
@@ -27,7 +28,7 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-import { getInitialCards } from "../components/api.js";
+import { getInitialCards, getProfileInfo } from "../components/api.js";
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -68,13 +69,14 @@ formEditProfile.addEventListener("submit", (evt) => {
 
 buttonEditProfile.addEventListener("click", () => {
   //  открытие окна редактирования профиля
-  let profileInfoToLoad = {
+  let profileInfoToRender = {
     // обновляем информацию о профиле для отображения при открытии формы редактирования
     name: profileTitle.textContent,
     occupation: profileSubtitle.textContent,
   };
-  loadProfileInfo(profileInfoToLoad);
+  renderProfileInfo(profileInfoToRender);
   // загружаем информацию о профиле для отображения в форме редактирования при открытии
+
   openPopup(popupEditProfile);
 });
 
@@ -125,7 +127,7 @@ formAddCard.addEventListener("submit", (evt) => {
 loadInitialCards(initialCards);
 // при загрузке страницы загружаем карточки из заранее заготовленного массива
 
-loadProfileInfo(profileInfoToLoad);
+renderProfileInfoOnPage();
 // загружаем информацию о профиле перед включением валидации
 
 enableValidation(validationConfig);
