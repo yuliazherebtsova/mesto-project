@@ -1,7 +1,5 @@
 import "./index.css";
 // импорт главного файла стилей
-import { initialCards } from "../components/initial-cards.js";
-// начальные карточки
 import {
   popupSelector,
   popups,
@@ -26,7 +24,8 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-import { getInitialCards } from "../components/api.js";
+import { getInitialCards, postNewCard } from "../components/api.js";
+// функции работы с api сервера
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -73,18 +72,18 @@ buttonEditProfile.addEventListener("click", () => {
   openPopup(popupEditProfile);
 });
 
-popups.forEach((el) =>
+popups.forEach((element) =>
   // добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
-  el.addEventListener("click", (evt) => {
+  element.addEventListener("click", (evt) => {
     if (evt.target === evt.currentTarget)
       // если нажатие произошло оверлей, оно также закроется
       closePopup(evt.target.closest(popupSelector));
   })
 );
 
-popupCloseButtons.forEach((el) => {
+popupCloseButtons.forEach((element) => {
   // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
-  el.addEventListener("click", (evt) => {
+  element.addEventListener("click", (evt) => {
     closePopup(evt.target.closest(popupSelector));
   });
 });
@@ -102,13 +101,21 @@ formAddCard.addEventListener("submit", (evt) => {
     name: formAddPlaceField.value,
     link: formAddPictureField.value,
   };
-  // создает объект с данными карточки
-  const newCard = createCard(cardData);
-  // создаем новую карточку
-  renderCard(newCard);
-  // добавляем карточку на страницу в начало списка
+  // создаем объект с данными карточки
+  postNewCard(cardData)
+    // отправка карточки на сервер
+    .then((card) => {
+      const newCard = createCard(card);
+      // создаем новую карточку
+      renderCard(newCard);
+      // добавляем карточку на страницу в начало списка
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
+
   formAddCard.reset();
-  // после добавлении новой карточки поля формы очищаются
+  // поля формы очищаются
   const submitCardButton = formAddCard.querySelector(
     validationConfig.submitButtonSelector
   );
@@ -117,13 +124,11 @@ formAddCard.addEventListener("submit", (evt) => {
   closePopup(popupAddCard);
 });
 
-loadInitialCards(initialCards);
-// при загрузке страницы загружаем карточки из заранее заготовленного массива
+loadInitialCards();
+// при загрузке страницы загружаем карточки с сервера
 
 renderProfileInfoOnPage();
 // загружаем информацию о профиле с сервера
 
 enableValidation(validationConfig);
 // включаем валидацию форм
-
-getInitialCards();

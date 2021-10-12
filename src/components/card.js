@@ -1,6 +1,8 @@
 import { renderImagePreview } from "./utils.js";
 // универсальные функции, используемые в нескольких местах проекта
+import { getInitialCards, deleteCard, likeCard, unlikeCard } from "./api.js";
 const cardContainer = document.querySelector(".cards__list");
+const myUserId = "916ca4d8de1023df920e0724";
 
 function createCard(cardData) {
   // функция создания карточки
@@ -10,7 +12,8 @@ function createCard(cardData) {
   cardElement.querySelector(".card__title").textContent = cardData.name;
   cardElement.querySelector(".card__image").src = cardData.link;
   cardElement.querySelector(".card__image").alt = cardData.name;
-  // заполняем шаблон карточки данными из формы создания
+  cardElement.querySelector(".card__likes").textContent = cardData.likes.length;
+  // заполняем шаблон карточки данными, полученными с сервера
 
   cardElement
     .querySelector(".card__like-button")
@@ -19,12 +22,20 @@ function createCard(cardData) {
       evt.target.classList.toggle("card__like-button_active");
     });
 
-  cardElement
-    .querySelector(".card__delete-button")
-    .addEventListener("click", (evt) => {
-      // создаем слушатель на событие нажатия на кнопку "Удалить" в карточке
-      evt.target.parentElement.remove();
+  const deleteButton = cardElement.querySelector(".card__delete-button");
+  if (cardData.owner._id === myUserId) {
+    // удалить можно только свою карточку
+    deleteButton.addEventListener("click", (evt) => {
+      // создаем слушатель на событие нажатия на кнопку "Удалить"
+      // #TODO попап удаления карточки
+      deleteCard(cardData._id)
+        // удаляем карточку с сервера
+        .then(() => evt.target.parentElement.remove())
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
     });
+  } else deleteButton.classList.add("card__delete-button_inactive");
 
   cardElement.querySelector(".card__image").addEventListener("click", (evt) => {
     // создаем слушатель на событие нажатия на превью фото в карточке
@@ -41,12 +52,19 @@ function renderCard(card) {
   cardContainer.prepend(card);
 }
 
-function loadInitialCards(cards) {
-  // функция загрузки начальных карточек на страницу
-  cards.forEach((element) => {
-    const newCard = createCard(element);
-    renderCard(newCard);
-  });
+function loadInitialCards() {
+  // функция добавления начальных карточек на страницу
+  getInitialCards()
+    // загрузка карточек с сервера
+    .then((cards) =>
+      cards.forEach((card) => {
+        const newCard = createCard(card);
+        renderCard(newCard);
+      })
+    )
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
 }
 
 export { createCard, renderCard, loadInitialCards };

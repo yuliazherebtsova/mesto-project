@@ -16,6 +16,7 @@
   cursor: pointer;
   opacity: 1;
   transition: opacity .7s ease;
+  filter: drop-shadow(0 0 0.4rem rgba(0, 0, 0, 0.5));
 }
 
 .card__delete-button:hover {
