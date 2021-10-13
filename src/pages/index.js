@@ -24,7 +24,11 @@ import {
   loadInitialCards,
 } from "../components/card.js";
 // функции работы с карточками
-import { postNewCard } from "../components/api.js";
+import {
+  getProfileInfo,
+  getInitialCards,
+  postNewCard,
+} from "../components/api.js";
 // функции работы с api сервера
 
 const formEditProfile = document.querySelector("#formEditProfile");
@@ -124,11 +128,18 @@ formAddCard.addEventListener("submit", (evt) => {
   closePopup(popupAddCard);
 });
 
-renderProfileInfoOnPage();
-// загружаем информацию о профиле с сервера
-
-loadInitialCards();
-// загружаем карточки с сервера
-
-enableValidation(validationConfig);
-// включаем валидацию форм
+Promise.all([getProfileInfo(), getInitialCards()])
+// Карточки должны отображаться на странице только после получения id пользователя
+  .then(([userInfo, cards]) => {
+    renderProfileInfoOnPage(userInfo);
+    // загружаем информацию о профиле с сервера
+    loadInitialCards(cards);
+    // загружаем карточки с сервера
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+  .finally(() => {
+    enableValidation(validationConfig);
+    // включаем валидацию форм
+  });

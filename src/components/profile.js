@@ -32,19 +32,11 @@ function renderProfileInfoOnModal({ name, about }) {
   formEditAboutField.value = about;
 }
 
-function renderProfileInfoOnPage() {
+function renderProfileInfoOnPage({ name, about, avatar }) {
   // отображаем на главной введенную ранее информацию о профиле
-  getProfileInfo()
-    // загружаем инфо с сервера, метод асинхронный
-    .then((res) => {
-      const { name, about, avatar } = res;
-      profileTitle.textContent = name;
-      profileSubtitle.textContent = about;
-      profileAvatar.src = avatar;
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
+  profileTitle.textContent = name;
+  profileSubtitle.textContent = about;
+  profileAvatar.src = avatar;
 }
 
 export {
