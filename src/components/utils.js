@@ -14,4 +14,9 @@ function renderImagePreview(image, title) {
   // открываем окно предпросмотра фото
 }
 
-export { renderImagePreview };
+function renderLoading(buttonElement, isLoading) {
+  if (isLoading) buttonElement.textContent = "Сохранение...";
+  else buttonElement.textContent = buttonElement.textContent;
+}
+
+export { renderImagePreview, renderLoading };

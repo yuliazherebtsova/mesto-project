@@ -9,11 +9,12 @@ import {
 } from "../components/modal.js";
 // функции работы с модальными окнами
 import {
-  editProfileInfo,
   renderProfileInfoOnModal,
   renderProfileInfoOnPage,
   profileTitle,
   profileSubtitle,
+  formEditNameField,
+  formEditAboutField,
 } from "../components/profile.js";
 // функции работы с данными профиля
 import enableValidation from "../components/validate.js";
@@ -28,8 +29,11 @@ import {
   getProfileInfo,
   getInitialCards,
   postNewCard,
+  updateProfileInfo,
 } from "../components/api.js";
 // функции работы с api сервера
+import { renderLoading } from "../components/utils.js";
+// универсальные функции, используемые в нескольких местах проекта
 
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
@@ -55,8 +59,62 @@ const validationConfig = {
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
-  editProfileInfo();
+  const submitProfileButton = formEditProfile.querySelector(
+    // кнопка отправки формы
+    validationConfig.submitButtonSelector
+  );
+  renderLoading(submitProfileButton, true);
+  const profileInfo = {
+    name: formEditNameField.value,
+    about: formEditAboutField.value,
+  };
+  updateProfileInfo(profileInfo)
+    // загружаем инфо с сервера, метод асинхронный
+    .then((res) => {
+      const { name, about } = res;
+      profileTitle.textContent = name;
+      profileSubtitle.textContent = about;
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
+
   closePopup(evt.target.closest(popupSelector));
+});
+
+formAddCard.addEventListener("submit", (evt) => {
+  // добавление карточки в разметку
+  evt.preventDefault();
+  const cardData = {
+    name: formAddPlaceField.value,
+    link: formAddPictureField.value,
+  };
+  // создаем объект с данными карточки
+
+  const submitCardButton = formAddCard.querySelector(
+    // кнопка отправки формы
+    validationConfig.submitButtonSelector
+  );
+
+  postNewCard(cardData)
+    // отправка карточки на сервер
+    .then((card) => {
+      const newCard = createCard(card);
+      // создаем новую карточку
+      renderCard(newCard);
+      // добавляем карточку на страницу в начало списка
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
+
+  formAddCard.reset();
+  // поля формы очищаются
+
+  submitCardButton.classList.add(validationConfig.inactiveButtonClass);
+  // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
+
+  closePopup(popupAddCard);
 });
 
 buttonEditProfile.addEventListener("click", () => {
@@ -98,38 +156,8 @@ buttonAddCard.addEventListener("click", () => {
   openPopup(popupAddCard);
 });
 
-formAddCard.addEventListener("submit", (evt) => {
-  // добавление карточки в разметку
-  evt.preventDefault();
-  const cardData = {
-    name: formAddPlaceField.value,
-    link: formAddPictureField.value,
-  };
-  // создаем объект с данными карточки
-  postNewCard(cardData)
-    // отправка карточки на сервер
-    .then((card) => {
-      const newCard = createCard(card);
-      // создаем новую карточку
-      renderCard(newCard);
-      // добавляем карточку на страницу в начало списка
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
-
-  formAddCard.reset();
-  // поля формы очищаются
-  const submitCardButton = formAddCard.querySelector(
-    validationConfig.submitButtonSelector
-  );
-  submitCardButton.classList.add(validationConfig.inactiveButtonClass);
-  // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
-  closePopup(popupAddCard);
-});
-
 Promise.all([getProfileInfo(), getInitialCards()])
-// Карточки должны отображаться на странице только после получения id пользователя
+  // Карточки должны отображаться на странице только после получения id пользователя
   .then(([userInfo, cards]) => {
     renderProfileInfoOnPage(userInfo);
     // загружаем информацию о профиле с сервера
