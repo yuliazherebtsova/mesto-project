@@ -12,17 +12,12 @@ const getInitialCards = () => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      // если ошибка, отклоняем промис
+      if (res.ok) return res.json();
+      // если ошибка ответа с сервера, отклоняем промис
       return Promise.reject(`Ошибка: ${res.status}`);
     })
-    .then((data) => {
-      console.log(data)
-      return data; // если мы попали в этот then, data — это объект
-    })
     .catch((err) => {
+      // подробности ошибки запроса/ответа
       console.log(err);
     });
 };
@@ -33,13 +28,8 @@ const getProfileInfo = () => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -57,13 +47,8 @@ const updateProfileInfo = ({ name, about }) => {
     }),
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -81,13 +66,8 @@ const postNewCard = ({ name, link }) => {
     }),
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -101,10 +81,7 @@ const deleteCard = (cardId) => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      // если ошибка, отклоняем промис
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
     })
     .catch((err) => {
@@ -119,14 +96,8 @@ const setLikeToCard = (cardId) => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      // если ошибка, отклоняем промис
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -140,14 +111,8 @@ const deleteLikeFromCard = (cardId) => {
     headers: config.headers,
   })
     .then((res) => {
-      if (res.ok) {
-        return res.json();
-      }
-      // если ошибка, отклоняем промис
+      if (res.ok) return res.json();
       return Promise.reject(`Ошибка: ${res.status}`);
-    })
-    .then((data) => {
-      return data;
     })
     .catch((err) => {
       console.log(err);

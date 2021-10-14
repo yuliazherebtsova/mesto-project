@@ -83,7 +83,6 @@ formEditProfile.addEventListener("submit", (evt) => {
 });
 
 formAddCard.addEventListener("submit", (evt) => {
-  debugger
   // добавление карточки в разметку
   evt.preventDefault();
   const cardData = {

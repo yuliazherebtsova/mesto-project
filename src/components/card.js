@@ -8,29 +8,31 @@ function createCard(userId, cardData) {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
   // создаем новую карточку по шаблону
+  cardElement.id = cardData._id;
   cardElement.querySelector(".card__title").textContent = cardData.name;
   cardElement.querySelector(".card__image").src = cardData.link;
   cardElement.querySelector(".card__image").alt = cardData.name;
   // заполняем шаблон карточки данными, полученными с сервера
 
-  let isLiked = cardData.likes.some((like) => like._id === userId);
-  // признак, лайкал ли пользователь карточку
-  let likesCount = cardData.likes.length;
+  cardElement.isLiked = cardData.likes.some((like) => like._id === userId);
+  // признак, лайкал ли пользователь карточку ранее
+  cardElement.likesCount = cardData.likes.length;
   // количество лайков на карточке
-  toggleLikeButton(cardElement, likesCount, isLiked);
+  toggleLikeButton(cardElement);
   // отображаем актуальное состояние лайков на карточке
 
   cardElement
     .querySelector(".card__like-button")
     .addEventListener("click", () => {
       // создаем слушатель на событие постановки / снятия лайка
-      isLiked = cardData.likes.some((like) => like._id === userId);
-      if (isLiked) {
+      if (cardElement.isLiked) {
         deleteLikeFromCard(cardData._id)
           // удаляем лайк с карточки
           .then((data) => {
-            const likesCount = data.likes.length;
-            toggleLikeButton(cardElement, likesCount, false);
+            cardElement.likesCount = data.likes.length;
+            cardElement.isLiked = false;
+            toggleLikeButton(cardElement);
+
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
@@ -39,8 +41,10 @@ function createCard(userId, cardData) {
         setLikeToCard(cardData._id)
           // ставим лайк карточке
           .then((data) => {
-            const likesCount = data.likes.length;
-            toggleLikeButton(cardElement, likesCount, true);
+            cardElement.likesCount = data.likes.length;
+            cardElement.isLiked = true;
+            toggleLikeButton(cardElement);
+
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
@@ -48,12 +52,12 @@ function createCard(userId, cardData) {
       }
     });
 
-  function toggleLikeButton(cardElement, likesCount, isLiked) {
+  function toggleLikeButton(cardElement) {
     // функция изменения внешнего вида кнопки и счетчика лайков
     const likeButtonElement = cardElement.querySelector(".card__like-button");
-    if (isLiked) likeButtonElement.classList.add("card__like-button_active");
+    if (cardElement.isLiked) likeButtonElement.classList.add("card__like-button_active");
     else likeButtonElement.classList.remove("card__like-button_active");
-    cardElement.querySelector(".card__likes").textContent = likesCount;
+    cardElement.querySelector(".card__likes").textContent = cardElement.likesCount;
   }
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
@@ -61,7 +65,7 @@ function createCard(userId, cardData) {
     // удалить можно только свою карточку
     deleteButton.addEventListener("click", (evt) => {
       // создаем слушатель на событие нажатия на кнопку "Удалить"
-      // #TODO попап удаления карточки
+      // #TODO попап подтверждения удаления карточки
       deleteCard(cardData._id)
         // удаляем карточку с сервера
         .then(() => evt.target.parentElement.remove())
