@@ -77,9 +77,9 @@ formEditProfile.addEventListener("submit", (evt) => {
       console.log(`Ошибка: ${err}`);
     })
     .finally(() => {
-      closePopup(popupEditProfile);
       renderLoading(popupEditProfile, false);
       // завершение загрузки данных
+      closePopup(popupEditProfile);
     });
 });
 
