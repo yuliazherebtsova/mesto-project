@@ -60,11 +60,8 @@ const validationConfig = {
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
-  const submitProfileButton = formEditProfile.querySelector(
-    // кнопка отправки формы
-    validationConfig.submitButtonSelector
-  );
-  renderLoading(submitProfileButton, true);
+  renderLoading(popupEditProfile, true);
+  // отображение процесса загрузки данных
   const profileInfo = {
     name: formEditNameField.value,
     about: formEditAboutField.value,
@@ -81,6 +78,8 @@ formEditProfile.addEventListener("submit", (evt) => {
     })
     .finally(() => {
       closePopup(popupEditProfile);
+      renderLoading(popupEditProfile, false);
+      // завершение загрузки данных
     });
 });
 
@@ -93,11 +92,7 @@ formAddCard.addEventListener("submit", (evt) => {
   };
   // создаем объект с данными карточки
 
-  const submitCardButton = formAddCard.querySelector(
-    // кнопка отправки формы
-    validationConfig.submitButtonSelector
-  );
-
+  renderLoading(popupAddCard, true);
   postNewCard(cardData)
     // отправка карточки на сервер
     .then((card) => {
@@ -110,8 +105,13 @@ formAddCard.addEventListener("submit", (evt) => {
       console.log(`Ошибка: ${err}`);
     })
     .finally(() => {
+      renderLoading(popupAddCard, false);
       formAddCard.reset();
       // поля формы очищаются
+      const submitCardButton = formAddCard.querySelector(
+        // кнопка отправки формы
+        validationConfig.submitButtonSelector
+      );
       submitCardButton.classList.add(validationConfig.inactiveButtonClass);
       // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
       closePopup(popupAddCard);

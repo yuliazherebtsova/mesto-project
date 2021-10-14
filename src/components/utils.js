@@ -14,9 +14,16 @@ function renderImagePreview(image, title) {
   // открываем окно предпросмотра фото
 }
 
-function renderLoading(buttonElement, isLoading) {
-  if (isLoading) buttonElement.textContent = "Сохранение...";
-  else buttonElement.textContent = buttonElement.textContent;
+function renderLoading(popup, isLoading) {
+  const submitButton = popup.querySelector(".form__submit-button");
+  if (isLoading) {
+    submitButton.textContent = "Сохранение...";
+  } else {
+    if (popup.classList.contains("popup_type_edit-profile"))
+      submitButton.textContent = "Сохранить";
+    if (popup.classList.contains("popup_type_add-card"))
+      submitButton.textContent = "Создать";
+  }
 }
 
 export { renderImagePreview, renderLoading };

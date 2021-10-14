@@ -68,8 +68,4 @@
 @import url('../blocks/form/__field-error/_active/form__field-error_active.css');
 @import url('../blocks/form/__submit-button/form__submit-button.css');
 @import url('../blocks/form/__submit-button/_inactive/form__submit-button_inactive.css');
-@import url('../blocks/form/__submit-button-text/form__submit-button-text.css');
-@import url('../blocks/form/__submit-button-text/_hidden/form__submit-button-text_hidden.css');
-@import url('../blocks/form/__submit-button-loading-text/form__submit-button-loading-text.css');
-@import url('../blocks/form/__submit-button-loading-text/_hidden/form__submit-button-loading-text_hidden.css');
 /* form */
