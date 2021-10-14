@@ -19,6 +19,7 @@ const getInitialCards = () => {
       return Promise.reject(`Ошибка: ${res.status}`);
     })
     .then((data) => {
+      console.log(data)
       return data; // если мы попали в этот then, data — это объект
     })
     .catch((err) => {

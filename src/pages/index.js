@@ -83,6 +83,7 @@ formEditProfile.addEventListener("submit", (evt) => {
 });
 
 formAddCard.addEventListener("submit", (evt) => {
+  debugger
   // добавление карточки в разметку
   evt.preventDefault();
   const cardData = {
@@ -99,7 +100,7 @@ formAddCard.addEventListener("submit", (evt) => {
   postNewCard(cardData)
     // отправка карточки на сервер
     .then((card) => {
-      const newCard = createCard(card);
+      const newCard = createCard(card.owner._id, card);
       // создаем новую карточку
       renderCard(newCard);
       // добавляем карточку на страницу в начало списка
@@ -157,11 +158,11 @@ buttonAddCard.addEventListener("click", () => {
 });
 
 Promise.all([getProfileInfo(), getInitialCards()])
-  // Карточки должны отображаться на странице только после получения id пользователя
+  // карточки должны отображаться на странице только после получения id пользователя
   .then(([userInfo, cards]) => {
     renderProfileInfoOnPage(userInfo);
     // загружаем информацию о профиле с сервера
-    loadInitialCards(cards);
+    loadInitialCards(userInfo._id, cards);
     // загружаем карточки с сервера
   })
   .catch((err) => {

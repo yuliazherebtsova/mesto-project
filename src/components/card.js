@@ -2,9 +2,8 @@ import { renderImagePreview } from "./utils.js";
 // универсальные функции, используемые в нескольких местах проекта
 import { deleteCard, setLikeToCard, deleteLikeFromCard } from "./api.js";
 const cardContainer = document.querySelector(".cards__list");
-const myUserId = "916ca4d8de1023df920e0724";
 
-function createCard(cardData) {
+function createCard(userId, cardData) {
   // функция создания карточки
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
@@ -14,16 +13,18 @@ function createCard(cardData) {
   cardElement.querySelector(".card__image").alt = cardData.name;
   // заполняем шаблон карточки данными, полученными с сервера
 
-  let isLiked = cardData.likes.some((like) => like._id === myUserId);
+  let isLiked = cardData.likes.some((like) => like._id === userId);
+  // признак, лайкал ли пользователь карточку
   let likesCount = cardData.likes.length;
+  // количество лайков на карточке
   toggleLikeButton(cardElement, likesCount, isLiked);
-  // отображаем актуальное состояние кнопки лайка на карточке
+  // отображаем актуальное состояние лайков на карточке
 
   cardElement
     .querySelector(".card__like-button")
     .addEventListener("click", () => {
       // создаем слушатель на событие постановки / снятия лайка
-      isLiked = cardData.likes.some((like) => like._id === myUserId);
+      isLiked = cardData.likes.some((like) => like._id === userId);
       if (isLiked) {
         deleteLikeFromCard(cardData._id)
           // удаляем лайк с карточки
@@ -56,7 +57,7 @@ function createCard(cardData) {
   }
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
-  if (cardData.owner._id === myUserId) {
+  if (cardData.owner._id === userId) {
     // удалить можно только свою карточку
     deleteButton.addEventListener("click", (evt) => {
       // создаем слушатель на событие нажатия на кнопку "Удалить"
@@ -85,10 +86,10 @@ function renderCard(card) {
   cardContainer.prepend(card);
 }
 
-function loadInitialCards(cards) {
+function loadInitialCards(userId, cards) {
   // функция добавления начальных карточек на страницу
   cards.forEach((card) => {
-    const newCard = createCard(card);
+    const newCard = createCard(userId, card);
     renderCard(newCard);
   });
 }
