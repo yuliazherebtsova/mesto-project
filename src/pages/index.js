@@ -77,9 +77,10 @@ formEditProfile.addEventListener("submit", (evt) => {
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
+    })
+    .finally(() => {
+      closePopup(popupEditProfile);
     });
-
-  closePopup(evt.target.closest(popupSelector));
 });
 
 formAddCard.addEventListener("submit", (evt) => {
@@ -106,15 +107,14 @@ formAddCard.addEventListener("submit", (evt) => {
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
+    })
+    .finally(() => {
+      formAddCard.reset();
+      // поля формы очищаются
+      submitCardButton.classList.add(validationConfig.inactiveButtonClass);
+      // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
+      closePopup(popupAddCard);
     });
-
-  formAddCard.reset();
-  // поля формы очищаются
-
-  submitCardButton.classList.add(validationConfig.inactiveButtonClass);
-  // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
-
-  closePopup(popupAddCard);
 });
 
 buttonEditProfile.addEventListener("click", () => {
