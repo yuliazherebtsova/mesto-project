@@ -9,10 +9,10 @@ import {
 } from "../components/modal.js";
 // функции работы с модальными окнами
 import {
-  renderProfileInfoOnModal,
-  renderProfileInfoOnPage,
+  renderProfileInfo,
   profileTitle,
   profileSubtitle,
+  profileAvatar,
   formEditNameField,
   formEditAboutField,
 } from "../components/profile.js";
@@ -35,6 +35,7 @@ import {
 import { renderLoading } from "../components/utils.js";
 // универсальные функции, используемые в нескольких местах проекта
 
+const profileElement = document.querySelector(".profile__info");
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -103,7 +104,7 @@ formAddCard.addEventListener("submit", (evt) => {
       const newCard = createCard(card.owner._id, card);
       // создаем новую карточку
       renderCard(newCard);
-      // добавляем карточку на страницу в начало списка
+      // добавляем карточку на страницу
     })
     .catch((err) => {
       console.log(`Ошибка: ${err}`);
@@ -119,12 +120,12 @@ formAddCard.addEventListener("submit", (evt) => {
 
 buttonEditProfile.addEventListener("click", () => {
   //  открытие окна редактирования профиля
-  const profileInfoToRender = {
+  const profileData = {
     // информация о профиле для отображения при открытии формы редактирования
     name: profileTitle.textContent,
     about: profileSubtitle.textContent,
   };
-  renderProfileInfoOnModal(profileInfoToRender);
+  renderProfileInfo(popupEditProfile, profileData);
   // отображаем информацию о профиле в форме редактирования при открытии
   const submitProfileButton = formEditProfile.querySelector(
     validationConfig.submitButtonSelector
@@ -159,7 +160,7 @@ buttonAddCard.addEventListener("click", () => {
 Promise.all([getProfileInfo(), getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userInfo, cards]) => {
-    renderProfileInfoOnPage(userInfo);
+    renderProfileInfo(profileElement, userInfo);
     // загружаем информацию о профиле с сервера
     loadInitialCards(userInfo._id, cards);
     // загружаем карточки с сервера
