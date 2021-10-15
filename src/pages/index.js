@@ -30,14 +30,20 @@ import {
   getInitialCards,
   postNewCard,
   updateProfileInfo,
+  updateProfileAvatar,
 } from "../components/api.js";
 // функции работы с api сервера
 import { renderLoading } from "../components/utils.js";
 // универсальные функции, используемые в нескольких местах проекта
 
 const profileElement = document.querySelector(".profile__info");
-const profileAvatarContainer = document.querySelector(".profile__avatar-container");
+const profileAvatarContainer = document.querySelector(
+  ".profile__avatar-container"
+);
 const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
+const formEditAvatar = document.querySelector("#formEditAvatar");
+const formEditAvatarSrcField =
+  document.querySelector("#formEditAvatar").elements["avatar"];
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -117,6 +123,24 @@ formAddCard.addEventListener("submit", (evt) => {
       submitCardButton.classList.add(validationConfig.inactiveButtonClass);
       // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
       closePopup(popupAddCard);
+    });
+});
+
+formEditAvatar.addEventListener("submit", (evt) => {
+  // обновление аватара пользователя
+  evt.preventDefault();
+  renderLoading(popupEditAvatar, true);
+  const avatarUrl = formEditAvatarSrcField.value;
+  updateProfileAvatar(avatarUrl)
+    .then((res) => {
+      profileAvatar.src = res.avatar;
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    })
+    .finally(() => {
+      renderLoading(popupEditAvatar, false);
+      closePopup(popupEditAvatar);
     });
 });
 

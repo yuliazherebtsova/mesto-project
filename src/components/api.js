@@ -55,6 +55,24 @@ const updateProfileInfo = ({ name, about }) => {
     });
 };
 
+const updateProfileAvatar = (avatarUrl) => {
+  // обновление данных профиля после редактирования
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: "PATCH",
+    headers: config.headers,
+    body: JSON.stringify({
+      avatar: avatarUrl,
+    }),
+  })
+    .then((res) => {
+      if (res.ok) return res.json();
+      return Promise.reject(`Ошибка: ${res.status}`);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};
+
 const postNewCard = ({ name, link }) => {
   // загрузка начальных карточек с сервера
   return fetch(`${config.baseUrl}/cards`, {
@@ -123,6 +141,7 @@ export {
   getInitialCards,
   getProfileInfo,
   updateProfileInfo,
+  updateProfileAvatar,
   postNewCard,
   deleteCard,
   setLikeToCard,
