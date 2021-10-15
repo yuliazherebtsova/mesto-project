@@ -36,6 +36,8 @@ import { renderLoading } from "../components/utils.js";
 // универсальные функции, используемые в нескольких местах проекта
 
 const profileElement = document.querySelector(".profile__info");
+const profileAvatarContainer = document.querySelector(".profile__avatar-container");
+const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
 const formEditProfile = document.querySelector("#formEditProfile");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
@@ -155,6 +157,12 @@ buttonAddCard.addEventListener("click", () => {
   // открытие формы добавления карточки
   ////clearFormAddCard();
   openPopup(popupAddCard);
+});
+
+profileAvatarContainer.addEventListener("click", () => {
+  // открытие формы редактирование аватара
+  ////clearFormAddCard();
+  openPopup(popupEditAvatar);
 });
 
 Promise.all([getProfileInfo(), getInitialCards()])

@@ -31,7 +31,13 @@
         Дело в том, что Webpack уже работает с хешированными версиями файлов — найти logo.png не получится.
         Научим Webpack динамически заменять пути в HTML-файле. С этим поможет HtmlWebpackPlugin: он умеет корректно подставлять правильные пути файлов.
         Для этого потребуется изменить привычный путь до изображения на такой. Вставки вида <% %> — синтаксис шаблона lodash-->
-        <img src="" alt="Аватар профиля пользователя" class="profile__avatar" />
+        <div class="profile__avatar-container">
+          <img
+            src=""
+            alt="Аватар профиля пользователя"
+            class="profile__avatar"
+          />
+        </div>
         <div class="profile__info">
           <h1 class="profile__title"></h1>
           <p class="profile__subtitle"></p>
@@ -51,8 +57,7 @@
         class="cards page__section page__section_place_cards"
         aria-label="Сетка карточек с интересными местами"
       >
-        <ul class="cards__list list">
-        </ul>
+        <ul class="cards__list list"></ul>
       </section>
     </main>
     <footer class="footer page__section page__section_place_footer">
@@ -147,6 +152,29 @@
           <img src="#" alt="#" class="popup__image" />
           <figcaption class="popup__image-title"></figcaption>
         </figure>
+      </div>
+    </div>
+    <div class="popup popup_type_edit-avatar">
+      <div class="popup__container popup__container_type_avatar-edit">
+        <button class="popup__close-button" aria-label="Закрыть"></button>
+        <h2 class="popup__heading">Обновить аватар</h2>
+        <form class="form" id="formEditAvavar" name="formEditAvatar" novalidate>
+          <fieldset class="form__input-container">
+            <label class="form__field">
+              <input
+                type="url"
+                pattern="https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)"
+                class="form__field-input"
+                id="avatar"
+                name="avatar"
+                placeholder="Ссылка на фото"
+                required
+              />
+              <span class="form__field-error avatar-error"></span>
+            </label>
+          </fieldset>
+          <button class="form__submit-button" type="submit">Сохранить</button>
+        </form>
       </div>
     </div>
     <template id="card-template">

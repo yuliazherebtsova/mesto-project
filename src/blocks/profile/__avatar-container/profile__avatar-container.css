@@ -1,0 +1,53 @@
+.profile__avatar-container {
+  margin-right: 30px;
+  position: relative;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  transition: opacity .7s ease;
+}
+
+.profile__avatar-container:hover {
+  cursor: pointer;
+}
+
+.profile__avatar-container:before {
+  content: "";
+  position: absolute;
+  display: inline-block;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  transition: background .7s ease;
+}
+
+.profile__avatar-container:hover:before {
+  background: rgba(0, 0, 0, .5);
+}
+
+.profile__avatar-container:after {
+  content: "";
+  position: absolute;
+  top: 46px;
+  left: 46px;
+  width: 26px;
+  height: 26px;
+  background-image: url('../../../images/profile-edit-button-icon.svg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  transition: opacity .7s ease;
+  opacity: 0;
+}
+
+.profile__avatar-container:hover:after {
+  opacity: 1;
+}
+
+
+@media (max-width: 767px) {
+  .profile__avatar-container {
+    margin-right: 0;
+    margin-bottom: 26px;
+  }
+}
