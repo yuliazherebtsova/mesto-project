@@ -42,14 +42,17 @@ const profileAvatarContainer = document.querySelector(
 );
 const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
 const formEditAvatar = document.querySelector("#formEditAvatar");
+const submitButtonEditAvatar = formEditAvatar.querySelector(".form__submit-button");
 const formEditAvatarSrcField =
   document.querySelector("#formEditAvatar").elements["avatar"];
 const formEditProfile = document.querySelector("#formEditProfile");
+const submitButtonEditProfile = formEditProfile.querySelector(".form__submit-button");
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
 const popupAddCard = document.querySelector(".popup_type_add-card");
 const formAddCard = document.querySelector("#formAddCard");
+const submitButtonAddCard = formAddCard.querySelector(".form__submit-button");
 const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
@@ -68,7 +71,7 @@ const validationConfig = {
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
-  renderLoading(popupEditProfile, true);
+  renderLoading(submitButtonEditProfile, true);
   // отображение процесса загрузки данных
   const profileInfo = {
     name: formEditNameField.value,
@@ -85,7 +88,7 @@ formEditProfile.addEventListener("submit", (evt) => {
       console.log(`Ошибка: ${err}`);
     })
     .finally(() => {
-      renderLoading(popupEditProfile, false);
+      renderLoading(submitButtonEditProfile, false);
       // завершение загрузки данных
       closePopup(popupEditProfile);
     });
@@ -100,7 +103,7 @@ formAddCard.addEventListener("submit", (evt) => {
   };
   // создаем объект с данными карточки
 
-  renderLoading(popupAddCard, true);
+  renderLoading(submitButtonAddCard, true);
   postNewCard(cardData)
     // отправка карточки на сервер
     .then((card) => {
@@ -113,7 +116,7 @@ formAddCard.addEventListener("submit", (evt) => {
       console.log(`Ошибка: ${err}`);
     })
     .finally(() => {
-      renderLoading(popupAddCard, false);
+      renderLoading(submitButtonAddCard, false, "Создать");
       formAddCard.reset();
       // поля формы очищаются
       const submitCardButton = formAddCard.querySelector(
@@ -129,7 +132,7 @@ formAddCard.addEventListener("submit", (evt) => {
 formEditAvatar.addEventListener("submit", (evt) => {
   // обновление аватара пользователя
   evt.preventDefault();
-  renderLoading(popupEditAvatar, true);
+  renderLoading(submitButtonEditAvatar, true);
   const avatarUrl = formEditAvatarSrcField.value;
   updateProfileAvatar(avatarUrl)
     .then((res) => {
@@ -139,7 +142,7 @@ formEditAvatar.addEventListener("submit", (evt) => {
       console.log(`Ошибка: ${err}`);
     })
     .finally(() => {
-      renderLoading(popupEditAvatar, false);
+      renderLoading(submitButtonEditAvatar, false);
       closePopup(popupEditAvatar);
     });
 });

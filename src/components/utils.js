@@ -1,12 +1,10 @@
 import { openPopup } from "./modal.js";
 const popupPreviewImage = document.querySelector(".popup_type_image-preview");
+const popupImage = popupPreviewImage.querySelector(".popup__image");
+const popupImageTitle = popupPreviewImage.querySelector(".popup__image-title");
 
 function renderImagePreview(image, title) {
   // функция отрисовки окна предпросмотра фото
-  const popupImage = popupPreviewImage.querySelector(".popup__image");
-  const popupImageTitle = popupPreviewImage.querySelector(
-    ".popup__image-title"
-  );
   popupImage.src = image;
   popupImage.alt = title;
   popupImageTitle.textContent = title;
@@ -14,16 +12,9 @@ function renderImagePreview(image, title) {
   // открываем окно предпросмотра фото
 }
 
-function renderLoading(popup, isLoading) {
-  const submitButton = popup.querySelector(".form__submit-button");
-  if (isLoading) {
-    submitButton.textContent = "Сохранение...";
-  } else {
-    if (popup.classList.contains("popup_type_edit-profile"))
-      submitButton.textContent = "Сохранить";
-    if (popup.classList.contains("popup_type_add-card"))
-      submitButton.textContent = "Создать";
-  }
+function renderLoading(submitButton, isLoading, buttonText = "Сохранить", ) {
+  if (isLoading) submitButton.textContent = "Сохранение...";
+  else submitButton.textContent = buttonText;
 }
 
 export { renderImagePreview, renderLoading };

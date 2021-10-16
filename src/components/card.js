@@ -7,11 +7,13 @@ function createCard(userId, cardData) {
   // функция создания карточки
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
+  const cardImage = cardElement.querySelector(".card__image");
+  const cardTitle = cardElement.querySelector(".card__title");
   // создаем новую карточку по шаблону
   cardElement.id = cardData._id;
-  cardElement.querySelector(".card__title").textContent = cardData.name;
-  cardElement.querySelector(".card__image").src = cardData.link;
-  cardElement.querySelector(".card__image").alt = cardData.name;
+  cardTitle.textContent = cardData.name;
+  cardImage.src = cardData.link;
+  cardImage.alt = cardData.name;
   // заполняем шаблон карточки данными, полученными с сервера
 
   cardElement.isLiked = cardData.likes.some((like) => like._id === userId);
@@ -75,7 +77,7 @@ function createCard(userId, cardData) {
     });
   } else deleteButton.classList.add("card__delete-button_inactive");
 
-  cardElement.querySelector(".card__image").addEventListener("click", () => {
+  cardImage.addEventListener("click", () => {
     // создаем слушатель на событие нажатия на превью фото в карточке
     const clickedImageSrc = cardData.link;
     const clickedImageTitle = cardData.name;
