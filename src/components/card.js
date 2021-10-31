@@ -101,30 +101,3 @@ function loadInitialCards(userId, cards) {
 }
 
 export { createCard, renderCard, loadInitialCards };
-
-// function clearFormAddCard() {
-//   // в форме создания нового места очищаем введенную ранее информацию
-//   // (необходимо в случае если форма не была отправлена, а просто была закрыта)
-//   formAddPlaceField.value = "";
-//   formAddPictureField.value = "";
-//   const validationConfig = {
-//     formSelector: "#formAddCard",
-//     fieldsetSelector: ".form__input-container",
-//     inputSelector: ".form__field-input",
-//     submitButtonSelector: ".form__submit-button",
-//     inactiveButtonClass: "form__submit-button_inactive",
-//     inputErrorClass: "form__field-input_type_error",
-//     errorClass: "form__field-error_active",
-//   };
-//   enableValidation(validationConfig);
-//   // перезапускаем валидацию, кнопка "Сохранить" становится неактивна
-//   hideInputError(
-//   // скрываваем сообщения об ошибках, которые появились на еще незаполненных полях
-//     { formElement: formAddCard, inputElement: formAddPlaceField },
-//     validationConfig
-//   );
-//   hideInputError(
-//     { formElement: formAddCard, inputElement: formAddPictureField },
-//     validationConfig
-//   );
-// }

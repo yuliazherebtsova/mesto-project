@@ -16,7 +16,7 @@ export default class Section {
 
   // отрисовка элемента
   renderItems() {
-    this.clear();
+    this._clear();
     this._renderedItems.forEach(item => {
       this._renderer(item);
     });

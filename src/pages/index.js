@@ -1,6 +1,10 @@
 import "./index.css";
 // импорт главного файла стилей
 import {
+  cardListSelector
+} from '../utils/constants.js';
+import Section from "../components/Section.js";
+import {
   popupSelector,
   popups,
   popupCloseButtons,
@@ -192,13 +196,12 @@ profileAvatarContainer.addEventListener("click", () => {
   openPopup(popupEditAvatar);
 });
 
-//---попытка запустить классы--------//
+//=======================================классы===============================================//
 //---
 //все импорты позже перенесем наверх, пока здесь, вроде, понятнее их держать.
 //---
-let userId = null; // в промисе приобретет свое значение
 
-/*СЕРВЕР*/
+/**********************СЕРВЕР*******************/
 import Api from "../components/Apii.js"; //пока не убила api.js ибо страшно, и завела отдельный файл Apii.js)
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
@@ -207,29 +210,25 @@ const api = new Api({
     'Content-Type': 'application/json',
   }
 })
-const initialData = [api.getProfileInfo(), api.getInitialCards()];
 
-/*ЮЗЕР*/
+/*********************** ЮЗЕР ******************/
 import UserInfo from "../components/UserInfo.js";
 //---перенести в utils/variables.js
 // profileTitle, profileSubtitle, profileAvatar <-- пока они находятся в profile.js
 //---
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
 
-/*КАРТИНКИ*/
-import Section from "../components/Section.js";
-//---перенести в utils/variables.js
-const cardContainer = document.querySelector(".cards__list"); // <-- пока прямо тут объявила
-//---
-const cardsList = new Section({
-  renderer: (data) => {
-    cardsList.addItem(createCard(userId, data));
-  },
-}, cardContainer);
-
-/*ОБЩИЙ ПРОМИС*/
-//Promise.all([getProfileInfo(), getInitialCards()])
-Promise.all(initialData)
+/********************* КАРТОЧКИ *****************/
+// const initialCardsList = new Section({
+//   data: [],
+//   renderer: (item) => {
+//     console.log(item)
+//     const cardElement = createCard(userId, item);
+//     initialCardsList.addItem(cardElement);
+//   },
+// }, cardListSelector);
+/********************* ОБЩИЙ ПРОМИС **************/
+Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   /*
   .then(([userInfo, cards]) => {
@@ -240,9 +239,19 @@ Promise.all(initialData)
   })
   */
   .then(([userData, cards]) => {
-    userId = userData._id;
+    console.log(userData) // <---------------- убрать перед сдачей проекта
+    console.log(cards) // <---------------- убрать перед сдачей проекта
+    const userId = userData._id;
     user.setUserInfo(userData);
-    cardsList.renderItems(cards.reverse());
+    const initialCardsList = new Section({
+      data: cards,
+      renderer: (card) => {
+        const cardElement = createCard(userId, card);
+        initialCardsList.addItem(cardElement);
+      },
+    }, cardListSelector);
+    console.log(initialCardsList) // <---------------- убрать перед сдачей проекта
+    initialCardsList.renderItems();
   })
   .catch((err) => {
     console.log(err);
