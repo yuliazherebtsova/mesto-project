@@ -1,103 +1,107 @@
-import { renderImagePreview } from "./utils.js";
-// универсальные функции, используемые в нескольких местах проекта
-import { deleteCard, setLikeToCard, deleteLikeFromCard } from "./api.js";
-const cardContainer = document.querySelector(".cards__list");
+import {
+  cardElementSelector,
+  cardImageSelector,
+  cardTitleSelector,
+  cardDeleteBtnSelector,
+  cardDeleteBtnInactiveSelector,
+  cardLikeBtnSelector,
+  cardLikeBtnActiveSelector,
+  cardLikesCountSelector,
+} from "../utils/constants.js";
 
-function createCard(userId, cardData) {
-  // функция создания карточки
-  const cardTemplate = document.querySelector("#card-template").content;
-  const cardElement = cardTemplate.querySelector(".card").cloneNode(true);
-  const cardImage = cardElement.querySelector(".card__image");
-  const cardTitle = cardElement.querySelector(".card__title");
-  // создаем новую карточку по шаблону
-  cardElement.id = cardData._id;
-  cardTitle.textContent = cardData.name;
-  cardImage.src = cardData.link;
-  cardImage.alt = cardData.name;
-  // заполняем шаблон карточки данными, полученными с сервера
+export default class Card {
+  constructor(
+    {
+      name,
+      link,
+      userId,
+      likes,
+      owner,
+      handleCardClick,
+      handleLikeClick,
+      handleDeleteIconClick,
+    },
+    templateSelector
+  ) {
+    this._name = name;
+    this._alt = name;
+    this._link = link;
+    this._likesCount = this._countLikes(likes);
+    this._isMyCard = this._isMyCard(userId, owner);
+    this._isLiked = this._isLiked(userId, likes);
+    this._selector = templateSelector;
+    this._handleCardClick = handleCardClick;
+    this._handleLikeClick = handleLikeClick;
+    this._handleDeleteIconClick = handleDeleteIconClick;
+  }
+  _getElement() {
+    // создаем новую карточку по шаблону
+    const cardElement = document
+      .querySelector(this._selector)
+      .content.querySelector(cardElementSelector)
+      .cloneNode(true);
 
-  cardElement.isLiked = cardData.likes.some((like) => like._id === userId);
-  // признак, лайкал ли пользователь карточку ранее
-  cardElement.likesCount = cardData.likes.length;
-  // количество лайков на карточке
-  toggleLikeButton(cardElement);
-  // отображаем актуальное состояние лайков на карточке
-
-  cardElement
-    .querySelector(".card__like-button")
-    .addEventListener("click", () => {
-      // создаем слушатель на событие постановки / снятия лайка
-      if (cardElement.isLiked) {
-        deleteLikeFromCard(cardData._id)
-          // удаляем лайк с карточки
-          .then((data) => {
-            cardElement.likesCount = data.likes.length;
-            cardElement.isLiked = false;
-            toggleLikeButton(cardElement);
-
-          })
-          .catch((err) => {
-            console.log(`Ошибка: ${err}`);
-          });
-      } else {
-        setLikeToCard(cardData._id)
-          // ставим лайк карточке
-          .then((data) => {
-            cardElement.likesCount = data.likes.length;
-            cardElement.isLiked = true;
-            toggleLikeButton(cardElement);
-
-          })
-          .catch((err) => {
-            console.log(`Ошибка: ${err}`);
-          });
-      }
-    });
-
-  function toggleLikeButton(cardElement) {
-    // функция изменения внешнего вида кнопки и счетчика лайков
-    const likeButtonElement = cardElement.querySelector(".card__like-button");
-    if (cardElement.isLiked) likeButtonElement.classList.add("card__like-button_active");
-    else likeButtonElement.classList.remove("card__like-button_active");
-    cardElement.querySelector(".card__likes").textContent = cardElement.likesCount;
+    return cardElement;
   }
 
-  const deleteButton = cardElement.querySelector(".card__delete-button");
-  if (cardData.owner._id === userId) {
-    // удалить можно только свою карточку
-    deleteButton.addEventListener("click", (evt) => {
-      // создаем слушатель на событие нажатия на кнопку "Удалить"
-      // #TODO попап подтверждения удаления карточки
-      deleteCard(cardData._id)
-        // удаляем карточку с сервера
-        .then(() => evt.target.parentElement.remove())
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
-    });
-  } else deleteButton.classList.add("card__delete-button_inactive");
+  createCard() {
+    this._element = this._getElement();
+    this._element.querySelector(cardTitleSelector).textContent = this._name;
+    this._element.querySelector(cardImageSelector).src = this._link;
+    this._element.querySelector(cardImageSelector).alt = this._name;
+    this._toggleLikeButton();
+    // заполняем шаблон карточки данными, полученными с сервера
 
-  cardImage.addEventListener("click", () => {
-    // создаем слушатель на событие нажатия на превью фото в карточке
-    const clickedImageSrc = cardData.link;
-    const clickedImageTitle = cardData.name;
-    renderImagePreview(clickedImageSrc, clickedImageTitle);
-  });
+    if (!this._isMyCard)
+      // удалить можно только свою карточку
+      this._element
+        .querySelector(cardDeleteBtnSelector)
+        .classList.add(cardDeleteBtnInactiveSelector);
 
-  return cardElement;
+    return this._element;
+  }
+
+  _isMyCard(userId, owner) {
+    return owner._id === userId;
+  }
+
+  _isLiked(userId, likes) {
+    return likes.some((like) => like._id === userId);
+  }
+
+  _countLikes(likes) {
+    return likes.length;
+  }
+
+  _toggleLikeButton() {
+    // функция изменения внешнего вида кнопки и счетчика лайков
+    const likeButtonElement = this._element.querySelector(cardLikeBtnSelector);
+
+    if (this._isLiked)
+      likeButtonElement.classList.add(cardLikeBtnActiveSelector);
+    else likeButtonElement.classList.remove(cardLikeBtnActiveSelector);
+
+    this._element.querySelector(cardLikesCountSelector).textContent =
+      this._likesCount;
+  }
+
+  // _handleOpenPopup() {
+  //   popupImage.src = this._image;
+  //   popupElement.classList.add("popup_is-opened");
+  // }
+
+  // _handleClosePopup() {
+  //   popupImage.src = "";
+  //   popupElement.classList.remove("popup_is-opened");
+  // }
+
+  // _setEventListeners() {
+  //   this._element.addEventListener("click", () => {
+  //     this._handleOpenPopup();
+  //   });
+
+  //   popupCloseButton.addEventListener("click", () => {
+  //     this._handleClosePopup();
+  //   });
+  // }
 }
-
-function renderCard(card) {
-  // функция добавления новой карточки в разметку
-  cardContainer.prepend(card);
-}
-
-function loadInitialCards(userId, cards) {
-  // функция добавления начальных карточек на страницу
-  cards.forEach((card) => {
-    const newCard = createCard(userId, card);
-    renderCard(newCard);
-  });
-}
-
-export { createCard, renderCard, loadInitialCards };
