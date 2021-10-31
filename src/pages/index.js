@@ -33,8 +33,6 @@ import {
 } from "../components/card2.js";
 // функции работы с карточками
 import {
-  getProfileInfo,
-  getInitialCards,
   postNewCard,
   updateProfileInfo,
   updateProfileAvatar,
