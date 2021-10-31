@@ -1,8 +1,4 @@
 // класс для взаимодействия с сервером
-// -----------
-// там, где стоит ✓ считаю, что все работает,
-// остальные функции перенесла, но не проверяла,
-// и еще остались те, которые позже предлагаю перенести (в самом низу список).
 export default class Api {
   constructor({ baseUrl, headers }) {
     this.baseUrl = baseUrl;
@@ -36,13 +32,13 @@ export default class Api {
 
   //-------
   // обновление данных профиля после редактирования
-  updateProfileInfo(item) {
+  updateProfileInfo({name, about}) {
     return fetch(`${this.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this.headers,
       body: JSON.stringify({
-        name: item.name,
-        about: item.about
+        name: name,
+        about: about
       })
     })
       .then(this._checkResponse)

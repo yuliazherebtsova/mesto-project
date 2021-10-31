@@ -1,20 +1,24 @@
-//вроде бы учла все, что сдесь должно быть.
-
 export default class Section {
-  constructor({ renderer }, cardContainer) {
+  constructor({ data, renderer }, containerSelector) {
+    this._renderedItems = data;
     this._renderer = renderer;
-    this._container = cardContainer;
+    this._container = document.querySelector(containerSelector);
   }
 
-  // рендерим карточки
-  renderItems(items) {
-    items.forEach((item) => {
-      this._renderer(item);
-    });
-  }
-
-  // новая карточка
+  // новый элемент в контейнере
   addItem(element) {
     this._container.prepend(element);
+  }
+
+  _clear() {
+    this._container.innerHTML = '';
+  }
+
+  // отрисовка элемента
+  renderItems() {
+    this.clear();
+    this._renderedItems.forEach(item => {
+      this._renderer(item);
+    });
   }
 }
