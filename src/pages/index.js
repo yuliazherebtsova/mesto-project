@@ -1,9 +1,12 @@
 import "./index.css";
 // импорт главного файла стилей
 import {
-  cardListSelector
+  cardListSelector, cardTemplateSelector
 } from '../utils/constants.js';
+
 import Section from "../components/Section.js";
+import Card from "../components/Card.js";
+
 import {
   popupSelector,
   popups,
@@ -27,7 +30,7 @@ import {
   createCard,
   renderCard,
   loadInitialCards,
-} from "../components/card.js";
+} from "../components/card2.js";
 // функции работы с карточками
 import {
   getProfileInfo,
@@ -35,7 +38,7 @@ import {
   postNewCard,
   updateProfileInfo,
   updateProfileAvatar,
-} from "../components/api.js";
+} from "../components/api2.js";
 // функции работы с api сервера
 import { renderLoading } from "../components/utils.js";
 // универсальные функции, используемые в нескольких местах проекта
@@ -202,7 +205,7 @@ profileAvatarContainer.addEventListener("click", () => {
 //---
 
 /**********************СЕРВЕР*******************/
-import Api from "../components/Apii.js"; //пока не убила api.js ибо страшно, и завела отдельный файл Apii.js)
+import Api from "../components/Api.js"; //пока не убила api.js ибо страшно, и завела отдельный файл Apii.js)
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
@@ -218,26 +221,9 @@ import UserInfo from "../components/UserInfo.js";
 //---
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
 
-/********************* КАРТОЧКИ *****************/
-// const initialCardsList = new Section({
-//   data: [],
-//   renderer: (item) => {
-//     console.log(item)
-//     const cardElement = createCard(userId, item);
-//     initialCardsList.addItem(cardElement);
-//   },
-// }, cardListSelector);
 /********************* ОБЩИЙ ПРОМИС **************/
 Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
-  /*
-  .then(([userInfo, cards]) => {
-    renderProfileInfo(profileElement, userInfo);
-    // загружаем информацию о профиле с сервера
-    loadInitialCards(userInfo._id, cards);
-    // загружаем карточки с сервера
-  })
-  */
   .then(([userData, cards]) => {
     console.log(userData) // <---------------- убрать перед сдачей проекта
     console.log(cards) // <---------------- убрать перед сдачей проекта
@@ -245,8 +231,9 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     user.setUserInfo(userData);
     const initialCardsList = new Section({
       data: cards,
-      renderer: (card) => {
-        const cardElement = createCard(userId, card);
+      renderer: (data) => {
+        data.userId = userId;
+        const cardElement = new Card(data, cardTemplateSelector).createCard();
         initialCardsList.addItem(cardElement);
       },
     }, cardListSelector);

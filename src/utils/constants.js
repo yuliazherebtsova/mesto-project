@@ -1,1 +1,10 @@
 export const cardListSelector = ".cards__list";
+export const cardTemplateSelector = "#card-template";
+export const cardElementSelector = ".card";
+export const cardImageSelector = ".card__image";
+export const cardTitleSelector = ".card__title";
+export const cardDeleteBtnSelector = ".card__delete-button";
+export const cardDeleteBtnInactiveSelector = "card__delete-button_inactive";
+export const cardLikeBtnSelector = ".card__like-button";
+export const cardLikeBtnActiveSelector = "card__like-button_active";
+export const cardLikesCountSelector = ".card__likes";
