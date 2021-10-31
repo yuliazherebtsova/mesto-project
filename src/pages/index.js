@@ -29,7 +29,6 @@ import enableValidation from "../components/validate.js";
 import {
   createCard,
   renderCard,
-  loadInitialCards,
 } from "../components/card2.js";
 // функции работы с карточками
 import {
