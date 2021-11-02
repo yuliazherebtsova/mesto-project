@@ -60,17 +60,10 @@ const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
-const validationConfig = {
-  formSelector: ".form",
-  fieldsetSelector: ".form__input-container",
-  inputSelector: ".form__field-input",
-  submitButtonSelector: ".form__submit-button",
-  inactiveButtonClass: "form__submit-button_inactive",
-  inputErrorClass: "form__field-input_type_error",
-  errorClass: "form__field-error_active",
-};
-// настройки валидации форм
 
+
+
+/*
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
   evt.preventDefault();
@@ -194,6 +187,10 @@ profileAvatarContainer.addEventListener("click", () => {
   ////clearFormAddCard();
   openPopup(popupEditAvatar);
 });
+*/
+
+
+
 
 //=======================================классы===============================================//
 //---
@@ -216,6 +213,102 @@ import UserInfo from "../components/UserInfo.js";
 // profileTitle, profileSubtitle, profileAvatar <-- пока они находятся в profile.js
 //---
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
+
+
+
+
+/*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
+
+import FormValidator from "../components/FormValidator.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+//---перенести в utils/variables.js
+const validationConfig = {
+  formSelector: ".form",
+  fieldsetSelector: ".form__input-container",
+  inputSelector: ".form__field-input",
+  submitButtonSelector: ".form__submit-button",
+  inactiveButtonClass: "form__submit-button_inactive",
+  inputErrorClass: "form__field-input_type_error",
+  errorClass: "form__field-error_active",
+};
+//  еще перенесутся:
+// formEditProfile
+// formAddCard
+// formEditAvatar
+
+
+/*--------------------работаем с формой юзера--------------------*/
+
+//валидация юзера
+const validationProfile = new FormValidator(validationConfig, formEditProfile);
+
+//экземпляр PopupWithForm для юзера
+//перенести popupEditProfile в переменные
+const popupProfile = new PopupWithForm(
+  popupEditProfile,
+  validationProfile,
+  {
+    //обращаемся к апи
+    handleFormSubmit: () => {
+      popupProfile.renderLoading(true);
+      api
+        .updateProfileInfo(popupProfile._getInputValues())
+        .then((data) => {
+          user.setUserInfo(data);
+        })
+        .catch((err) => console.log(`Ошибка: ${err}`))
+        .finally(() => {
+          popupProfile.renderLoading(false);
+          popupProfile.close();
+        });
+    },
+    setInputValues: () => {
+      //перенести formEditProfile в переменные
+      formEditProfile.elements.name.value = user.getUserInfo().title;
+      formEditProfile.elements.about.value = user.getUserInfo().subtitle;
+    },
+  }
+);
+//открытие формы редактирования инфы о юзере
+buttonEditProfile.addEventListener('click', () => {
+  popupProfile.open();
+});
+
+/*--------------------работаем с формой аватара--------------------*/
+
+const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
+//перенести popupEditAvatar в переменные
+const popupAvatar = new PopupWithForm(
+  popupEditAvatar,
+  validationAvatar,
+  {
+    handleFormSubmit: () => {
+      popupAvatar.renderLoading(true);
+      api
+        .updateProfileAvatar(popupAvatar._getInputValues())
+        .then((data) => {
+          user.updateProfileAvatar(data); //я не знаю, почему, но выдает ошибку.
+        })
+        .catch((err) => console.log(`Ошибка: ${err}`))
+        .finally(() => {
+          popupAvatar.renderLoading(false);
+          popupAvatar.close();
+        });
+    },
+    setInputValues: () => {
+      //formEditAvatarSrcField.value = '';
+    },
+  }
+);
+
+profileAvatarContainer.addEventListener('click', () => {
+  popupAvatar.open();
+});
+
+/*--------------------работаем с формой картинок--------------------*/
+const validationPlace = new FormValidator(validationConfig, formAddCard);
+//тут должна примешаться PopupWithImage и вообще хз короч
+
 
 /********************* ОБЩИЙ ПРОМИС **************/
 
@@ -250,6 +343,6 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     console.log(err);
   })
   .finally(() => {
-    enableValidation(validationConfig);
+    //enableValidation(validationConfig);
     // включаем валидацию форм
   });
