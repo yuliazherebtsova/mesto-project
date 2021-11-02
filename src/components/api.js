@@ -74,5 +74,4 @@ export default class Api {
   //лайк карточки setLikeToCard
   //-------
   //дизлайк карточки deleteLikeFromCard
-
 }

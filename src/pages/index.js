@@ -347,7 +347,6 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
       cardListSelector
     );
     console.log(initialCardsList); // <---------------- убрать перед сдачей проекта
-
     initialCardsList.renderItems();
   })
   .catch((err) => {
