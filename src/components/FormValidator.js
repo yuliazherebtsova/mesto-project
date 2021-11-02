@@ -25,10 +25,6 @@ export default class FormValidator {
   }
 
   _hideInputError(inputElement) {
-    /*
-    console.log('--------------');
-    console.log(inputElement);
-    */
     const errorElement = this._returnErrorElement(inputElement);
     inputElement.classList.remove(this._inputErrorClass);
     errorElement.classList.remove(this._errorClass);
@@ -37,21 +33,11 @@ export default class FormValidator {
   }
 
   //невалидное поле
-  /*
-  _findInvalidInput(inputList) {
-    return inputList.some((inputElement) => {
-      return !inputElement.validity.valid;
-    });
-  }
-  */
   _hasInvalidInput(inputList) {
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     });
   }
-
-
-
 
   //валидность поля
   _checkInputValidity(inputElement) {
@@ -84,35 +70,6 @@ export default class FormValidator {
     });
   }
 
-  /*
-  _setEventListeners() {
-    const inputList = Array.from(
-      this._formElement.querySelectorAll(this._inputSelector)
-    );
-    this._toggleButtonState(inputList);
-    inputList.forEach((inputElement) => {
-      inputElement.addEventListener('input', () => {
-        this._checkInputValidity(inputElement);
-        this._toggleButtonState(inputList);
-      });
-    });
-  }
-  */
-  /*
-  //состояние кнопки --> используется при открытии --> PopupWithForm
-  setInitialButtonState(isDisabled) {
-    const buttonElement = this._formElement.querySelector(this._submitButtonSelector);
-    buttonElement.disabled = isDisabled;
-  }
-
-  //начальное состояние --> используется при открытии --> PopupWithForm
-  setDefaultErrorState() {
-    const inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
-    inputList.forEach((inputElement) => {
-      this._hideInputError(inputElement);
-    });
-  }
-  */
   updateButtonState(formElement) {
     const inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector));
     const buttonElement = formElement.querySelector(this._submitButtonSelector);
@@ -132,13 +89,6 @@ export default class FormValidator {
       event.preventDefault();
     });
   }
-  /*
-  enableValidation() {
-    this._formElement.addEventListener('submit', (evt) => {
-      evt.preventDefault();
-    });
-    this._setEventListeners();
-  }
-  */
+
 
 }
