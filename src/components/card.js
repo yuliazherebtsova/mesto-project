@@ -3,20 +3,21 @@ import {
   cardImageSelector,
   cardTitleSelector,
   cardDeleteBtnSelector,
-  cardDeleteBtnInactiveSelector,
+  cardDeleteBtnInactiveModifier,
   cardLikeBtnSelector,
-  cardLikeBtnActiveSelector,
+  cardLikeBtnActiveModifier,
   cardLikesCountSelector,
 } from "../utils/constants.js";
 
 export default class Card {
   constructor(
-    { name, link, userId, likes, owner },
+    { _id, name, link, userId, likes, owner },
     handleCardClick,
     //handleLikeClick,
-    //handleDeleteClick,
+    handleDeleteClick,
     templateSelector
   ) {
+    this._id = _id;
     this._name = name;
     this._alt = name;
     this._link = link;
@@ -26,10 +27,10 @@ export default class Card {
     this._selector = templateSelector;
     this._handleCardClick = handleCardClick;
     //this._handleLikeClick = handleLikeClick;
-    //this._handleDeleteClick = handleDeleteClick;
+    this._handleDeleteClick = handleDeleteClick;
   }
   _getElement() {
-    // создаем новую карточку по шаблону
+    // создаем новую карточку по шаблону из разметки
     const cardElement = document
       .querySelector(this._selector)
       .content.querySelector(cardElementSelector)
@@ -38,7 +39,7 @@ export default class Card {
     return cardElement;
   }
 
-  createCard() {
+  create() {
     this._element = this._getElement();
     this._element.querySelector(cardTitleSelector).textContent = this._name;
     this._element.querySelector(cardImageSelector).src = this._link;
@@ -52,9 +53,13 @@ export default class Card {
       // удалить можно только свою карточку
       this._element
         .querySelector(cardDeleteBtnSelector)
-        .classList.add(cardDeleteBtnInactiveSelector);
+        .classList.add(cardDeleteBtnInactiveModifier);
 
     return this._element;
+  }
+
+  delete() {
+    this._element.remove();
   }
 
   _toggleLikeButton() {
@@ -62,38 +67,26 @@ export default class Card {
     const likeButtonElement = this._element.querySelector(cardLikeBtnSelector);
 
     if (this._isLiked)
-      likeButtonElement.classList.add(cardLikeBtnActiveSelector);
-    else likeButtonElement.classList.remove(cardLikeBtnActiveSelector);
+      likeButtonElement.classList.add(cardLikeBtnActiveModifier);
+    else likeButtonElement.classList.remove(cardLikeBtnActiveModifier);
 
     this._element.querySelector(cardLikesCountSelector).textContent =
       this._likesCount;
   }
 
   _setEventListeners() {
+    // слушатели, устанавливамые на элементы карточки при ее создании (приватный метод)
     this._element
       .querySelector(cardImageSelector)
       .addEventListener("click", () => {
         this._handleCardClick();
       });
+
+    this._element
+      .querySelector(cardDeleteBtnSelector)
+      .addEventListener("click", () => {
+        // создаем слушатель на событие нажатия на кнопку "Удалить"
+        this._handleDeleteClick(this._id);
+      });
   }
-
-  // _handleOpenPopup() {
-  //   popupImage.src = this._image;
-  //   popupElement.classList.add("popup_is-opened");
-  // }
-
-  // _handleClosePopup() {
-  //   popupImage.src = "";
-  //   popupElement.classList.remove("popup_is-opened");
-  // }
-
-  // _setEventListeners() {
-  //   this._element.addEventListener("click", () => {
-  //     this._handleOpenPopup();
-  //   });
-
-  //   popupCloseButton.addEventListener("click", () => {
-  //     this._handleClosePopup();
-  //   });
-  // }
 }

@@ -1,9 +1,20 @@
 import "./index.css";
 // импорт главного файла стилей
-import { cardListSelector, cardTemplateSelector } from "../utils/constants.js";
+import {
+  cardListSelector,
+  cardTemplateSelector,
+  popupEditProfileSelector,
+  popupPreviewImageSelector,
+} from "../utils/constants.js";
+// ииморт констант (селекторы и пр.)
 
 import Section from "../components/Section.js";
 import Card from "../components/Card.js";
+import FormValidator from "../components/FormValidator.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import Api from "../components/Api.js";
+import UserInfo from "../components/UserInfo.js";
 
 import {
   popupSelector,
@@ -33,7 +44,6 @@ import {
 } from "../components/api2.js";
 // функции работы с api сервера
 import { renderLoading, renderImagePreview } from "../components/utils.js";
-// универсальные функции, используемые в нескольких местах проекта
 
 const profileElement = document.querySelector(".profile__info");
 const profileAvatarContainer = document.querySelector(
@@ -50,7 +60,7 @@ const formEditProfile = document.querySelector("#formEditProfile");
 const submitButtonEditProfile = formEditProfile.querySelector(
   ".form__submit-button"
 );
-const popupEditProfile = document.querySelector(".popup_type_edit-profile");
+
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
 const popupAddCard = document.querySelector(".popup_type_add-card");
@@ -60,8 +70,6 @@ const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
-
-
 
 /*
 formEditProfile.addEventListener("submit", (evt) => {
@@ -189,16 +197,10 @@ profileAvatarContainer.addEventListener("click", () => {
 });
 */
 
-
-
-
 //=======================================классы===============================================//
-//---
-//все импорты позже перенесем наверх, пока здесь, вроде, понятнее их держать.
-//---
 
 /**********************СЕРВЕР*******************/
-import Api from "../components/Api.js"; //пока не убила api.js ибо страшно, и завела отдельный файл Apii.js)
+
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
@@ -208,19 +210,14 @@ const api = new Api({
 });
 
 /*********************** ЮЗЕР ******************/
-import UserInfo from "../components/UserInfo.js";
+
 //---перенести в utils/variables.js
 // profileTitle, profileSubtitle, profileAvatar <-- пока они находятся в profile.js
 //---
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
 
-
-
-
 /*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
 
-import FormValidator from "../components/FormValidator.js";
-import PopupWithForm from "../components/PopupWithForm.js";
 //---перенести в utils/variables.js
 const validationConfig = {
   formSelector: ".form",
@@ -237,7 +234,7 @@ const validationConfig = {
 // formEditAvatar
 
 
-/*--------------------работаем с формой юзера--------------------*/
+//--------------------работаем с формой юзера--------------------
 
 //валидация юзера
 const validationProfile = new FormValidator(validationConfig, formEditProfile);
@@ -245,7 +242,7 @@ validationProfile.enableValidation();
 
 //попап юзера
 const popupProfile = new PopupWithForm({
-  popupSelector: popupEditProfile,
+  popupSelector: popupEditProfileSelector,
   handleFormSubmit: () => {
     popupProfile.renderLoading(true);
     api
@@ -260,20 +257,19 @@ const popupProfile = new PopupWithForm({
       })
       .finally(() => {
         popupProfile.renderLoading(false);
-      })
-  }
-
+      });
+  },
 });
 
 //кнопка юзера
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   validationProfile.updateButtonState(formEditProfile);
   formEditProfile.elements.name.value = user.getUserInfo().title;
   formEditProfile.elements.about.value = user.getUserInfo().subtitle;
   popupProfile.open();
 });
 
-/*--------------------работаем с формой аватара--------------------*/
+//--------------------работаем с формой аватара--------------------
 
 //валидация аватара
 const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
@@ -292,27 +288,27 @@ const popupAvatar = new PopupWithForm({
       })
 
       .catch((err) => {
-        console.log(`${err}`)
+        console.log(`${err}`);
       })
       .finally(() => {
         popupAvatar.renderLoading(false);
-      })
-  }
+      });
+  },
 });
 
 // кнопка аватара
-profileAvatarContainer.addEventListener('click', () => {
+profileAvatarContainer.addEventListener("click", () => {
   validationAvatar.updateButtonState(formEditAvatar);
   popupAvatar.open();
 });
 
-
-/*--------------------работаем с формой картинок--------------------*/
+//--------------------работаем с формой картинок--------------------
 const validationPlace = new FormValidator(validationConfig, formAddCard);
 //тут должна примешаться PopupWithImage и вообще хз короч
 
 
-/********************* ОБЩИЙ ПРОМИС **************/
+const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
+popupWithImage.setEventListeners();
 
 Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
@@ -325,15 +321,27 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
         data: cards,
         renderer: (cardData) => {
           cardData.userId = userData._id;
-          const cardElement = new Card(
+          const card = new Card(
             cardData,
             () => {
-              console.log("click!", cardData.name); // <-------- убрать перед сдачей проекта
-              renderImagePreview(cardData);
+              popupWithImage.open(cardData);
+            },
+            (id) => {
+              api
+                .deleteCard(id)
+                // #TODO попап подтверждения удаления карточки
+                .then(() => {
+                  card.delete();
+                })
+                .catch((err) => {
+                  console.log(`Ошибка: ${err}`);
+                });
             },
             cardTemplateSelector
-          ).createCard();
+          );
+          const cardElement = card.create();
           initialCardsList.addItem(cardElement);
+          console.log(card); // <---------------- убрать перед сдачей проекта
         },
       },
       cardListSelector
