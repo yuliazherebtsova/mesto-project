@@ -1,41 +1,47 @@
-//отвечает за открытие и закрытие попапа
-//Принимает в конструктор единственный параметр — селектор попапа.
-//Содержит публичные методы open и close
-//Содержит приватный метод _handleEscClose
-//Содержит публичный метод setEventListeners, который добавляет слушатель клика иконке закрытия попапа
+import {
+  popupCloseBtnSelector,
+  popupOpenedModifier,
+} from "../utils/constants.js";
 
 export default class Popup {
   constructor(popupSelector) {
-    this._popup = popupSelector;
-    this._escCloseHandler = (evt) => this._handleEscClose(evt);
+    this._popupSelector = popupSelector;
+    this._popupElement = document.querySelector(popupSelector);
+    this._handleEscClose = this._handleEscClose.bind(this);
+    /* Cоздаём новую функцию с привязанным контекстом.
+    Где бы мы ни вызвали функцию _handleEscClose,
+    значением this внутри неё всегда будет данный объект класса Popup.
+
+    Как и все объекты, функции тоже имеют свои методы.
+    Метод bind применяют, чтобы явно указать значения this в функции.
+  */
   }
 
-  // открытие
+  // открытие модального окна
   open() {
-    this._popup.classList.add('popup_opened');
-    this._setEventListeners();
+    this._popupElement.classList.add(popupOpenedModifier);
+    window.addEventListener("keyup", this._handleEscClose);
   }
 
-  // закрытие
+  // закрытие модального окна
   close() {
-    this._popup.classList.remove('popup_opened');
-    document.removeEventListener('keyup', this._escCloseHandler);
+    this._popupElement.classList.remove(popupOpenedModifier);
+    window.removeEventListener("keyup", this._handleEscClose);
   }
 
-  // Esc
+  // закрытие модального окна по кнопке Esc
   _handleEscClose(evt) {
-    if (evt.key === 'Escape' || evt.key === 'Esc') {
-      this.close();
-    }
+    if (evt.key === "Escape") this.close();
   }
 
-  // слушатели
-  _setEventListeners() {
-    this._popup.addEventListener('click', (evt) => {
-      if (evt.target.matches('.popup__close-button') || evt.target.matches('.popup')) {
+  // слушатели родительского класса, устанавливаются в index.js
+  setEventListeners() {
+    this._popupElement.addEventListener("click", (evt) => {
+      if (
+        evt.target.matches(popupCloseBtnSelector) ||
+        evt.target.matches(this._popupSelector)
+      )
         this.close();
-      }
     });
-    document.addEventListener('keyup', this._escCloseHandler);
   }
 }

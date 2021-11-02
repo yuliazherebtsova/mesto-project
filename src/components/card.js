@@ -3,9 +3,9 @@ import {
   cardImageSelector,
   cardTitleSelector,
   cardDeleteBtnSelector,
-  cardDeleteBtnInactiveSelector,
+  cardDeleteBtnInactiveModifier,
   cardLikeBtnSelector,
-  cardLikeBtnActiveSelector,
+  cardLikeBtnActiveModifier,
   cardLikesCountSelector,
 } from "../utils/constants.js";
 
@@ -52,7 +52,7 @@ export default class Card {
       // удалить можно только свою карточку
       this._element
         .querySelector(cardDeleteBtnSelector)
-        .classList.add(cardDeleteBtnInactiveSelector);
+        .classList.add(cardDeleteBtnInactiveModifier);
 
     return this._element;
   }
@@ -62,8 +62,8 @@ export default class Card {
     const likeButtonElement = this._element.querySelector(cardLikeBtnSelector);
 
     if (this._isLiked)
-      likeButtonElement.classList.add(cardLikeBtnActiveSelector);
-    else likeButtonElement.classList.remove(cardLikeBtnActiveSelector);
+      likeButtonElement.classList.add(cardLikeBtnActiveModifier);
+    else likeButtonElement.classList.remove(cardLikeBtnActiveModifier);
 
     this._element.querySelector(cardLikesCountSelector).textContent =
       this._likesCount;
@@ -72,28 +72,6 @@ export default class Card {
   _setEventListeners() {
     this._element
       .querySelector(cardImageSelector)
-      .addEventListener("click", () => {
-        this._handleCardClick();
-      });
+      .addEventListener("click", this._handleCardClick());
   }
-
-  // _handleOpenPopup() {
-  //   popupImage.src = this._image;
-  //   popupElement.classList.add("popup_is-opened");
-  // }
-
-  // _handleClosePopup() {
-  //   popupImage.src = "";
-  //   popupElement.classList.remove("popup_is-opened");
-  // }
-
-  // _setEventListeners() {
-  //   this._element.addEventListener("click", () => {
-  //     this._handleOpenPopup();
-  //   });
-
-  //   popupCloseButton.addEventListener("click", () => {
-  //     this._handleClosePopup();
-  //   });
-  // }
 }
