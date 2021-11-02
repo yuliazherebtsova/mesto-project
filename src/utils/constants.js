@@ -8,10 +8,12 @@ export const cardDeleteBtnInactiveModifier = "card__delete-button_inactive";
 export const cardLikeBtnSelector = ".card__like-button";
 export const cardLikeBtnActiveModifier = "card__like-button_active";
 export const cardLikesCountSelector = ".card__likes";
+// селекторы элементов разметки карточек
 
 export const popupPreviewImageSelector = ".popup_type_image-preview";
+export const popupEditProfileSelector = ".popup_type_edit-profile";
 export const popupCloseBtnSelector = ".popup__close-button";
 export const popupOpenedModifier = "popup_opened";
-export const popupEditProfileSelector = ".popup_type_edit-profile";
 export const popupImageSelector = ".popup__image";
 export const popupImageTitleSelector = ".popup__image-title";
+// селекторы элементов разметки модальных окон

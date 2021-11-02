@@ -326,8 +326,20 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
             () => {
               popupWithImage.open(cardData);
             },
+            () => {
+              api
+                .deleteCard(cardData._id)
+                // #TODO попап подтверждения удаления карточки
+                .then(
+
+                  cardElement.delete()
+                )
+                .catch((err) => {
+                  console.log(`Ошибка: ${err}`);
+                });
+            },
             cardTemplateSelector
-          ).createCard();
+          ).create();
           initialCardsList.addItem(cardElement);
         },
       },

@@ -11,12 +11,13 @@ import {
 
 export default class Card {
   constructor(
-    { name, link, userId, likes, owner },
+    { _id, name, link, userId, likes, owner },
     handleCardClick,
     //handleLikeClick,
-    //handleDeleteClick,
+    handleDeleteClick,
     templateSelector
   ) {
+    this._id = _id;
     this._name = name;
     this._alt = name;
     this._link = link;
@@ -26,10 +27,10 @@ export default class Card {
     this._selector = templateSelector;
     this._handleCardClick = handleCardClick;
     //this._handleLikeClick = handleLikeClick;
-    //this._handleDeleteClick = handleDeleteClick;
+    this._handleDeleteClick = handleDeleteClick;
   }
   _getElement() {
-    // создаем новую карточку по шаблону
+    // создаем новую карточку по шаблону из разметки
     const cardElement = document
       .querySelector(this._selector)
       .content.querySelector(cardElementSelector)
@@ -38,7 +39,7 @@ export default class Card {
     return cardElement;
   }
 
-  createCard() {
+  create() {
     this._element = this._getElement();
     this._element.querySelector(cardTitleSelector).textContent = this._name;
     this._element.querySelector(cardImageSelector).src = this._link;
@@ -57,6 +58,11 @@ export default class Card {
     return this._element;
   }
 
+  delete() {
+    this._element.remove();
+    //this._element.innerHtml = '';
+  }
+
   _toggleLikeButton() {
     // функция изменения внешнего вида кнопки и счетчика лайков
     const likeButtonElement = this._element.querySelector(cardLikeBtnSelector);
@@ -70,8 +76,18 @@ export default class Card {
   }
 
   _setEventListeners() {
+    // слушатели, устанавливамые на элементы карточки при ее создании (приватный метод)
     this._element
       .querySelector(cardImageSelector)
-      .addEventListener("click", this._handleCardClick());
+      .addEventListener("click", () => {
+        this._handleCardClick();
+      });
+
+    this._element
+      .querySelector(cardDeleteBtnSelector)
+      .addEventListener("click", () => {
+        // создаем слушатель на событие нажатия на кнопку "Удалить"
+        this._handleDeleteClick(this._id);
+      });
   }
 }
