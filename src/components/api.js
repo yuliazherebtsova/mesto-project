@@ -5,15 +5,14 @@ export default class Api {
     this._headers = headers;
   }
 
-  //-------
-  // "Ответ от сервера всегда проверяется на корректность:" ✓
   _checkResponse(res) {
+  // проверка ответа сервера на корректность
     if (res.ok) return res.json();
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
   //-------
-  // запрос данных пользователя ✓
+  // запрос данных пользователя
   getProfileInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers
