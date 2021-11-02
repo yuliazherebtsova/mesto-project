@@ -1,8 +1,6 @@
 import "./index.css";
 // импорт главного файла стилей
-import {
-  cardListSelector, cardTemplateSelector
-} from '../utils/constants.js';
+import { cardListSelector, cardTemplateSelector } from "../utils/constants.js";
 
 import Section from "../components/Section.js";
 import Card from "../components/Card.js";
@@ -26,21 +24,15 @@ import {
 // функции работы с данными профиля
 import enableValidation from "../components/validate.js";
 // функции валидации форм
-import {
-  createCard,
-  renderCard,
-  loadInitialCards,
-} from "../components/card2.js";
+import { createCard, renderCard } from "../components/card2.js";
 // функции работы с карточками
 import {
-  getProfileInfo,
-  getInitialCards,
   postNewCard,
   updateProfileInfo,
   updateProfileAvatar,
 } from "../components/api2.js";
 // функции работы с api сервера
-import { renderLoading } from "../components/utils.js";
+import { renderLoading, renderImagePreview } from "../components/utils.js";
 // универсальные функции, используемые в нескольких местах проекта
 
 const profileElement = document.querySelector(".profile__info");
@@ -49,11 +41,15 @@ const profileAvatarContainer = document.querySelector(
 );
 const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
 const formEditAvatar = document.querySelector("#formEditAvatar");
-const submitButtonEditAvatar = formEditAvatar.querySelector(".form__submit-button");
+const submitButtonEditAvatar = formEditAvatar.querySelector(
+  ".form__submit-button"
+);
 const formEditAvatarSrcField =
   document.querySelector("#formEditAvatar").elements["avatar"];
 const formEditProfile = document.querySelector("#formEditProfile");
-const submitButtonEditProfile = formEditProfile.querySelector(".form__submit-button");
+const submitButtonEditProfile = formEditProfile.querySelector(
+  ".form__submit-button"
+);
 const popupEditProfile = document.querySelector(".popup_type_edit-profile");
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
@@ -210,9 +206,9 @@ const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
     authorization: "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5",
-    'Content-Type': 'application/json',
-  }
-})
+    "Content-Type": "application/json",
+  },
+});
 
 /*********************** ЮЗЕР ******************/
 import UserInfo from "../components/UserInfo.js";
@@ -222,22 +218,32 @@ import UserInfo from "../components/UserInfo.js";
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
 
 /********************* ОБЩИЙ ПРОМИС **************/
+
 Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {
-    console.log(userData) // <---------------- убрать перед сдачей проекта
-    console.log(cards) // <---------------- убрать перед сдачей проекта
-    const userId = userData._id;
+    console.log(userData); // <---------------- убрать перед сдачей проекта
+    console.log(cards); // <---------------- убрать перед сдачей проекта
     user.setUserInfo(userData);
-    const initialCardsList = new Section({
-      data: cards,
-      renderer: (data) => {
-        data.userId = userId;
-        const cardElement = new Card(data, cardTemplateSelector).createCard();
-        initialCardsList.addItem(cardElement);
+    const initialCardsList = new Section(
+      {
+        data: cards,
+        renderer: (cardData) => {
+          cardData.userId = userData._id;
+          const cardElement = new Card(
+            cardData,
+            () => {
+              console.log("click!", cardData.name); // <-------- убрать перед сдачей проекта
+              renderImagePreview(cardData);
+            },
+            cardTemplateSelector
+          ).createCard();
+          initialCardsList.addItem(cardElement);
+        },
       },
-    }, cardListSelector);
-    console.log(initialCardsList) // <---------------- убрать перед сдачей проекта
+      cardListSelector
+    );
+    console.log(initialCardsList); // <---------------- убрать перед сдачей проекта
     initialCardsList.renderItems();
   })
   .catch((err) => {
@@ -247,6 +253,3 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     enableValidation(validationConfig);
     // включаем валидацию форм
   });
-
-
-
