@@ -60,7 +60,6 @@ export default class Card {
 
   delete() {
     this._element.remove();
-    //this._element.innerHtml = '';
   }
 
   _toggleLikeButton() {

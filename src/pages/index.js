@@ -321,31 +321,33 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
         data: cards,
         renderer: (cardData) => {
           cardData.userId = userData._id;
-          const cardElement = new Card(
+          const card = new Card(
             cardData,
             () => {
               popupWithImage.open(cardData);
             },
-            () => {
+            (id) => {
               api
-                .deleteCard(cardData._id)
+                .deleteCard(id)
                 // #TODO попап подтверждения удаления карточки
-                .then(
-
-                  cardElement.delete()
-                )
+                .then(() => {
+                  card.delete();
+                })
                 .catch((err) => {
                   console.log(`Ошибка: ${err}`);
                 });
             },
             cardTemplateSelector
-          ).create();
+          );
+          const cardElement = card.create();
           initialCardsList.addItem(cardElement);
+          console.log(card); // <---------------- убрать перед сдачей проекта
         },
       },
       cardListSelector
     );
     console.log(initialCardsList); // <---------------- убрать перед сдачей проекта
+
     initialCardsList.renderItems();
   })
   .catch((err) => {
