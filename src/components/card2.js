@@ -34,7 +34,6 @@ function createCard(userId, cardData) {
             cardElement.likesCount = data.likes.length;
             cardElement.isLiked = false;
             toggleLikeButton(cardElement);
-
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
@@ -46,7 +45,6 @@ function createCard(userId, cardData) {
             cardElement.likesCount = data.likes.length;
             cardElement.isLiked = true;
             toggleLikeButton(cardElement);
-
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
@@ -57,9 +55,11 @@ function createCard(userId, cardData) {
   function toggleLikeButton(cardElement) {
     // функция изменения внешнего вида кнопки и счетчика лайков
     const likeButtonElement = cardElement.querySelector(".card__like-button");
-    if (cardElement.isLiked) likeButtonElement.classList.add("card__like-button_active");
+    if (cardElement.isLiked)
+      likeButtonElement.classList.add("card__like-button_active");
     else likeButtonElement.classList.remove("card__like-button_active");
-    cardElement.querySelector(".card__likes").textContent = cardElement.likesCount;
+    cardElement.querySelector(".card__likes").textContent =
+      cardElement.likesCount;
   }
 
   const deleteButton = cardElement.querySelector(".card__delete-button");
@@ -81,7 +81,7 @@ function createCard(userId, cardData) {
     // создаем слушатель на событие нажатия на превью фото в карточке
     const clickedImageSrc = cardData.link;
     const clickedImageTitle = cardData.name;
-    renderImagePreview(clickedImageSrc, clickedImageTitle);
+    renderImagePreview({ clickedImageSrc, clickedImageTitle });
   });
 
   return cardElement;

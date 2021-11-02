@@ -11,28 +11,22 @@ import {
 
 export default class Card {
   constructor(
-    {
-      name,
-      link,
-      userId,
-      likes,
-      owner,
-      handleCardClick,
-      handleLikeClick,
-      handleDeleteIconClick,
-    },
+    { name, link, userId, likes, owner },
+    handleCardClick,
+    //handleLikeClick,
+    //handleDeleteClick,
     templateSelector
   ) {
     this._name = name;
     this._alt = name;
     this._link = link;
-    this._likesCount = this._countLikes(likes);
-    this._isMyCard = this._isMyCard(userId, owner);
-    this._isLiked = this._isLiked(userId, likes);
+    this._likesCount = likes.length;
+    this._isMyCard = owner._id === userId;
+    this._isLiked = likes.some((like) => like._id === userId);
     this._selector = templateSelector;
     this._handleCardClick = handleCardClick;
-    this._handleLikeClick = handleLikeClick;
-    this._handleDeleteIconClick = handleDeleteIconClick;
+    //this._handleLikeClick = handleLikeClick;
+    //this._handleDeleteClick = handleDeleteClick;
   }
   _getElement() {
     // создаем новую карточку по шаблону
@@ -51,6 +45,8 @@ export default class Card {
     this._element.querySelector(cardImageSelector).alt = this._name;
     this._toggleLikeButton();
     // заполняем шаблон карточки данными, полученными с сервера
+    this._setEventListeners();
+    // устанавливаем слушателей
 
     if (!this._isMyCard)
       // удалить можно только свою карточку
@@ -59,18 +55,6 @@ export default class Card {
         .classList.add(cardDeleteBtnInactiveSelector);
 
     return this._element;
-  }
-
-  _isMyCard(userId, owner) {
-    return owner._id === userId;
-  }
-
-  _isLiked(userId, likes) {
-    return likes.some((like) => like._id === userId);
-  }
-
-  _countLikes(likes) {
-    return likes.length;
   }
 
   _toggleLikeButton() {
@@ -83,6 +67,14 @@ export default class Card {
 
     this._element.querySelector(cardLikesCountSelector).textContent =
       this._likesCount;
+  }
+
+  _setEventListeners() {
+    this._element
+      .querySelector(cardImageSelector)
+      .addEventListener("click", () => {
+        this._handleCardClick();
+      });
   }
 
   // _handleOpenPopup() {
