@@ -241,69 +241,71 @@ const validationConfig = {
 
 //валидация юзера
 const validationProfile = new FormValidator(validationConfig, formEditProfile);
+validationProfile.enableValidation();
 
-//экземпляр PopupWithForm для юзера
-//перенести popupEditProfile в переменные
-const popupProfile = new PopupWithForm(
-  popupEditProfile,
-  validationProfile,
-  {
-    //обращаемся к апи
-    handleFormSubmit: () => {
-      popupProfile.renderLoading(true);
-      api
-        .updateProfileInfo(popupProfile._getInputValues())
-        .then((data) => {
-          user.setUserInfo(data);
-        })
-        .catch((err) => console.log(`Ошибка: ${err}`))
-        .finally(() => {
-          popupProfile.renderLoading(false);
-          popupProfile.close();
-        });
-    },
-    setInputValues: () => {
-      //перенести formEditProfile в переменные
-      formEditProfile.elements.name.value = user.getUserInfo().title;
-      formEditProfile.elements.about.value = user.getUserInfo().subtitle;
-    },
+//попап юзера
+const popupProfile = new PopupWithForm({
+  popupSelector: popupEditProfile,
+  handleFormSubmit: () => {
+    popupProfile.renderLoading(true);
+    api
+      .updateProfileInfo(popupProfile._getInputValues())
+      .then((data) => {
+        user.setUserInfo(data);
+        popupProfile.close();
+      })
+
+      .catch((err) => {
+        console.log(`Ошибка: ${err}`);
+      })
+      .finally(() => {
+        popupProfile.renderLoading(false);
+      })
   }
-);
-//открытие формы редактирования инфы о юзере
+
+});
+
+//кнопка юзера
 buttonEditProfile.addEventListener('click', () => {
+  validationProfile.updateButtonState(formEditProfile);
+  formEditProfile.elements.name.value = user.getUserInfo().title;
+  formEditProfile.elements.about.value = user.getUserInfo().subtitle;
   popupProfile.open();
 });
 
 /*--------------------работаем с формой аватара--------------------*/
 
+//валидация аватара
 const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
-//перенести popupEditAvatar в переменные
-const popupAvatar = new PopupWithForm(
-  popupEditAvatar,
-  validationAvatar,
-  {
-    handleFormSubmit: () => {
-      popupAvatar.renderLoading(true);
-      api
-        .updateProfileAvatar(popupAvatar._getInputValues())
-        .then((data) => {
-          user.updateProfileAvatar(data); //я не знаю, почему, но выдает ошибку.
-        })
-        .catch((err) => console.log(`Ошибка: ${err}`))
-        .finally(() => {
-          popupAvatar.renderLoading(false);
-          popupAvatar.close();
-        });
-    },
-    setInputValues: () => {
-      //formEditAvatarSrcField.value = '';
-    },
-  }
-);
+validationAvatar.enableValidation();
 
+//попап аватара
+const popupAvatar = new PopupWithForm({
+  popupSelector: popupEditAvatar,
+  handleFormSubmit: () => {
+    popupAvatar.renderLoading(true);
+    api
+      .updateProfileAvatar(popupAvatar._getInputValues())
+      .then((data) => {
+        user.setUserInfo(data);
+        popupAvatar.close();
+      })
+
+      .catch((err) => {
+        console.log(`${err}`)
+      })
+      .finally(() => {
+        popupAvatar.renderLoading(false);
+      })
+  }
+});
+
+// кнопка аватара
 profileAvatarContainer.addEventListener('click', () => {
+  validationAvatar.updateButtonState(formEditAvatar);
   popupAvatar.open();
 });
+
 
 /*--------------------работаем с формой картинок--------------------*/
 const validationPlace = new FormValidator(validationConfig, formAddCard);
