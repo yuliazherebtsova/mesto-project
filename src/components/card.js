@@ -12,9 +12,7 @@ import {
 export default class Card {
   constructor(
     { name, link, userId, likes, owner },
-    handleCardClick,
-    //handleLikeClick,
-    //handleDeleteClick,
+    { handleCardClick, handleLikeClick, handleDeleteClick },
     templateSelector
   ) {
     this._name = name;
@@ -25,8 +23,8 @@ export default class Card {
     this._isLiked = likes.some((like) => like._id === userId);
     this._selector = templateSelector;
     this._handleCardClick = handleCardClick;
-    //this._handleLikeClick = handleLikeClick;
-    //this._handleDeleteClick = handleDeleteClick;
+    this._handleLikeClick = handleLikeClick;
+    this._handleDeleteClick = handleDeleteClick;
   }
   _getElement() {
     // создаем новую карточку по шаблону

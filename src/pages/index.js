@@ -61,8 +61,6 @@ const formAddPlaceField =
 const formAddPictureField =
   document.querySelector("#formAddCard").elements["picture"];
 
-
-
 /*
 formEditProfile.addEventListener("submit", (evt) => {
   // редактирование и сохранение данных профиля
@@ -189,9 +187,6 @@ profileAvatarContainer.addEventListener("click", () => {
 });
 */
 
-
-
-
 //=======================================классы===============================================//
 //---
 //все импорты позже перенесем наверх, пока здесь, вроде, понятнее их держать.
@@ -214,9 +209,6 @@ import UserInfo from "../components/UserInfo.js";
 //---
 const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
 
-
-
-
 /*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
 
 import FormValidator from "../components/FormValidator.js";
@@ -236,7 +228,6 @@ const validationConfig = {
 // formAddCard
 // formEditAvatar
 
-
 /*--------------------работаем с формой юзера--------------------*/
 
 //валидация юзера
@@ -244,33 +235,29 @@ const validationProfile = new FormValidator(validationConfig, formEditProfile);
 
 //экземпляр PopupWithForm для юзера
 //перенести popupEditProfile в переменные
-const popupProfile = new PopupWithForm(
-  popupEditProfile,
-  validationProfile,
-  {
-    //обращаемся к апи
-    handleFormSubmit: () => {
-      popupProfile.renderLoading(true);
-      api
-        .updateProfileInfo(popupProfile._getInputValues())
-        .then((data) => {
-          user.setUserInfo(data);
-        })
-        .catch((err) => console.log(`Ошибка: ${err}`))
-        .finally(() => {
-          popupProfile.renderLoading(false);
-          popupProfile.close();
-        });
-    },
-    setInputValues: () => {
-      //перенести formEditProfile в переменные
-      formEditProfile.elements.name.value = user.getUserInfo().title;
-      formEditProfile.elements.about.value = user.getUserInfo().subtitle;
-    },
-  }
-);
+const popupProfile = new PopupWithForm(popupEditProfile, validationProfile, {
+  //обращаемся к апи
+  handleFormSubmit: () => {
+    popupProfile.renderLoading(true);
+    api
+      .updateProfileInfo(popupProfile._getInputValues())
+      .then((data) => {
+        user.setUserInfo(data);
+      })
+      .catch((err) => console.log(`Ошибка: ${err}`))
+      .finally(() => {
+        popupProfile.renderLoading(false);
+        popupProfile.close();
+      });
+  },
+  setInputValues: () => {
+    //перенести formEditProfile в переменные
+    formEditProfile.elements.name.value = user.getUserInfo().title;
+    formEditProfile.elements.about.value = user.getUserInfo().subtitle;
+  },
+});
 //открытие формы редактирования инфы о юзере
-buttonEditProfile.addEventListener('click', () => {
+buttonEditProfile.addEventListener("click", () => {
   popupProfile.open();
 });
 
@@ -278,37 +265,32 @@ buttonEditProfile.addEventListener('click', () => {
 
 const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
 //перенести popupEditAvatar в переменные
-const popupAvatar = new PopupWithForm(
-  popupEditAvatar,
-  validationAvatar,
-  {
-    handleFormSubmit: () => {
-      popupAvatar.renderLoading(true);
-      api
-        .updateProfileAvatar(popupAvatar._getInputValues())
-        .then((data) => {
-          user.updateProfileAvatar(data); //я не знаю, почему, но выдает ошибку.
-        })
-        .catch((err) => console.log(`Ошибка: ${err}`))
-        .finally(() => {
-          popupAvatar.renderLoading(false);
-          popupAvatar.close();
-        });
-    },
-    setInputValues: () => {
-      //formEditAvatarSrcField.value = '';
-    },
-  }
-);
+const popupAvatar = new PopupWithForm(popupEditAvatar, validationAvatar, {
+  handleFormSubmit: () => {
+    popupAvatar.renderLoading(true);
+    api
+      .updateProfileAvatar(popupAvatar._getInputValues())
+      .then((data) => {
+        user.updateProfileAvatar(data); //я не знаю, почему, но выдает ошибку.
+      })
+      .catch((err) => console.log(`Ошибка: ${err}`))
+      .finally(() => {
+        popupAvatar.renderLoading(false);
+        popupAvatar.close();
+      });
+  },
+  setInputValues: () => {
+    //formEditAvatarSrcField.value = '';
+  },
+});
 
-profileAvatarContainer.addEventListener('click', () => {
+profileAvatarContainer.addEventListener("click", () => {
   popupAvatar.open();
 });
 
 /*--------------------работаем с формой картинок--------------------*/
 const validationPlace = new FormValidator(validationConfig, formAddCard);
 //тут должна примешаться PopupWithImage и вообще хз короч
-
 
 /********************* ОБЩИЙ ПРОМИС **************/
 
@@ -325,9 +307,13 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
           cardData.userId = userData._id;
           const cardElement = new Card(
             cardData,
-            () => {
-              console.log("click!", cardData.name); // <-------- убрать перед сдачей проекта
-              renderImagePreview(cardData);
+            {
+              handleCardClick: () => {
+                console.log("click!", cardData.name); // <-------- убрать перед сдачей проекта
+                renderImagePreview(cardData);
+              },
+              handleLikeClick: () => {},
+              handleDeleteClick: () => {},
             },
             cardTemplateSelector
           ).createCard();
