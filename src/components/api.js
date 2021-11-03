@@ -6,7 +6,7 @@ export default class Api {
   }
 
   _checkResponse(res) {
-  // проверка ответа сервера на корректность
+    // проверка ответа сервера на корректность
     if (res.ok) return res.json();
     return Promise.reject(`Ошибка: ${res.status}`);
   }
@@ -15,9 +15,8 @@ export default class Api {
   // запрос данных пользователя
   getProfileInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers
-    })
-      .then(this._checkResponse)
+      headers: this._headers,
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -25,33 +24,30 @@ export default class Api {
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    })
-      .then(this._checkResponse)
+    }).then(this._checkResponse);
   }
 
   //-------
   // обновление данных профиля после редактирования
-  updateProfileInfo({name, about}) {
+  updateProfileInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
-        about: about
-      })
-    })
-      .then(this._checkResponse)
+        about: about,
+      }),
+    }).then(this._checkResponse);
   }
 
   //-------
   // обновление аватара
   updateProfileAvatar(avatarUrl) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(avatarUrl),
-    })
-      .then(this._checkResponse)
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -70,7 +66,30 @@ export default class Api {
       });
   };
 
-  //лайк карточки setLikeToCard
+  //лайк карточки
   //-------
-  //дизлайк карточки deleteLikeFromCard
+  setLike = (cardId) => {
+    // удаление карточки с сервера
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "PUT",
+      headers: this._headers,
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // удаление лайка с карточки
+  //-------
+  deleteLike = (cardId) => {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }
