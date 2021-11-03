@@ -236,7 +236,6 @@ const validationConfig = {
 // formAddCard
 // formEditAvatar
 
-/*
 //--------------------работаем с формой юзера--------------------
 
 //валидация юзера
@@ -308,7 +307,6 @@ profileAvatarContainer.addEventListener("click", () => {
 //--------------------работаем с формой картинок--------------------
 const validationPlace = new FormValidator(validationConfig, formAddCard);
 //тут должна примешаться PopupWithImage и вообще хз короч
-*/
 
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 popupWithImage.setEventListeners();
