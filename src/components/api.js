@@ -68,6 +68,20 @@ export default class Api {
 
   //-------
   //добавление новой карточки postNewCard
+  postNewCard(newCard) {
+    return fetch(`${this.baseUrl}/cards`, {
+      method: 'POST',
+      headers: this.headers,
+      body: JSON.stringify({
+        name: newCard.name,
+        link: newCard.link,
+      })
+    })
+      .then(this._getResponseData)
+      .catch((err) => {
+        console.log(err);
+      });
+  }
   //-------
 
   deleteCard = (cardId) => {
