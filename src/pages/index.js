@@ -1,3 +1,6 @@
+"use strict";
+console.log(this)
+
 import "./index.css";
 // импорт главного файла стилей
 import {
@@ -233,7 +236,6 @@ const validationConfig = {
 // formAddCard
 // formEditAvatar
 
-
 //--------------------работаем с формой юзера--------------------
 
 //валидация юзера
@@ -306,7 +308,6 @@ profileAvatarContainer.addEventListener("click", () => {
 const validationPlace = new FormValidator(validationConfig, formAddCard);
 //тут должна примешаться PopupWithImage и вообще хз короч
 
-
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 popupWithImage.setEventListeners();
 
@@ -325,6 +326,34 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
             cardData,
             () => {
               popupWithImage.open(cardData);
+            },
+            (id, isLiked) => {
+              console.log(this);
+              if (isLiked) {
+                api
+                  .deleteLike(id)
+                  // удаляем лайк с карточки
+                  .then((data) => {
+                    card.likesCount = data.likes.length;
+                    card.isLiked = false;
+                    card.toggleLikeButton();
+                  })
+                  .catch((err) => {
+                    console.log(`Ошибка: ${err}`);
+                  });
+              } else {
+                api
+                  .setLike(id)
+                  // ставим лайк карточке
+                  .then((data) => {
+                    card.likesCount = data.likes.length;
+                    card.isLiked = true;
+                    card.toggleLikeButton();
+                  })
+                  .catch((err) => {
+                    console.log(`Ошибка: ${err}`);
+                  });
+              }
             },
             (id) => {
               api

@@ -39,7 +39,7 @@ export default class Api {
   // обновление данных профиля после редактирования
   updateProfileInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: this._headers,
       body: JSON.stringify({
         name: name,
@@ -56,7 +56,7 @@ export default class Api {
   // обновление аватара
   updateProfileAvatar(avatarUrl) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
-      method: 'PATCH',
+      method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(avatarUrl),
     })
@@ -82,7 +82,30 @@ export default class Api {
       });
   };
 
-  //лайк карточки setLikeToCard
+  //лайк карточки
   //-------
-  //дизлайк карточки deleteLikeFromCard
+  setLike = (cardId) => {
+    // удаление карточки с сервера
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "PUT",
+      headers: this._headers,
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  // удаление лайка с карточки
+  //-------
+  deleteLike = (cardId) => {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: "DELETE",
+      headers: this._headers,
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 }

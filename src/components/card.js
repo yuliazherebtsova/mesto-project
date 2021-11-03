@@ -13,7 +13,7 @@ export default class Card {
   constructor(
     { _id, name, link, userId, likes, owner },
     handleCardClick,
-    //handleLikeClick,
+    handleLikeClick,
     handleDeleteClick,
     templateSelector
   ) {
@@ -21,12 +21,12 @@ export default class Card {
     this._name = name;
     this._alt = name;
     this._link = link;
-    this._likesCount = likes.length;
+    this.likesCount = likes.length;
     this._isMyCard = owner._id === userId;
-    this._isLiked = likes.some((like) => like._id === userId);
+    this.isLiked = likes.some((like) => like._id === userId);
     this._selector = templateSelector;
     this._handleCardClick = handleCardClick;
-    //this._handleLikeClick = handleLikeClick;
+    this._handleLikeClick = handleLikeClick;
     this._handleDeleteClick = handleDeleteClick;
   }
   _getElement() {
@@ -44,7 +44,7 @@ export default class Card {
     this._element.querySelector(cardTitleSelector).textContent = this._name;
     this._element.querySelector(cardImageSelector).src = this._link;
     this._element.querySelector(cardImageSelector).alt = this._name;
-    this._toggleLikeButton();
+    this.toggleLikeButton();
     // заполняем шаблон карточки данными, полученными с сервера
     this._setEventListeners();
     // устанавливаем слушателей
@@ -62,16 +62,16 @@ export default class Card {
     this._element.remove();
   }
 
-  _toggleLikeButton() {
+  toggleLikeButton() {
     // функция изменения внешнего вида кнопки и счетчика лайков
     const likeButtonElement = this._element.querySelector(cardLikeBtnSelector);
 
-    if (this._isLiked)
+    if (this.isLiked)
       likeButtonElement.classList.add(cardLikeBtnActiveModifier);
     else likeButtonElement.classList.remove(cardLikeBtnActiveModifier);
 
     this._element.querySelector(cardLikesCountSelector).textContent =
-      this._likesCount;
+      this.likesCount;
   }
 
   _setEventListeners() {
@@ -80,6 +80,12 @@ export default class Card {
       .querySelector(cardImageSelector)
       .addEventListener("click", () => {
         this._handleCardClick();
+      });
+
+      this._element
+      .querySelector(cardLikeBtnSelector)
+      .addEventListener("click", () => {
+        this._handleLikeClick(this._id, this.isLiked);
       });
 
     this._element

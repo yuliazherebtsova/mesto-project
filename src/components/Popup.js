@@ -8,13 +8,10 @@ export default class Popup {
     this._popupSelector = popupSelector;
     this._popupElement = document.querySelector(popupSelector);
     this._handleEscClose = this._handleEscClose.bind(this);
-    /* Cоздаём новую функцию с привязанным контекстом.
-    Где бы мы ни вызвали функцию _handleEscClose,
-    значением this внутри неё всегда будет данный объект класса Popup.
-
-    Как и все объекты, функции тоже имеют свои методы.
-    Метод bind применяют, чтобы явно указать значения this в функции.
-  */
+    /* Т.к. this определяется в момент вызова, для объектов Popup при вызове
+    setEventListeners из index.js контекст будет равен Window.
+    Чтобы этого избежать, необходимо забайндить приватный метод _handleEscClose
+    на текущий объект класса Popup */
   }
 
   // открытие модального окна
@@ -31,7 +28,11 @@ export default class Popup {
 
   // закрытие модального окна по кнопке Esc
   _handleEscClose(evt) {
-    if (evt.key === "Escape") this.close();
+    if (evt.key === "Escape") {
+      this.close();
+
+      console.log(this);
+    }
   }
 
   // слушатели родительского класса, устанавливаются в index.js
