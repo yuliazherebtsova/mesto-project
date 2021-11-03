@@ -15,8 +15,12 @@ export default class Api {
   // запрос данных пользователя
   getProfileInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers,
-    }).then(this._checkResponse);
+      headers: this._headers
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
@@ -24,7 +28,11 @@ export default class Api {
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    }).then(this._checkResponse);
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
@@ -35,9 +43,13 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: name,
-        about: about,
-      }),
-    }).then(this._checkResponse);
+        about: about
+      })
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
@@ -47,7 +59,11 @@ export default class Api {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(avatarUrl),
-    }).then(this._checkResponse);
+    })
+      .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
