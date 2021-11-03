@@ -6,7 +6,7 @@ export default class Api {
   }
 
   _checkResponse(res) {
-  // проверка ответа сервера на корректность
+    // проверка ответа сервера на корректность
     if (res.ok) return res.json();
     return Promise.reject(`Ошибка: ${res.status}`);
   }
@@ -18,6 +18,9 @@ export default class Api {
       headers: this._headers
     })
       .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
@@ -27,11 +30,14 @@ export default class Api {
       headers: this._headers,
     })
       .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
   // обновление данных профиля после редактирования
-  updateProfileInfo({name, about}) {
+  updateProfileInfo({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this._headers,
@@ -41,6 +47,9 @@ export default class Api {
       })
     })
       .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
@@ -52,6 +61,9 @@ export default class Api {
       body: JSON.stringify(avatarUrl),
     })
       .then(this._checkResponse)
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   //-------
