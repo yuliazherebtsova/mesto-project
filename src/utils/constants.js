@@ -12,6 +12,8 @@ export const cardLikesCountSelector = ".card__likes";
 
 export const popupPreviewImageSelector = ".popup_type_image-preview";
 export const popupEditProfileSelector = ".popup_type_edit-profile";
+export const popupEditAvatarSelector = ".popup_type_edit-avatar";
+export const popupEditPlaceSelector = ".popup_type_add-card";
 export const popupCloseBtnSelector = ".popup__close-button";
 export const popupOpenedModifier = "popup_opened";
 export const popupImageSelector = ".popup__image";

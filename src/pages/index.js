@@ -6,6 +6,8 @@ import "./index.css";
 import {
   cardListSelector,
   cardTemplateSelector,
+  popupEditAvatarSelector,
+  popupEditPlaceSelector,
   popupEditProfileSelector,
   popupPreviewImageSelector,
 } from "../utils/constants.js";
@@ -262,7 +264,7 @@ const popupProfile = new PopupWithForm({
       });
   },
 });
-
+popupProfile.setEventListeners();
 //кнопка юзера
 buttonEditProfile.addEventListener("click", () => {
   validationProfile.updateButtonState(formEditProfile);
@@ -279,7 +281,7 @@ validationAvatar.enableValidation();
 
 //попап аватара
 const popupAvatar = new PopupWithForm({
-  popupSelector: popupEditAvatar,
+  popupSelector: popupEditAvatarSelector,
   handleFormSubmit: () => {
     popupAvatar.renderLoading(true);
     api
@@ -297,7 +299,7 @@ const popupAvatar = new PopupWithForm({
       });
   },
 });
-
+popupAvatar.setEventListeners();
 // кнопка аватара
 profileAvatarContainer.addEventListener("click", () => {
   validationAvatar.updateButtonState(formEditAvatar);
@@ -306,7 +308,36 @@ profileAvatarContainer.addEventListener("click", () => {
 
 //--------------------работаем с формой картинок--------------------
 const validationPlace = new FormValidator(validationConfig, formAddCard);
-//тут должна примешаться PopupWithImage и вообще хз короч
+validationPlace.enableValidation();
+
+const popupPlace = new PopupWithForm({
+  popupSelector: popupEditPlaceSelector,
+  handleFormSubmit: (item) => {
+    popupPlace.renderLoading(true);
+    api.postNewCard(item) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      .then((data) => {
+        const card = new Card();
+        //место где я сломалась))
+        //что-то должно произойти с data, userId и initialCardsList.
+
+        popupPlace.close();
+      })
+      .catch((err) => {
+        console.log(`${err}`);
+      })
+      .finally(() => {
+        popupPlace.renderLoading(false);
+      })
+  }
+});
+
+popupPlace.setEventListeners();
+
+buttonAddCard.addEventListener('click', () => {
+  validationPlace.updateButtonState(formAddCard);
+  popupPlace.open();
+});
+//------------------------------------------------------------
 
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 popupWithImage.setEventListeners();
