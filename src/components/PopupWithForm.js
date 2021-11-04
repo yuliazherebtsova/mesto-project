@@ -1,10 +1,8 @@
-//Кроме селектора попапа принимает в конструктор колбэк сабмита формы.
-//В этом колбэке содержится метод класса Api
-//Содержит приватный метод _getInputValues, который собирает данные всех полей формы.
-//Перезаписывает родительский метод setEventListeners.
-//Метод setEventListeners должен не только добавлять обработчик клика иконке закрытия,
-//но и добавлять обработчик сабмита формы.
-//Перезаписывает родительский метод close
+import {
+  formSelector,
+  formFieldSelector,
+  formSubmitBtnSelector,
+} from "../utils/constants.js";
 
 import Popup from "./Popup.js";
 
@@ -12,19 +10,28 @@ export default class PopupWithForm extends Popup {
   constructor({ popupSelector, handleFormSubmit }) {
     super(popupSelector);
     this._handleFormSubmit = handleFormSubmit;
-    this._form = this._popupElement.querySelector('.form');
-    this._inputList = this._form.querySelectorAll('.form__field-input');
-    this._buttonSubmit = this._popupElement.querySelector('.form__submit-button');
+    this._formElement = this._popupElement.querySelector(formSelector);
+    this._inputList = Array.from(
+      this._formElement.querySelectorAll(formFieldSelector)
+    );
+    this._buttonSubmit = this._popupElement.querySelector(
+      formSubmitBtnSelector
+    );
   }
 
-  _getInputValues() {
+  getInputValues() {
+    // создаём пустой объект
     this._formValues = {};
-    this._inputList.forEach(input => this._formValues[input.name] = input.value);
+    // добавляем в этот объект значения всех полей
+    this._inputList.forEach((input) => {
+      this._formValues[input.name] = input.value;
+    });
+    // возвращаем объект значений
     return this._formValues;
   }
 
-  //что проиходит с загрузкой
   renderLoading(isLoading) {
+    // лоадер загрузки данных на сервер/с сервера
     if (isLoading) {
       this._buttonSubmit.textContent = "Сохранение...";
     } else {
@@ -34,15 +41,16 @@ export default class PopupWithForm extends Popup {
 
   close() {
     super.close();
-    this._form.reset();
+    this._formElement.reset();
+    // при закрытии форма должна очищаться
   }
 
   setEventListeners() {
     super.setEventListeners();
-    this._form.addEventListener('submit', (event) => {
-      event.preventDefault();
-      this._handleFormSubmit(this._getInputValues());
+    this._formElement.addEventListener("submit", (evt) => {
+      // обработчик сабмита формы
+      evt.preventDefault();
+      this._handleFormSubmit(this.getInputValues());
     });
   }
-
 }

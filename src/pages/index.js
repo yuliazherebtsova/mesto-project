@@ -1,5 +1,4 @@
 "use strict";
-console.log(this)
 
 import "./index.css";
 // импорт главного файла стилей
@@ -7,7 +6,7 @@ import {
   cardListSelector,
   cardTemplateSelector,
   popupEditAvatarSelector,
-  popupEditPlaceSelector,
+  popupAddCardSelector,
   popupEditProfileSelector,
   popupPreviewImageSelector,
 } from "../utils/constants.js";
@@ -54,7 +53,6 @@ const profileElement = document.querySelector(".profile__info");
 const profileAvatarContainer = document.querySelector(
   ".profile__avatar-container"
 );
-const popupEditAvatar = document.querySelector(".popup_type_edit-avatar");
 const formEditAvatar = document.querySelector("#formEditAvatar");
 const submitButtonEditAvatar = formEditAvatar.querySelector(
   ".form__submit-button"
@@ -68,8 +66,6 @@ const submitButtonEditProfile = formEditProfile.querySelector(
 
 const buttonEditProfile = document.querySelector(".profile__edit-button");
 const buttonAddCard = document.querySelector(".profile__add-button");
-const popupAddCard = document.querySelector(".popup_type_add-card");
-const formAddCard = document.querySelector("#formAddCard");
 const submitButtonAddCard = formAddCard.querySelector(".form__submit-button");
 const formAddPlaceField =
   document.querySelector("#formAddCard").elements["place"];
@@ -245,32 +241,32 @@ const validationProfile = new FormValidator(validationConfig, formEditProfile);
 validationProfile.enableValidation();
 
 //попап юзера
-const popupProfile = new PopupWithForm({
+const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
   handleFormSubmit: () => {
-    popupProfile.renderLoading(true);
+    popupEditProfile.renderLoading(true);
     api
-      .updateProfileInfo(popupProfile._getInputValues())
+      .updateProfileInfo(popupEditProfile._getInputValues())
       .then((data) => {
         user.setUserInfo(data);
-        popupProfile.close();
+        popupEditProfile.close();
       })
 
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       })
       .finally(() => {
-        popupProfile.renderLoading(false);
+        popupEditProfile.renderLoading(false);
       });
   },
 });
-popupProfile.setEventListeners();
+popupEditProfile.setEventListeners();
 //кнопка юзера
 buttonEditProfile.addEventListener("click", () => {
   validationProfile.updateButtonState(formEditProfile);
   formEditProfile.elements.name.value = user.getUserInfo().title;
   formEditProfile.elements.about.value = user.getUserInfo().subtitle;
-  popupProfile.open();
+  popupEditProfile.open();
 });
 
 //--------------------работаем с формой аватара--------------------
@@ -280,67 +276,77 @@ const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
 validationAvatar.enableValidation();
 
 //попап аватара
-const popupAvatar = new PopupWithForm({
+const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
   handleFormSubmit: () => {
-    popupAvatar.renderLoading(true);
+    popupEditAvatar.renderLoading(true);
     api
-      .updateProfileAvatar(popupAvatar._getInputValues())
+      .updateProfileAvatar(popupEditAvatar._getInputValues())
       .then((data) => {
         user.setUserInfo(data);
-        popupAvatar.close();
+        popupEditAvatar.close();
       })
 
       .catch((err) => {
         console.log(`${err}`);
       })
       .finally(() => {
-        popupAvatar.renderLoading(false);
+        popupEditAvatar.renderLoading(false);
       });
   },
 });
-popupAvatar.setEventListeners();
+popupEditAvatar.setEventListeners();
 // кнопка аватара
 profileAvatarContainer.addEventListener("click", () => {
   validationAvatar.updateButtonState(formEditAvatar);
-  popupAvatar.open();
+  popupEditAvatar.open();
 });
 
-//--------------------работаем с формой картинок--------------------
+//-------------------- Форма добавления новой карточки --------------------
 const validationPlace = new FormValidator(validationConfig, formAddCard);
 validationPlace.enableValidation();
 
-const popupPlace = new PopupWithForm({
-  popupSelector: popupEditPlaceSelector,
-  handleFormSubmit: (item) => {
-    popupPlace.renderLoading(true);
-    api.postNewCard(item) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      .then((data) => {
-        const card = new Card();
-        //место где я сломалась))
-        //что-то должно произойти с data, userId и initialCardsList.
-
-        popupPlace.close();
+const popupAddCard = new PopupWithForm({
+  popupSelector: popupAddCardSelector,
+  handleFormSubmit: (inputData) => {
+    popupAddCard.renderLoading(true);
+    api
+      .postCard(inputData)
+      .then((cardData) => {
+        cardElementsList.addItem(createNewCard(cardData));
+        popupAddCard.close();
       })
       .catch((err) => {
         console.log(`${err}`);
       })
       .finally(() => {
-        popupPlace.renderLoading(false);
-      })
-  }
+        popupAddCard.renderLoading(false);
+      });
+  },
 });
 
-popupPlace.setEventListeners();
+popupAddCard.setEventListeners();
 
-buttonAddCard.addEventListener('click', () => {
+buttonAddCard.addEventListener("click", () => {
+  // слушатель для кнопки добавления новой карточки
   validationPlace.updateButtonState(formAddCard);
-  popupPlace.open();
+  popupAddCard.open();
 });
 //------------------------------------------------------------
 
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 popupWithImage.setEventListeners();
+
+const cardElementsList = new Section(
+  // объект для рендеринга карточек на страницу
+  {
+    data: [],
+    renderer: (cardData) => {
+      cardElementsList.addItem(createNewCard(cardData));
+    },
+  },
+  cardListSelector
+);
 
 Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
@@ -348,66 +354,10 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     console.log(userData); // <---------------- убрать перед сдачей проекта
     console.log(cards); // <---------------- убрать перед сдачей проекта
     user.setUserInfo(userData);
-    const initialCardsList = new Section(
-      {
-        data: cards,
-        renderer: (cardData) => {
-          cardData.userId = userData._id;
-          const card = new Card(
-            cardData,
-            () => {
-              popupWithImage.open(cardData);
-            },
-            (id, isLiked) => {
-              console.log(this);
-              if (isLiked) {
-                api
-                  .deleteLike(id)
-                  // удаляем лайк с карточки
-                  .then((data) => {
-                    card.likesCount = data.likes.length;
-                    card.isLiked = false;
-                    card.toggleLikeButton();
-                  })
-                  .catch((err) => {
-                    console.log(`Ошибка: ${err}`);
-                  });
-              } else {
-                api
-                  .setLike(id)
-                  // ставим лайк карточке
-                  .then((data) => {
-                    card.likesCount = data.likes.length;
-                    card.isLiked = true;
-                    card.toggleLikeButton();
-                  })
-                  .catch((err) => {
-                    console.log(`Ошибка: ${err}`);
-                  });
-              }
-            },
-            (id) => {
-              api
-                .deleteCard(id)
-                // #TODO попап подтверждения удаления карточки
-                .then(() => {
-                  card.delete();
-                })
-                .catch((err) => {
-                  console.log(`Ошибка: ${err}`);
-                });
-            },
-            cardTemplateSelector
-          );
-          const cardElement = card.create();
-          initialCardsList.addItem(cardElement);
-          console.log(card); // <---------------- убрать перед сдачей проекта
-        },
-      },
-      cardListSelector
+    cards.forEach((card) =>
+      cardElementsList.addItem(createNewCard(card, userData._id))
     );
-    console.log(initialCardsList); // <---------------- убрать перед сдачей проекта
-    initialCardsList.renderItems();
+    console.log(cardElementsList); // <---------------- убрать перед сдачей проекта
   })
   .catch((err) => {
     console.log(err);
@@ -416,3 +366,57 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     //enableValidation(validationConfig);
     // включаем валидацию форм
   });
+
+function createNewCard(cardData) {
+  //!не работает корзина, т.к. требуется iD пользователя. Надо
+  //! переделать класс UserInfo с обращением к Api, тогда внутри будет userId
+  const card = new Card(
+    cardData,
+    () => {
+      popupWithImage.open(cardData);
+    },
+    (id, isLiked) => {
+      console.log(this);
+      if (isLiked) {
+        api
+          .deleteLike(id)
+          // удаляем лайк с карточки
+          .then((data) => {
+            card.likesCount = data.likes.length;
+            card.isLiked = false;
+            card.toggleLikeButton();
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      } else {
+        api
+          .setLike(id)
+          // ставим лайк карточке
+          .then((data) => {
+            card.likesCount = data.likes.length;
+            card.isLiked = true;
+            card.toggleLikeButton();
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      }
+    },
+    (id) => {
+      api
+        .deleteCard(id)
+        // #TODO попап подтверждения удаления карточки
+        .then(() => {
+          card.delete();
+        })
+        .catch((err) => {
+          console.log(`Ошибка: ${err}`);
+        });
+    },
+    cardTemplateSelector
+  );
+  const cardElement = card.create();
+  console.log(card); // <---------------- убрать перед сдачей проекта
+  return cardElement;
+}

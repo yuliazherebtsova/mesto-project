@@ -15,7 +15,7 @@ export default class Api {
   // запрос данных пользователя
   getProfileInfo() {
     return fetch(`${this._baseUrl}/users/me`, {
-      headers: this._headers
+      headers: this._headers,
     })
       .then(this._checkResponse)
       .catch((err) => {
@@ -43,8 +43,8 @@ export default class Api {
       headers: this._headers,
       body: JSON.stringify({
         name: name,
-        about: about
-      })
+        about: about,
+      }),
     })
       .then(this._checkResponse)
       .catch((err) => {
@@ -67,17 +67,17 @@ export default class Api {
   }
 
   //-------
-  //добавление новой карточки postNewCard
-  postNewCard(newCard) {
-    return fetch(`${this.baseUrl}/cards`, {
-      method: 'POST',
-      headers: this.headers,
+  //добавление новой карточки
+  postCard({ place, picture }) {
+    return fetch(`${this._baseUrl}/cards`, {
+      method: "POST",
+      headers: this._headers,
       body: JSON.stringify({
-        name: newCard.name,
-        link: newCard.link,
-      })
+        name: place,
+        link: picture,
+      }),
     })
-      .then(this._getResponseData)
+      .then(this._checkResponse)
       .catch((err) => {
         console.log(err);
       });
