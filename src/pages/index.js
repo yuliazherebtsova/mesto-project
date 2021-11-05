@@ -16,6 +16,7 @@ import {
   formEditProfileAboutField,
   formEditProfileNameField,
   formEditAvatar,
+  formAddCard,
   buttonAddCard,
   buttonEditProfile,
   profileAvatarContainer,
@@ -31,72 +32,8 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
 
-/*
-formEditAvatar.addEventListener("submit", (evt) => {
-  // обновление аватара пользователя
-  evt.preventDefault();
-  renderLoading(submitButtonEditAvatar, true);
-  const avatarUrl = formEditAvatarSrcField.value;
-  updateProfileAvatar(avatarUrl)
-    .then((res) => {
-      profileAvatar.src = res.avatar;
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    })
-    .finally(() => {
-      renderLoading(submitButtonEditAvatar, false);
-      closePopup(popupEditAvatar);
-    });
-});
-
-buttonEditProfile.addEventListener("click", () => {
-  //  открытие окна редактирования профиля
-  const profileData = {
-    // информация о профиле для отображения при открытии формы редактирования
-    name: profileTitle.textContent,
-    about: profileSubtitle.textContent,
-  };
-  renderProfileInfo(popupEditProfile, profileData);
-  // отображаем информацию о профиле в форме редактирования при открытии
-  const submitProfileButton = formEditProfile.querySelector(
-    validationConfig.submitButtonSelector
-  );
-  submitProfileButton.classList.remove(validationConfig.inactiveButtonClass);
-  // кнопку "Сохранить" делаем активной #TODO вынести в функцию makeButtonActive()
-  openPopup(popupEditProfile);
-});
-
-popups.forEach((element) =>
-  // добавляем возможность закрывать диалоговые окна путем нажатия на оверлей
-  element.addEventListener("click", (evt) => {
-    if (evt.target === evt.currentTarget)
-      // если нажатие произошло оверлей, оно также закроется
-      closePopup(evt.target.closest(popupSelector));
-  })
-);
-
-popupCloseButtons.forEach((element) => {
-  // добавляем слушателей кнопкам закрытия для всех диалоговых окон в разметке
-  element.addEventListener("click", (evt) => {
-    closePopup(evt.target.closest(popupSelector));
-  });
-});
-
-buttonAddCard.addEventListener("click", () => {
-  // открытие формы добавления карточки
-  ////clearFormAddCard();
-  openPopup(popupAddCard);
-});
-
-profileAvatarContainer.addEventListener("click", () => {
-  // открытие формы редактирование аватара
-  ////clearFormAddCard();
-  openPopup(popupEditAvatar);
-});
-*/
-
 const api = new Api({
+  // объект для работы с api сервера
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
     authorization: "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5",
@@ -105,6 +42,7 @@ const api = new Api({
 });
 
 const user = new UserInfo(
+  // объект для работы с данными пользователя
   {
     profileTitleSelector,
     profileSubtitleSelector,
@@ -113,11 +51,33 @@ const user = new UserInfo(
   () => api.getUserData()
 );
 
-//--------------- Форма редактирования информации о пользователе ---------------
-// валидация формы редактирования информации о пользователей
-const validationProfile = new FormValidator(validationConfig, formEditProfile);
-validationProfile.enableValidation();
+const cardElementsList = new Section(
+  // объект для рендеринга карточек на страницу
+  {
+    data: [],
+    renderer: (cardData) => {
+      cardElementsList.addItem(createNewCard(cardData));
+    },
+  },
+  cardListSelector
+);
 
+//--------------- Включение валидации форм на странице ------------------------
+const formEditProfileValiadtor = new FormValidator(
+  validationConfig,
+  formEditProfile
+);
+const formEditAvatarValiadtor = new FormValidator(
+  validationConfig,
+  formEditAvatar
+);
+const formAddCardValidator = new FormValidator(validationConfig, formAddCard);
+
+formEditProfileValiadtor.enableValidation();
+formEditAvatarValiadtor.enableValidation();
+formAddCardValidator.enableValidation();
+
+//-------------- Логика работы модальных окон на странице -----------------------
 // попап редактирования профиля пользователя
 const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
@@ -138,28 +98,6 @@ const popupEditProfile = new PopupWithForm({
   },
 });
 
-popupEditProfile.setEventListeners();
-
-// обработчик кнопки редактирования профиля пользователя
-buttonEditProfile.addEventListener("click", () => {
-  validationProfile.updateButtonState(formEditProfile);
-  user
-    .getUserInfo()
-    .then((res) => {
-      formEditProfileNameField.value = res.name;
-      formEditProfileAboutField.value = res.about;
-      popupEditProfile.open();
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    });
-});
-
-//---------------- Форма редактирования аватара пользователя ----------------
-// валидация формы обноввления аватара
-const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
-validationAvatar.enableValidation();
-
 // попап обновления аватара
 const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
@@ -171,7 +109,6 @@ const popupEditAvatar = new PopupWithForm({
         user.setUserInfo(data);
         popupEditAvatar.close();
       })
-
       .catch((err) => {
         console.log(`${err}`);
       })
@@ -181,19 +118,7 @@ const popupEditAvatar = new PopupWithForm({
   },
 });
 
-popupEditAvatar.setEventListeners();
-// кнопка редактирования аватара
-
-profileAvatarContainer.addEventListener("click", () => {
-  // обработчик кнопки редактирвания аватара
-  validationAvatar.updateButtonState(formEditAvatar);
-  popupEditAvatar.open();
-});
-
-//-------------------- Форма добавления новой карточки --------------------
-const validationPlace = new FormValidator(validationConfig, formAddCard);
-validationPlace.enableValidation();
-
+// попап добавления карточки
 const popupAddCard = new PopupWithForm({
   popupSelector: popupAddCardSelector,
   handleFormSubmit: (inputData) => {
@@ -213,17 +138,29 @@ const popupAddCard = new PopupWithForm({
   },
 });
 
-popupAddCard.setEventListeners();
+buttonEditProfile.addEventListener("click", () => {
+  // обработчик кнопки редактирования профиля пользователя
+  user
+    .getUserInfo()
+    .then((res) => {
+      formEditProfileNameField.value = res.name;
+      formEditProfileAboutField.value = res.about;
+      formEditProfileValiadtor.refresh();
+      popupEditProfile.open();
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
+});
 
 buttonAddCard.addEventListener("click", () => {
   // обработчик кнопки добавления новой карточки
-  validationPlace.updateButtonState(formAddCard);
+  formAddCardValidator.refresh();
   popupAddCard.open();
 });
-//------------------------------------------------------------
 
+// попап окна просмотра фото в карточке
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
-popupWithImage.setEventListeners();
 
 const cardElementsList = new Section(
   // объект для рендеринга карточек на страницу
@@ -235,10 +172,18 @@ const cardElementsList = new Section(
   cardListSelector
 );
 
+popupAddCard.setEventListeners();
+popupWithImage.setEventListeners();
+popupEditProfile.setEventListeners();
+popupEditAvatar.setEventListeners();
+profileAvatarContainer.addEventListener("click", () => {
+  formEditAvatarValiadtor.refresh();
+  popupEditAvatar.open();
+});
+
 function createNewCard(cardData) {
   // логика создания карточки вынесена в отдельную функцию
   // для более удобного взаимодействия между экземплярами классов
-
   cardData.userId = user.userId;
   const card = new Card(
     cardData,
@@ -290,6 +235,7 @@ function createNewCard(cardData) {
   return cardElement;
 }
 
+//-------------------------- Загрузка данных на страницу -------------------------
 Promise.all([api.getUserData(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {

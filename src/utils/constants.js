@@ -34,6 +34,7 @@ export const formEditProfile = document.querySelector("#formEditProfile");
 export const formEditProfileNameField = formEditProfile.elements["name"];
 export const formEditProfileAboutField = formEditProfile.elements["about"];
 export const formEditAvatar = document.querySelector("#formEditAvatar");
+export const formAddCard = document.querySelector("#formAddCard");
 export const profileAvatarContainer = document.querySelector(
   ".profile__avatar-container"
 );
