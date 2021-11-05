@@ -1,9 +1,3 @@
-//Хаз:
-//класс UserInfo (обратите внимание что тут не нужны сеттеры и геттеры, надо сделать обычными методами):
-//Аргумент - объект с двумя ключами { элементИнформацииОСебе, элементИмени }
-//есть метод getUserInfo который возвращает текущие значения из разметки. то есть textContent свойство двух элементов в виде объекта
-//setUserInfo - получает объект с ключами и устанавливает их в разметку (то есть делает наоборот в отличие от getUserInfo)
-
 //Яндекс:
 //Класс UserInfo отвечает за управление информацией о пользователе на странице. Этот класс:
 //Принимает в конструктор объект с селекторами двух элементов:
@@ -17,38 +11,28 @@
 //отправляет их на сервер и добавляет их на страницу.
 
 export default class UserInfo {
-  constructor({ profileTitle, profileSubtitle, profileAvatar }) {
-    this._title = profileTitle;
-    this._subtitle = profileSubtitle;
-    this._profileAvatar = profileAvatar;
-    this._userId = 0;
+  constructor(
+    { profileTitleSelector, profileSubtitleSelector, profileAvatarSelector },
+    getUserData
+  ) {
+    this._name = document.querySelector(`.${profileTitleSelector}`);
+    this._about = document.querySelector(`.${profileSubtitleSelector}`);
+    this._avatarUrl = document.querySelector(`.${profileAvatarSelector}`);
+    this._getUserData = getUserData;
   }
 
   getUserInfo() {
-    const userInfo = {
-      title: this._title.textContent,
-      subtitle: this._subtitle.textContent,
-      avatar: this._profileAvatar.textContent
-    };
-    return userInfo;
+    // по ТЗ - данные должны возвращаться с сервера,
+    // getUserData - коллбэк обращения к api.getUserData
+    // при работе с экземпляром можно получить данные вот так:
+    // userInfo.getUserInfo().then(res => ...)
+    return this._getUserData();
   }
 
-  getUserID() {
-    return this._userId;
+  setUserInfo({ _id, name, about, avatarUrl }) {
+    this.userId = _id;
+    this._name.textContent = name;
+    this._about.textContent = about;
+    this._avatarUrl.src = avatarUrl;
   }
-
-  setUserInfo({ name, about, avatar }) {
-    this._title.textContent = name;
-    this._subtitle.textContent = about;
-    this._profileAvatar.src = avatar;
-  }
-
-  setUserId(id) {
-    console.log('Вроде id находится!');
-    console.log(id);
-    this._userId = id;
-  }
-
 }
-
-

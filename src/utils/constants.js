@@ -24,3 +24,8 @@ export const formSelector = ".form";
 export const formFieldSelector = ".form__field-input";
 export const formSubmitBtnSelector = ".form__submit-button";
 // селекторы элементов разметки модальных окон
+
+export const profileTitleSelector = "profile__title";
+export const profileSubtitleSelector = "profile__subtitle";
+export const profileAvatarSelector = "profile__avatar";
+// селекторы элементов разметки профиля пользователя
