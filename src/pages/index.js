@@ -228,7 +228,6 @@ popupWithImage.setEventListeners();
 const cardElementsList = new Section(
   // объект для рендеринга карточек на страницу
   {
-    data: [],
     renderer: (cardData) => {
       cardElementsList.addItem(createNewCard(cardData));
     },
