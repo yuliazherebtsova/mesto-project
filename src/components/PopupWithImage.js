@@ -10,9 +10,9 @@ export default class PopupWithImage extends Popup {
     super(popupSelector);
     // ключевым словом super вызываем конструктор родительского класса
     // это необходимо, для определения селектора внутри PopupWithImage
-    this._popupImage = this._popupElement.querySelector(popupImageSelector);
+    this._popupImage = this._popupElement.querySelector(`.${popupImageSelector}`);
     this._popupImageTitle = this._popupElement.querySelector(
-      popupImageTitleSelector
+      `.${popupImageTitleSelector}`
     );
   }
 

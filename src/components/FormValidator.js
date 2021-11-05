@@ -10,12 +10,9 @@ export default class FormValidator {
     this._inactiveButtonClass = validationConfig.inactiveButtonClass;
   }
 
-  // имеет приватные методы, которые обрабатывают форму
-
   _returnErrorElement(inputElement) {
     return this._formElement.querySelector(`.${inputElement.id}-error`);
   }
-
 
   _showInputError(inputElement, errorMessage) {
     const errorElement = this._returnErrorElement(inputElement);
@@ -29,17 +26,16 @@ export default class FormValidator {
     inputElement.classList.remove(this._inputErrorClass);
     errorElement.classList.remove(this._errorClass);
     errorElement.textContent = '';
-
   }
 
-  //невалидное поле
+  // невалидное поле
   _hasInvalidInput(inputList) {
     return inputList.some((inputElement) => {
       return !inputElement.validity.valid;
     });
   }
 
-  //валидность поля
+  // валидность поля
   _checkInputValidity(inputElement) {
     if (!inputElement.validity.valid) {
       this._showInputError(inputElement, inputElement.validationMessage);
@@ -57,7 +53,7 @@ export default class FormValidator {
     }
   }
 
-  //слушатели
+  // слушатели
   _setEventListeners(formElement) {
     const inputList = Array.from(formElement.querySelectorAll(this._inputSelector));
     const buttonElement = formElement.querySelector(this._submitButtonSelector);
@@ -89,6 +85,4 @@ export default class FormValidator {
       event.preventDefault();
     });
   }
-
-
 }

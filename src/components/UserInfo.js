@@ -29,10 +29,10 @@ export default class UserInfo {
     return this._getUserData();
   }
 
-  setUserInfo({ _id, name, about, avatarUrl }) {
+  setUserInfo({ _id, name, about, avatar }) {
     this.userId = _id;
     this._name.textContent = name;
     this._about.textContent = about;
-    this._avatarUrl.src = avatarUrl;
+    this._avatarUrl.src = avatar;
   }
 }
