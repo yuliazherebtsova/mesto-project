@@ -12,6 +12,14 @@ import {
   profileTitleSelector,
   profileSubtitleSelector,
   profileAvatarSelector,
+  formEditProfile,
+  formEditProfileAboutField,
+  formEditProfileNameField,
+  formEditAvatar,
+  buttonAddCard,
+  buttonEditProfile,
+  profileAvatarContainer,
+  validationConfig,
 } from "../utils/constants.js";
 // ииморт констант (селекторы и пр.)
 
@@ -23,120 +31,7 @@ import PopupWithImage from "../components/PopupWithImage.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
 
-import {
-  popupSelector,
-  popups,
-  popupCloseButtons,
-  openPopup,
-  closePopup,
-} from "../components/modal.js";
-// функции работы с модальными окнами
-import {
-  renderProfileInfo,
-  profileTitle,
-  profileSubtitle,
-  profileAvatar,
-  formEditNameField,
-  formEditAboutField,
-} from "../components/profile.js";
-// функции работы с данными профиля
-import enableValidation from "../components/validate.js";
-// функции валидации форм
-import { createCard, renderCard } from "../components/card2.js";
-// функции работы с карточками
-import {
-  postNewCard,
-  updateProfileInfo,
-  updateProfileAvatar,
-} from "../components/api2.js";
-// функции работы с api сервера
-import { renderLoading, renderImagePreview } from "../components/utils.js";
-
-const profileElement = document.querySelector(".profile__info");
-const profileAvatarContainer = document.querySelector(
-  ".profile__avatar-container"
-);
-const formEditAvatar = document.querySelector("#formEditAvatar");
-const submitButtonEditAvatar = formEditAvatar.querySelector(
-  ".form__submit-button"
-);
-const formEditAvatarSrcField =
-  document.querySelector("#formEditAvatar").elements["avatar"];
-const formEditProfile = document.querySelector("#formEditProfile");
-const submitButtonEditProfile = formEditProfile.querySelector(
-  ".form__submit-button"
-);
-
-const buttonEditProfile = document.querySelector(".profile__edit-button");
-const buttonAddCard = document.querySelector(".profile__add-button");
-const submitButtonAddCard = formAddCard.querySelector(".form__submit-button");
-const formAddPlaceField =
-  document.querySelector("#formAddCard").elements["place"];
-const formAddPictureField =
-  document.querySelector("#formAddCard").elements["picture"];
-
 /*
-formEditProfile.addEventListener("submit", (evt) => {
-  // редактирование и сохранение данных профиля
-  evt.preventDefault();
-  renderLoading(submitButtonEditProfile, true);
-  // отображение процесса загрузки данных
-  const profileInfo = {
-    name: formEditNameField.value,
-    about: formEditAboutField.value,
-  };
-  updateProfileInfo(profileInfo)
-    // загружаем инфо с сервера, метод асинхронный
-    .then((res) => {
-      const { name, about } = res;
-      profileTitle.textContent = name;
-      profileSubtitle.textContent = about;
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    })
-    .finally(() => {
-      renderLoading(submitButtonEditProfile, false);
-      // завершение загрузки данных
-      closePopup(popupEditProfile);
-    });
-});
-
-formAddCard.addEventListener("submit", (evt) => {
-  // добавление карточки в разметку
-  evt.preventDefault();
-  const cardData = {
-    name: formAddPlaceField.value,
-    link: formAddPictureField.value,
-  };
-  // создаем объект с данными карточки
-
-  renderLoading(submitButtonAddCard, true);
-  postNewCard(cardData)
-    // отправка карточки на сервер
-    .then((card) => {
-      const newCard = createCard(card.owner._id, card);
-      // создаем новую карточку
-      renderCard(newCard);
-      // добавляем карточку на страницу
-    })
-    .catch((err) => {
-      console.log(`Ошибка: ${err}`);
-    })
-    .finally(() => {
-      renderLoading(submitButtonAddCard, false, "Создать");
-      formAddCard.reset();
-      // поля формы очищаются
-      const submitCardButton = formAddCard.querySelector(
-        // кнопка отправки формы
-        validationConfig.submitButtonSelector
-      );
-      submitCardButton.classList.add(validationConfig.inactiveButtonClass);
-      // кнопку "Сохранить" делаем неактивной #TODO вынести в функцию makeButtonInactive()
-      closePopup(popupAddCard);
-    });
-});
-
 formEditAvatar.addEventListener("submit", (evt) => {
   // обновление аватара пользователя
   evt.preventDefault();
@@ -201,8 +96,6 @@ profileAvatarContainer.addEventListener("click", () => {
 });
 */
 
-//=======================================классы===============================================//
-
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
@@ -220,21 +113,8 @@ const user = new UserInfo(
   () => api.getUserData()
 );
 
-/*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
-
-//---перенести в utils/variables.js
-const validationConfig = {
-  formSelector: ".form",
-  fieldsetSelector: ".form__input-container",
-  inputSelector: ".form__field-input",
-  submitButtonSelector: ".form__submit-button",
-  inactiveButtonClass: "form__submit-button_inactive",
-  inputErrorClass: "form__field-input_type_error",
-  errorClass: "form__field-error_active",
-};
-
-//--------------------работаем с формой юзера--------------------
-// валидация юзера
+//--------------- Форма редактирования информации о пользователе ---------------
+// валидация формы редактирования информации о пользователей
 const validationProfile = new FormValidator(validationConfig, formEditProfile);
 validationProfile.enableValidation();
 
@@ -244,12 +124,11 @@ const popupEditProfile = new PopupWithForm({
   handleFormSubmit: () => {
     popupEditProfile.renderLoading(true);
     api
-      .updateProfileInfo(popupEditProfile.getInputValues()) //<-- а зачем мы меняли на приватный метод?
+      .updateUserData(popupEditProfile.getInputValues())
       .then((data) => {
         user.setUserInfo(data);
         popupEditProfile.close();
       })
-
       .catch((err) => {
         console.log(`Ошибка: ${err}`);
       })
@@ -260,16 +139,23 @@ const popupEditProfile = new PopupWithForm({
 });
 
 popupEditProfile.setEventListeners();
-// кнопка редактирования профиля пользователя
 
+// обработчик кнопки редактирования профиля пользователя
 buttonEditProfile.addEventListener("click", () => {
   validationProfile.updateButtonState(formEditProfile);
-  formEditProfile.elements.name.value = user.getUserInfo().title;
-  formEditProfile.elements.about.value = user.getUserInfo().subtitle;
-  popupEditProfile.open();
+  user
+    .getUserInfo()
+    .then((res) => {
+      formEditProfileNameField.value = res.name;
+      formEditProfileAboutField.value = res.about;
+      popupEditProfile.open();
+    })
+    .catch((err) => {
+      console.log(`Ошибка: ${err}`);
+    });
 });
 
-//--------------------работаем с формой аватара--------------------
+//---------------- Форма редактирования аватара пользователя ----------------
 // валидация формы обноввления аватара
 const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
 validationAvatar.enableValidation();
@@ -280,7 +166,7 @@ const popupEditAvatar = new PopupWithForm({
   handleFormSubmit: () => {
     popupEditAvatar.renderLoading(true);
     api
-      .updateProfileAvatar(popupEditAvatar.getInputValues()) //<-- а зачем мы меняли на приватный метод?
+      .updateProfileAvatar(popupEditAvatar.getInputValues())
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
@@ -299,6 +185,7 @@ popupEditAvatar.setEventListeners();
 // кнопка редактирования аватара
 
 profileAvatarContainer.addEventListener("click", () => {
+  // обработчик кнопки редактирвания аватара
   validationAvatar.updateButtonState(formEditAvatar);
   popupEditAvatar.open();
 });
@@ -329,7 +216,7 @@ const popupAddCard = new PopupWithForm({
 popupAddCard.setEventListeners();
 
 buttonAddCard.addEventListener("click", () => {
-  // слушатель для кнопки добавления новой карточки
+  // обработчик кнопки добавления новой карточки
   validationPlace.updateButtonState(formAddCard);
   popupAddCard.open();
 });
@@ -349,23 +236,6 @@ const cardElementsList = new Section(
   cardListSelector
 );
 
-Promise.all([api.getUserData(), api.getInitialCards()])
-  // карточки должны отображаться на странице только после получения id пользователя
-  .then(([userData, cards]) => {
-    console.log(userData); // <---------------- убрать перед сдачей проекта
-    console.log(cards); // <---------------- убрать перед сдачей проекта
-    user.setUserInfo(userData);
-    cards.forEach((card) => cardElementsList.addItem(createNewCard(card)));
-    console.log(cardElementsList); // <---------------- убрать перед сдачей проекта
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finally(() => {
-    //enableValidation(validationConfig);
-    // включаем валидацию форм
-  });
-
 function createNewCard(cardData) {
   // логика создания карточки вынесена в отдельную функцию
   // для более удобного взаимодействия между экземплярами классов
@@ -377,7 +247,6 @@ function createNewCard(cardData) {
       popupWithImage.open(cardData);
     },
     (id, isLiked) => {
-      console.log(this);
       if (isLiked) {
         api
           .deleteLike(id)
@@ -418,6 +287,19 @@ function createNewCard(cardData) {
     cardTemplateSelector
   );
   const cardElement = card.create();
-  console.log(card); // <---------------- убрать перед сдачей проекта
+  console.log(card); // !<------------------- убрать перед сдачей проекта
   return cardElement;
 }
+
+Promise.all([api.getUserData(), api.getInitialCards()])
+  // карточки должны отображаться на странице только после получения id пользователя
+  .then(([userData, cards]) => {
+    console.log(userData); // !<------------- убрать перед сдачей проекта
+    console.log(cards); // !<---------------- убрать перед сдачей проекта
+    user.setUserInfo(userData);
+    cards.forEach((card) => cardElementsList.addItem(createNewCard(card)));
+    console.log(cardElementsList); // !<----- убрать перед сдачей проекта
+  })
+  .catch((err) => {
+    console.log(err);
+  });
