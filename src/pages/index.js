@@ -203,8 +203,6 @@ profileAvatarContainer.addEventListener("click", () => {
 
 //=======================================классы===============================================//
 
-/**********************СЕРВЕР*******************/
-
 const api = new Api({
   baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
   headers: {
@@ -212,8 +210,6 @@ const api = new Api({
     "Content-Type": "application/json",
   },
 });
-
-/*********************** ЮЗЕР ******************/
 
 const user = new UserInfo(
   {
@@ -236,18 +232,13 @@ const validationConfig = {
   inputErrorClass: "form__field-input_type_error",
   errorClass: "form__field-error_active",
 };
-//  еще перенесутся:
-// formEditProfile
-// formAddCard
-// formEditAvatar
 
 //--------------------работаем с формой юзера--------------------
-
-//валидация юзера
+// валидация юзера
 const validationProfile = new FormValidator(validationConfig, formEditProfile);
 validationProfile.enableValidation();
 
-//попап юзера
+// попап редактирования профиля пользователя
 const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
   handleFormSubmit: () => {
@@ -267,8 +258,10 @@ const popupEditProfile = new PopupWithForm({
       });
   },
 });
+
 popupEditProfile.setEventListeners();
-//кнопка юзера
+// кнопка редактирования профиля пользователя
+
 buttonEditProfile.addEventListener("click", () => {
   validationProfile.updateButtonState(formEditProfile);
   formEditProfile.elements.name.value = user.getUserInfo().title;
@@ -277,12 +270,11 @@ buttonEditProfile.addEventListener("click", () => {
 });
 
 //--------------------работаем с формой аватара--------------------
-
-//валидация аватара
+// валидация формы обноввления аватара
 const validationAvatar = new FormValidator(validationConfig, formEditAvatar);
 validationAvatar.enableValidation();
 
-//попап аватара
+// попап обновления аватара
 const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
   handleFormSubmit: () => {
@@ -302,8 +294,10 @@ const popupEditAvatar = new PopupWithForm({
       });
   },
 });
+
 popupEditAvatar.setEventListeners();
-// кнопка аватара
+// кнопка редактирования аватара
+
 profileAvatarContainer.addEventListener("click", () => {
   validationAvatar.updateButtonState(formEditAvatar);
   popupEditAvatar.open();
@@ -373,6 +367,9 @@ Promise.all([api.getUserData(), api.getInitialCards()])
   });
 
 function createNewCard(cardData) {
+  // логика создания карточки вынесена в отдельную функцию
+  // для более удобного взаимодействия между экземплярами классов
+
   cardData.userId = user.userId;
   const card = new Card(
     cardData,
