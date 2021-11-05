@@ -54,7 +54,6 @@ const user = new UserInfo(
 const cardElementsList = new Section(
   // объект для рендеринга карточек на страницу
   {
-    data: [],
     renderer: (cardData) => {
       cardElementsList.addItem(createNewCard(cardData));
     },
@@ -162,16 +161,6 @@ buttonAddCard.addEventListener("click", () => {
 // попап окна просмотра фото в карточке
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 
-const cardElementsList = new Section(
-  // объект для рендеринга карточек на страницу
-  {
-    renderer: (cardData) => {
-      cardElementsList.addItem(createNewCard(cardData));
-    },
-  },
-  cardListSelector
-);
-
 popupAddCard.setEventListeners();
 popupWithImage.setEventListeners();
 popupEditProfile.setEventListeners();
@@ -231,7 +220,6 @@ function createNewCard(cardData) {
     cardTemplateSelector
   );
   const cardElement = card.create();
-  console.log(card); // !<------------------- убрать перед сдачей проекта
   return cardElement;
 }
 
@@ -239,11 +227,8 @@ function createNewCard(cardData) {
 Promise.all([api.getUserData(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {
-    console.log(userData); // !<------------- убрать перед сдачей проекта
-    console.log(cards); // !<---------------- убрать перед сдачей проекта
     user.setUserInfo(userData);
     cards.forEach((card) => cardElementsList.addItem(createNewCard(card)));
-    console.log(cardElementsList); // !<----- убрать перед сдачей проекта
   })
   .catch((err) => {
     console.log(err);
