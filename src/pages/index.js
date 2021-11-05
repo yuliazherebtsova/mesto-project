@@ -9,6 +9,9 @@ import {
   popupAddCardSelector,
   popupEditProfileSelector,
   popupPreviewImageSelector,
+  profileTitleSelector,
+  profileSubtitleSelector,
+  profileAvatarSelector,
 } from "../utils/constants.js";
 // ииморт констант (селекторы и пр.)
 
@@ -212,10 +215,14 @@ const api = new Api({
 
 /*********************** ЮЗЕР ******************/
 
-//---перенести в utils/variables.js
-// profileTitle, profileSubtitle, profileAvatar <-- пока они находятся в profile.js
-//---
-const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
+const user = new UserInfo(
+  {
+    profileTitleSelector,
+    profileSubtitleSelector,
+    profileAvatarSelector,
+  },
+  () => api.getUserData()
+);
 
 /*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
 
@@ -246,7 +253,7 @@ const popupEditProfile = new PopupWithForm({
   handleFormSubmit: () => {
     popupEditProfile.renderLoading(true);
     api
-      .updateProfileInfo(popupEditProfile.getInputValues())  //<-- а зачем мы меняли на приватный метод?
+      .updateProfileInfo(popupEditProfile.getInputValues()) //<-- а зачем мы меняли на приватный метод?
       .then((data) => {
         user.setUserInfo(data);
         popupEditProfile.close();
@@ -348,17 +355,13 @@ const cardElementsList = new Section(
   cardListSelector
 );
 
-Promise.all([api.getProfileInfo(), api.getInitialCards()])
+Promise.all([api.getUserData(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {
-    console.log('информация о пользователе получена с сервера:');
     console.log(userData); // <---------------- убрать перед сдачей проекта
     console.log(cards); // <---------------- убрать перед сдачей проекта
-    user.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
-    user.setUserId(userData._id);
-    cards.forEach((card) =>
-      cardElementsList.addItem(createNewCard(card, userData._id))
-    );
+    user.setUserInfo(userData);
+    cards.forEach((card) => cardElementsList.addItem(createNewCard(card)));
     console.log(cardElementsList); // <---------------- убрать перед сдачей проекта
   })
   .catch((err) => {
@@ -370,8 +373,7 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
   });
 
 function createNewCard(cardData) {
-  //!не работает корзина, т.к. требуется iD пользователя. Надо
-  //! переделать класс UserInfo с обращением к Api, тогда внутри будет userId
+  cardData.userId = user.userId;
   const card = new Card(
     cardData,
     () => {

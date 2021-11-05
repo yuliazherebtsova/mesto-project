@@ -13,7 +13,7 @@ export default class Api {
 
   //-------
   // запрос данных пользователя
-  getProfileInfo() {
+  getUserData() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
     })
@@ -37,7 +37,7 @@ export default class Api {
 
   //-------
   // обновление данных профиля после редактирования
-  updateProfileInfo({ name, about }) {
+  updateUserData({ name, about }) {
     return fetch(`${this._baseUrl}/users/me`, {
       method: "PATCH",
       headers: this._headers,
