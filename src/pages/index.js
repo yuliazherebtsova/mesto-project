@@ -81,10 +81,10 @@ formAddCardValidator.enableValidation();
 // попап редактирования профиля пользователя
 const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
-  handleFormSubmit: () => {
+  handleFormSubmit: (data) => {
     popupEditProfile.renderLoading(true);
     api
-      .updateUserData(popupEditProfile.getInputValues())
+      .updateUserData(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditProfile.close();
@@ -101,10 +101,10 @@ const popupEditProfile = new PopupWithForm({
 // попап обновления аватара
 const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
-  handleFormSubmit: () => {
+  handleFormSubmit: (data) => {
     popupEditAvatar.renderLoading(true);
     api
-      .updateProfileAvatar(popupEditAvatar.getInputValues())
+      .updateProfileAvatar(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
@@ -161,6 +161,16 @@ buttonAddCard.addEventListener("click", () => {
 
 // попап окна просмотра фото в карточке
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
+
+const cardElementsList = new Section(
+  // объект для рендеринга карточек на страницу
+  {
+    renderer: (cardData) => {
+      cardElementsList.addItem(createNewCard(cardData));
+    },
+  },
+  cardListSelector
+);
 
 popupAddCard.setEventListeners();
 popupWithImage.setEventListeners();
