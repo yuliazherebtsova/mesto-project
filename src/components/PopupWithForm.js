@@ -20,7 +20,7 @@ export default class PopupWithForm extends Popup {
     this._buttonText = this._buttonSubmit.textContent;
   }
 
-  getInputValues() {
+  _getInputValues() {
     // создаём пустой объект
     this._formValues = {};
     // добавляем в этот объект значения всех полей
@@ -51,7 +51,7 @@ export default class PopupWithForm extends Popup {
     this._formElement.addEventListener("submit", (evt) => {
       // обработчик сабмита формы
       evt.preventDefault();
-      this._handleFormSubmit(this.getInputValues());
+      this._handleFormSubmit(this._getInputValues());
     });
   }
 }

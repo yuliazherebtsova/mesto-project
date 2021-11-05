@@ -121,10 +121,10 @@ validationProfile.enableValidation();
 // попап редактирования профиля пользователя
 const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
-  handleFormSubmit: () => {
+  handleFormSubmit: (data) => {
     popupEditProfile.renderLoading(true);
     api
-      .updateUserData(popupEditProfile.getInputValues())
+      .updateUserData(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditProfile.close();
@@ -163,10 +163,10 @@ validationAvatar.enableValidation();
 // попап обновления аватара
 const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
-  handleFormSubmit: () => {
+  handleFormSubmit: (data) => {
     popupEditAvatar.renderLoading(true);
     api
-      .updateProfileAvatar(popupEditAvatar.getInputValues())
+      .updateProfileAvatar(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
