@@ -246,7 +246,7 @@ const popupEditProfile = new PopupWithForm({
   handleFormSubmit: () => {
     popupEditProfile.renderLoading(true);
     api
-      .updateProfileInfo(popupEditProfile._getInputValues())
+      .updateProfileInfo(popupEditProfile.getInputValues())  //<-- а зачем мы меняли на приватный метод?
       .then((data) => {
         user.setUserInfo(data);
         popupEditProfile.close();
@@ -281,7 +281,7 @@ const popupEditAvatar = new PopupWithForm({
   handleFormSubmit: () => {
     popupEditAvatar.renderLoading(true);
     api
-      .updateProfileAvatar(popupEditAvatar._getInputValues())
+      .updateProfileAvatar(popupEditAvatar.getInputValues()) //<-- а зачем мы меняли на приватный метод?
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
@@ -351,9 +351,11 @@ const cardElementsList = new Section(
 Promise.all([api.getProfileInfo(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {
+    console.log('информация о пользователе получена с сервера:');
     console.log(userData); // <---------------- убрать перед сдачей проекта
     console.log(cards); // <---------------- убрать перед сдачей проекта
-    user.setUserInfo(userData);
+    user.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
+    user.setUserId(userData._id);
     cards.forEach((card) =>
       cardElementsList.addItem(createNewCard(card, userData._id))
     );
