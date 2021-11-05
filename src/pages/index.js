@@ -215,7 +215,23 @@ const api = new Api({
 //---перенести в utils/variables.js
 // profileTitle, profileSubtitle, profileAvatar <-- пока они находятся в profile.js
 //---
-const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar });
+//const user = new UserInfo({ profileTitle, profileSubtitle, profileAvatar }); // <-- старый варик
+//новый с учетом хаза и пинка в апи (но где здесь айди то?)
+const user = new UserInfo(
+  { profileTitle, profileSubtitle, profileAvatar },
+  () => api.getProfileInfo()
+    .then((data) => {
+      return data;
+    })
+    .catch((err) => {
+      console.log(err);
+    }),
+  (name, about) => api.updateProfileInfo(name, about, avatar)
+    .catch((err) => {
+      console.log(err);
+    })
+
+);
 
 /*********************** ФОРМЫ и ВАЛИДАЦИЯ ******************/
 
@@ -355,7 +371,8 @@ Promise.all([api.getProfileInfo(), api.getInitialCards()])
     console.log(userData); // <---------------- убрать перед сдачей проекта
     console.log(cards); // <---------------- убрать перед сдачей проекта
     user.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
-    user.setUserId(userData._id);
+    //user.setUserInfo({ name: userData.name, about: userData.about, avatar: userData.avatar });
+    //user.setUserId(userData._id);
     cards.forEach((card) =>
       cardElementsList.addItem(createNewCard(card, userData._id))
     );
