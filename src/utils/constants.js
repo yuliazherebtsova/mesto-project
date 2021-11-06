@@ -14,6 +14,7 @@ export const popupPreviewImageSelector = "popup_type_image-preview";
 export const popupEditProfileSelector = "popup_type_edit-profile";
 export const popupEditAvatarSelector = "popup_type_edit-avatar";
 export const popupAddCardSelector = "popup_type_add-card";
+export const popupDeleteCardSelector = "popup_type_delete-card";
 export const popupCloseBtnSelector = "popup__close-button";
 export const popupOpenedSelector = "popup_opened";
 export const popupImageSelector = "popup__image";
