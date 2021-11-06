@@ -225,12 +225,12 @@ function createNewCard(cardData) {
           .deleteCard(id)
           .then(() => {
             card.delete();
+            popupDeleteCard.close();
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
           })
           .finally(() => {
-            popupDeleteCard.close();
             popupDeleteCard.renderLoading(false);
           });
       });
