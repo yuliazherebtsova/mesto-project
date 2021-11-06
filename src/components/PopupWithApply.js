@@ -13,8 +13,8 @@ export default class PopupWithApply extends Popup {
   }
 
   apply(handleFormSubmit) {
+  // обрабатываем коллбэк подтверждения удаления карточки
     this._handleFormSubmit = handleFormSubmit;
-    console.log(this._handleFormSubmit)
   }
 
   renderLoading(isLoading) {

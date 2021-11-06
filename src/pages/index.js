@@ -217,16 +217,21 @@ function createNewCard(cardData) {
     },
     (id) => {
       popupDeleteCard.open();
+      // перед удалением карточки спрашиваем подтверждение
       popupDeleteCard.apply(() => {
+        // подтверждение удаления (коллбэк сабмита формы)
         popupDeleteCard.renderLoading(true);
         api
           .deleteCard(id)
           .then(() => {
             card.delete();
-            popupDeleteCard.close();
           })
           .catch((err) => {
             console.log(`Ошибка: ${err}`);
+          })
+          .finally(() => {
+            popupDeleteCard.close();
+            popupDeleteCard.renderLoading(false);
           });
       });
     },
