@@ -7,6 +7,7 @@ import {
   cardTemplateSelector,
   popupEditAvatarSelector,
   popupAddCardSelector,
+  popupDeleteCardSelector,
   popupEditProfileSelector,
   popupPreviewImageSelector,
   profileTitleSelector,
@@ -17,6 +18,7 @@ import {
   formEditProfileNameField,
   formEditAvatar,
   formAddCard,
+  formDeleteCard,
   buttonAddCard,
   buttonEditProfile,
   profileAvatarContainer,
@@ -28,6 +30,7 @@ import Section from "../components/Section.js";
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithApply from "../components/PopupWithApply.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
@@ -137,6 +140,9 @@ const popupAddCard = new PopupWithForm({
   },
 });
 
+// попап подтверждения удаления карточки
+const popupDeleteCard = new PopupWithApply(popupDeleteCardSelector);
+
 buttonEditProfile.addEventListener("click", () => {
   // обработчик кнопки редактирования профиля пользователя
   user
@@ -158,6 +164,12 @@ buttonAddCard.addEventListener("click", () => {
   popupAddCard.open();
 });
 
+profileAvatarContainer.addEventListener("click", () => {
+  // обработчик кнопки обновления аватара пользователя
+  formEditAvatarValiadtor.refresh();
+  popupEditAvatar.open();
+});
+
 // попап окна просмотра фото в карточке
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 
@@ -165,10 +177,7 @@ popupAddCard.setEventListeners();
 popupWithImage.setEventListeners();
 popupEditProfile.setEventListeners();
 popupEditAvatar.setEventListeners();
-profileAvatarContainer.addEventListener("click", () => {
-  formEditAvatarValiadtor.refresh();
-  popupEditAvatar.open();
-});
+popupDeleteCard.setEventListeners();
 
 function createNewCard(cardData) {
   // логика создания карточки вынесена в отдельную функцию
@@ -207,15 +216,19 @@ function createNewCard(cardData) {
       }
     },
     (id) => {
-      api
-        .deleteCard(id)
-        // #TODO попап подтверждения удаления карточки
-        .then(() => {
-          card.delete();
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
+      popupDeleteCard.open();
+      popupDeleteCard.apply(() => {
+        popupDeleteCard.renderLoading(true);
+        api
+          .deleteCard(id)
+          .then(() => {
+            card.delete();
+            popupDeleteCard.close();
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          });
+      });
     },
     cardTemplateSelector
   );
