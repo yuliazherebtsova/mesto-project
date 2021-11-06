@@ -18,7 +18,6 @@ import {
   formEditProfileNameField,
   formEditAvatar,
   formAddCard,
-  formDeleteCard,
   buttonAddCard,
   buttonEditProfile,
   profileAvatarContainer,
