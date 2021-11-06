@@ -1,0 +1,16 @@
+.popup__container_type_delete-card {
+  min-height: 181px;
+  padding: 39px 39px 36px 36px;
+  margin: 0;
+  border-radius: 0;
+  background-color: aliceblue;
+  border-radius: 10px;
+}
+
+@media (max-width: 767px) {
+  .popup__container_type_delete-card {
+    padding: 19px 19px 18px 18px;
+    min-height: 140px;
+    min-width: 240px;
+  }
+}

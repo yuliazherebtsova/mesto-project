@@ -1,0 +1,9 @@
+.form__submit-button_type_delete-card {
+  margin-top: 36px;
+}
+
+@media (max-width: 767px) {
+  .form__submit-button_type_delete-card {
+    margin-top: 25px;
+  }
+}
