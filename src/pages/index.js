@@ -13,6 +13,7 @@ import {
   profileTitleSelector,
   profileSubtitleSelector,
   profileAvatarSelector,
+  profileAvatarLoaderSelector,
   formEditProfile,
   formEditProfileAboutField,
   formEditProfileNameField,
@@ -22,7 +23,6 @@ import {
   buttonEditProfile,
   profileAvatarContainer,
   validationConfig,
-  avatarLoader,
 } from "../utils/constants.js";
 // ииморт констант (селекторы и пр.)
 
@@ -34,6 +34,7 @@ import PopupWithApply from "../components/PopupWithApply.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
+import Loader from "../components/Loader";
 
 const api = new Api({
   // объект для работы с api сервера
@@ -63,6 +64,8 @@ const cardElementsList = new Section(
   },
   cardListSelector
 );
+
+const avatarLoader = new Loader(profileAvatarLoaderSelector);
 
 //--------------- Включение валидации форм на странице ------------------------
 const formEditProfileValiadtor = new FormValidator(
@@ -105,11 +108,13 @@ const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
   handleFormSubmit: (data) => {
     popupEditAvatar.renderLoading(true);
+    avatarLoader.renderLoading();
     api
       .updateProfileAvatar(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
+        avatarLoader.renderLoading(false);
       })
       .catch((err) => {
         console.log(`${err}`);
