@@ -43,6 +43,7 @@ export const buttonEditProfile = document.querySelector(
   ".profile__edit-button"
 );
 export const buttonAddCard = document.querySelector(".profile__add-button");
+export const avatarLoader = document.querySelector('.profile__loader');
 // элементы страницы
 
 export const validationConfig = {

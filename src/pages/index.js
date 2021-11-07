@@ -22,6 +22,7 @@ import {
   buttonEditProfile,
   profileAvatarContainer,
   validationConfig,
+  avatarLoader,
 } from "../utils/constants.js";
 // ииморт констант (селекторы и пр.)
 
