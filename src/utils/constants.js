@@ -29,7 +29,11 @@ export const formSubmitBtnSelector = ".form__submit-button";
 export const profileTitleSelector = "profile__title";
 export const profileSubtitleSelector = "profile__subtitle";
 export const profileAvatarSelector = "profile__avatar";
+export const profileAvatarLoaderSelector = 'profile__loader';
 // селекторы элементов разметки профиля пользователя
+
+export const loaderVisibleSelector = 'loader_visible';
+// селекторы элементов разметки лоадера
 
 export const formEditProfile = document.querySelector("#formEditProfile");
 export const formEditProfileNameField = formEditProfile.elements["name"];
@@ -43,7 +47,6 @@ export const buttonEditProfile = document.querySelector(
   ".profile__edit-button"
 );
 export const buttonAddCard = document.querySelector(".profile__add-button");
-export const avatarLoader = document.querySelector('.profile__loader');
 // элементы страницы
 
 export const validationConfig = {
