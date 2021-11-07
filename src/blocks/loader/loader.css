@@ -6,7 +6,7 @@
   width: 120px;
   height: 120px;
   border-radius: 50%;
-  background: rgba(250, 250, 250, 0.5);
+  background: rgba(0, 0, 0, .5);
   color: #fff;
   animation: rotation 1s linear infinite;
 }
