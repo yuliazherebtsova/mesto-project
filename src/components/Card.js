@@ -47,7 +47,7 @@ export default class Card {
     this.toggleLikeButton();
     // заполняем шаблон карточки данными, полученными с сервера
     this._setEventListeners();
-    // устанавливаем слушателей
+    // устанавливаем слушателей событиям карточки
 
     if (!this._isMyCard)
       // удалить можно только свою карточку
@@ -82,7 +82,7 @@ export default class Card {
         this._handleCardClick();
       });
 
-      this._element
+    this._element
       .querySelector(cardLikeBtnSelector)
       .addEventListener("click", () => {
         this._handleLikeClick(this._id, this.isLiked);
