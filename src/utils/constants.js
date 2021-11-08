@@ -14,6 +14,7 @@ export const popupPreviewImageSelector = "popup_type_image-preview";
 export const popupEditProfileSelector = "popup_type_edit-profile";
 export const popupEditAvatarSelector = "popup_type_edit-avatar";
 export const popupAddCardSelector = "popup_type_add-card";
+export const popupDeleteCardSelector = "popup_type_delete-card";
 export const popupCloseBtnSelector = "popup__close-button";
 export const popupOpenedSelector = "popup_opened";
 export const popupImageSelector = "popup__image";
@@ -28,7 +29,11 @@ export const formSubmitBtnSelector = ".form__submit-button";
 export const profileTitleSelector = "profile__title";
 export const profileSubtitleSelector = "profile__subtitle";
 export const profileAvatarSelector = "profile__avatar";
+export const profileAvatarLoaderSelector = 'profile__loader';
 // селекторы элементов разметки профиля пользователя
+
+export const loaderVisibleSelector = 'loader_visible';
+// селекторы элементов разметки лоадера
 
 export const formEditProfile = document.querySelector("#formEditProfile");
 export const formEditProfileNameField = formEditProfile.elements["name"];

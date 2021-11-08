@@ -1,0 +1,45 @@
+.loader {
+  display: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, .5);
+  color: #fff;
+  animation: rotation 1s linear infinite;
+}
+
+.loader:before, .loader:after {
+  content: '';
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  top: 50%;
+  left: 50%;
+  transform: scale(0.5) translate(0, 0);
+  background-color: #fff;
+  border-radius: 50%;
+  animation: animloader-points 1s infinite ease-in-out;
+}
+
+.loader:before {
+  background-color: rgb(70, 66, 66);
+  transform: scale(0.5) translate(-30px, -30px);
+}
+
+@keyframes animloader-points {
+  50% {
+    transform: scale(1) translate(-50%, -50%);
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

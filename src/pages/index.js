@@ -7,11 +7,13 @@ import {
   cardTemplateSelector,
   popupEditAvatarSelector,
   popupAddCardSelector,
+  popupDeleteCardSelector,
   popupEditProfileSelector,
   popupPreviewImageSelector,
   profileTitleSelector,
   profileSubtitleSelector,
   profileAvatarSelector,
+  profileAvatarLoaderSelector,
   formEditProfile,
   formEditProfileAboutField,
   formEditProfileNameField,
@@ -28,9 +30,11 @@ import Section from "../components/Section.js";
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithApply from "../components/PopupWithApply.js";
 import PopupWithImage from "../components/PopupWithImage.js";
 import Api from "../components/Api.js";
 import UserInfo from "../components/UserInfo.js";
+import Loader from "../components/Loader";
 
 const api = new Api({
   // объект для работы с api сервера
@@ -60,6 +64,8 @@ const cardElementsList = new Section(
   },
   cardListSelector
 );
+
+const avatarLoader = new Loader(profileAvatarLoaderSelector);
 
 //--------------- Включение валидации форм на странице ------------------------
 const formEditProfileValiadtor = new FormValidator(
@@ -102,11 +108,13 @@ const popupEditAvatar = new PopupWithForm({
   popupSelector: popupEditAvatarSelector,
   handleFormSubmit: (data) => {
     popupEditAvatar.renderLoading(true);
+    avatarLoader.renderLoading();
     api
       .updateProfileAvatar(data)
       .then((data) => {
         user.setUserInfo(data);
         popupEditAvatar.close();
+        avatarLoader.renderLoading(false);
       })
       .catch((err) => {
         console.log(`${err}`);
@@ -137,6 +145,9 @@ const popupAddCard = new PopupWithForm({
   },
 });
 
+// попап подтверждения удаления карточки
+const popupDeleteCard = new PopupWithApply(popupDeleteCardSelector);
+
 buttonEditProfile.addEventListener("click", () => {
   // обработчик кнопки редактирования профиля пользователя
   user
@@ -158,6 +169,12 @@ buttonAddCard.addEventListener("click", () => {
   popupAddCard.open();
 });
 
+profileAvatarContainer.addEventListener("click", () => {
+  // обработчик кнопки обновления аватара пользователя
+  formEditAvatarValiadtor.resetValidation();
+  popupEditAvatar.open();
+});
+
 // попап окна просмотра фото в карточке
 const popupWithImage = new PopupWithImage(popupPreviewImageSelector);
 
@@ -165,10 +182,7 @@ popupAddCard.setEventListeners();
 popupWithImage.setEventListeners();
 popupEditProfile.setEventListeners();
 popupEditAvatar.setEventListeners();
-profileAvatarContainer.addEventListener("click", () => {
-  formEditAvatarValiadtor.resetValidation();
-  popupEditAvatar.open();
-});
+popupDeleteCard.setEventListeners();
 
 function createNewCard(cardData) {
   // логика создания карточки вынесена в отдельную функцию
@@ -207,15 +221,24 @@ function createNewCard(cardData) {
       }
     },
     (id) => {
-      api
-        .deleteCard(id)
-        // #TODO попап подтверждения удаления карточки
-        .then(() => {
-          card.delete();
-        })
-        .catch((err) => {
-          console.log(`Ошибка: ${err}`);
-        });
+      popupDeleteCard.open();
+      // перед удалением карточки спрашиваем подтверждение
+      popupDeleteCard.apply(() => {
+        // подтверждение удаления (коллбэк сабмита формы)
+        popupDeleteCard.renderLoading(true);
+        api
+          .deleteCard(id)
+          .then(() => {
+            card.delete();
+            popupDeleteCard.close();
+          })
+          .catch((err) => {
+            console.log(`Ошибка: ${err}`);
+          })
+          .finally(() => {
+            popupDeleteCard.renderLoading(false);
+          });
+      });
     },
     cardTemplateSelector
   );

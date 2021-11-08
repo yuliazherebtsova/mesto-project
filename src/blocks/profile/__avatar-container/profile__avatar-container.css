@@ -1,4 +1,5 @@
 .profile__avatar-container {
+  display: flex;
   margin-right: 30px;
   position: relative;
   border-radius: 50%;
@@ -43,7 +44,6 @@
 .profile__avatar-container:hover:after {
   opacity: 1;
 }
-
 
 @media (max-width: 767px) {
   .profile__avatar-container {
