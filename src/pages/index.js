@@ -144,7 +144,7 @@ buttonEditProfile.addEventListener("click", () => {
     .then((res) => {
       formEditProfileNameField.value = res.name;
       formEditProfileAboutField.value = res.about;
-      formEditProfileValiadtor.refresh();
+      formEditProfileValiadtor.resetValidation();
       popupEditProfile.open();
     })
     .catch((err) => {
@@ -154,7 +154,7 @@ buttonEditProfile.addEventListener("click", () => {
 
 buttonAddCard.addEventListener("click", () => {
   // обработчик кнопки добавления новой карточки
-  formAddCardValidator.refresh();
+  formAddCardValidator.resetValidation();
   popupAddCard.open();
 });
 
@@ -166,7 +166,7 @@ popupWithImage.setEventListeners();
 popupEditProfile.setEventListeners();
 popupEditAvatar.setEventListeners();
 profileAvatarContainer.addEventListener("click", () => {
-  formEditAvatarValiadtor.refresh();
+  formEditAvatarValiadtor.resetValidation();
   popupEditAvatar.open();
 });
 
