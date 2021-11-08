@@ -16,11 +16,7 @@ export default class Api {
   getUserData() {
     return fetch(`${this._baseUrl}/users/me`, {
       headers: this._headers,
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -28,11 +24,7 @@ export default class Api {
   getInitialCards() {
     return fetch(`${this._baseUrl}/cards`, {
       headers: this._headers,
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -45,11 +37,7 @@ export default class Api {
         name: name,
         about: about,
       }),
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -59,11 +47,7 @@ export default class Api {
       method: "PATCH",
       headers: this._headers,
       body: JSON.stringify(avatarUrl),
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   }
 
   //-------
@@ -76,11 +60,7 @@ export default class Api {
         name: place,
         link: picture,
       }),
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   }
   //-------
 
@@ -89,11 +69,7 @@ export default class Api {
     return fetch(`${this._baseUrl}/cards/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   };
 
   //лайк карточки
@@ -103,11 +79,7 @@ export default class Api {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "PUT",
       headers: this._headers,
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   };
 
   // удаление лайка с карточки
@@ -116,10 +88,6 @@ export default class Api {
     return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
       method: "DELETE",
       headers: this._headers,
-    })
-      .then(this._checkResponse)
-      .catch((err) => {
-        console.log(err);
-      });
+    }).then(this._checkResponse);
   };
 }
