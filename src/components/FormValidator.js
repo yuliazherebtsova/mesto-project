@@ -69,7 +69,7 @@ export default class FormValidator {
     });
   }
 
-  refresh() {
+  resetValidation() {
     this._inputList.forEach((inputElement) => {
       this._hideInputError(inputElement);
     });
@@ -82,7 +82,6 @@ export default class FormValidator {
     this._setEventListeners(this._formElement);
     this._formElement.addEventListener("submit", (evt) => {
       evt.preventDefault();
-      this._toggleButtonState();
     });
   }
 }
