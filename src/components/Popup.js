@@ -17,13 +17,13 @@ export default class Popup {
   // открытие модального окна
   open() {
     this._popupElement.classList.add(popupOpenedSelector);
-    window.addEventListener("keyup", this._handleEscClose);
+    window.addEventListener("keydown", this._handleEscClose);
   }
 
   // закрытие модального окна
   close() {
     this._popupElement.classList.remove(popupOpenedSelector);
-    window.removeEventListener("keyup", this._handleEscClose);
+    window.removeEventListener("keydown", this._handleEscClose);
   }
 
   // закрытие модального окна по кнопке Esc
