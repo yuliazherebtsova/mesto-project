@@ -7,6 +7,7 @@ import {
 } from "../utils/constants.js";
 
 const apiAxios = axios.create({
+  // инстанс для работы с Axios
   baseURL: BASE_URL,
   headers: {
     authorization: API_KEY,
@@ -89,8 +90,8 @@ export default class Api {
   postCard({ place, picture }) {
     const body = {
       name: place,
-      link: picture
-    }
+      link: picture,
+    };
     return apiAxios.post(ENDPOINT_CARDS, body).then((res) => res.data);
   }
   //-------
