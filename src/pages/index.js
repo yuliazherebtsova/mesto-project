@@ -23,6 +23,8 @@ import {
   buttonEditProfile,
   profileAvatarContainer,
   validationConfig,
+  API_KEY,
+  BASE_URL,
 } from "../utils/constants.js";
 // ииморт констант (селекторы и пр.)
 
@@ -37,10 +39,10 @@ import UserInfo from "../components/UserInfo.js";
 import Loader from "../components/Loader";
 
 const api = new Api({
-  // объект для работы с api сервера
-  baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
+  // объект для работы с api сервера (с использованием fetch)
+  baseUrl: BASE_URL,
   headers: {
-    authorization: "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5",
+    authorization: API_KEY,
     "Content-Type": "application/json",
   },
 });
