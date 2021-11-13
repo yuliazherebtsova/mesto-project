@@ -18,6 +18,23 @@ const apiAxios = axios.create({
   },
 });
 
+/**
+ * Создаем перехватчик для логирования данных запроса перед отправкой на сервер
+ */
+apiAxios.interceptors.request.use(
+  (config) => {
+    // Do something before request is sent
+    console.log(
+      `Отправляется запрос ${config.method} на ${config.baseURL}${config.url}`
+    );
+    return config;
+  },
+  (error) => {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
+
 export default class Api {
   constructor({ baseUrl, headers }) {
     this._baseUrl = baseUrl;
