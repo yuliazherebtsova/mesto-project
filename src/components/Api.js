@@ -1,3 +1,7 @@
+/**
+ * Класс для работы с  api сервера
+ */
+
 import axios from "axios";
 import {
   ENDPOINT_CARDS,
@@ -21,11 +25,36 @@ export default class Api {
   }
 
   _checkResponse(res) {
-    /* проверка ответа сервера на корректность:
-    неуспешные запросы и ответы в fetch все равно резолвят промис,
-    поэтому важно проверять булевское значение res.ok*/
+    /**
+     * проверка ответа сервера на корректность:
+     * неуспешные запросы и ответы в fetch все равно резолвят промис,
+     * поэтому важно проверять булевское значение res.ok */
+
+    /**
+     * @params res - промис полученный от сервера с помощью fetch
+     * @returns в случае успешного ответа - json с данными, иначе - реджект промиса
+     */
     if (res.ok) return res.json();
-    return Promise.reject(`Ошибка: ${res.status}`);
+    return Promise.reject(`Ошибка запроса на сервер: ${res.status}`);
+  }
+
+  getErrorText(error) {
+    if (error.response) {
+      // The request was made and the server responded with a status code
+      // that falls out of the range of 2xx
+      console.log(error.response.data);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    } else if (error.request) {
+      // The request was made but no response was received
+      // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+      // http.ClientRequest in node.js
+      console.log(error.request);
+    } else {
+      // Something happened in setting up the request that triggered an Error
+      console.log(error.message);
+    }
+    console.log(error.config);
   }
 
   //-------
@@ -64,7 +93,9 @@ export default class Api {
   }
 
   //-------
-  // обновление аватара
+  /*
+    Метод обновления аватара
+  */
   updateProfileAvatar(avatarUrl) {
     return fetch(`${this._baseUrl}/users/me/avatar`, {
       method: "PATCH",
