@@ -29,10 +29,10 @@ export const formSubmitBtnSelector = ".form__submit-button";
 export const profileTitleSelector = "profile__title";
 export const profileSubtitleSelector = "profile__subtitle";
 export const profileAvatarSelector = "profile__avatar";
-export const profileAvatarLoaderSelector = 'profile__loader';
+export const profileAvatarLoaderSelector = "profile__loader";
 // селекторы элементов разметки профиля пользователя
 
-export const loaderVisibleSelector = 'loader_visible';
+export const loaderVisibleSelector = "loader_visible";
 // селекторы элементов разметки лоадера
 
 export const formEditProfile = document.querySelector("#formEditProfile");
@@ -48,6 +48,12 @@ export const buttonEditProfile = document.querySelector(
 );
 export const buttonAddCard = document.querySelector(".profile__add-button");
 // элементы страницы
+
+export const BASE_URL = "https://nomoreparties.co/v1/plus-cohort-2";
+export const API_KEY = "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5";
+export const ENDPOINT_CARDS = "/cards";
+export const ENDPOINT_LIKES = "/cards/likes";
+// параметры для работы с api сервера
 
 export const validationConfig = {
   formSelector: ".form",

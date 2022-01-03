@@ -21,7 +21,9 @@ import {
   buttonEditProfile,
   profileAvatarContainer,
   validationConfig,
-} from "../utils/constants";
+  API_KEY,
+  BASE_URL,
+} from "../utils/constants.js";
 // импорт констант (селекторы и пр.)
 
 import Section from "../components/Section";
@@ -35,10 +37,10 @@ import UserInfo from "../components/UserInfo";
 import Loader from "../components/Loader";
 
 const api = new Api({
-  // объект для работы с api сервера
-  baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
+  // объект для работы с api сервера (с использованием fetch)
+  baseUrl: BASE_URL,
   headers: {
-    authorization: "a13ed7cf-8f31-4ce8-b059-6e62fe3ca7e5",
+    authorization: API_KEY,
     "Content-Type": "application/json",
   },
 });
@@ -93,7 +95,7 @@ const popupEditProfile = new PopupWithForm({
         popupEditProfile.close();
       })
       .catch((err) => {
-        console.log(`Ошибка: ${err}`);
+        console.log(`Ошибка редактирования данных профиля: ${err}`);
       })
       .finally(() => {
         popupEditProfile.renderLoading(false);
@@ -115,7 +117,7 @@ const popupEditAvatar = new PopupWithForm({
         avatarLoader.renderLoading(false);
       })
       .catch((err) => {
-        console.log(`${err}`);
+        console.log(`Ошибка обновления аватара: ${err}`);
       })
       .finally(() => {
         popupEditAvatar.renderLoading(false);
@@ -135,7 +137,7 @@ const popupAddCard = new PopupWithForm({
         popupAddCard.close();
       })
       .catch((err) => {
-        console.log(`${err}`);
+        console.log(`Ошибка добавления карточки: ${err}`);
       })
       .finally(() => {
         popupAddCard.renderLoading(false);
@@ -157,7 +159,7 @@ buttonEditProfile.addEventListener("click", () => {
       popupEditProfile.open();
     })
     .catch((err) => {
-      console.log(`Ошибка: ${err}`);
+      console.log(`Ошибка получения данных пользователя: ${err}`);
     });
 });
 
@@ -202,7 +204,7 @@ function createNewCard(cardData) {
             card.toggleLikeButton();
           })
           .catch((err) => {
-            console.log(`Ошибка: ${err}`);
+            console.log(`Ошибка снятия лайка карточки: ${err}`);
           });
       } else {
         api
@@ -214,7 +216,7 @@ function createNewCard(cardData) {
             card.toggleLikeButton();
           })
           .catch((err) => {
-            console.log(`Ошибка: ${err}`);
+            console.log(`Ошибка лайка карточки: ${err}`);
           });
       }
     },
@@ -231,7 +233,7 @@ function createNewCard(cardData) {
             popupDeleteCard.close();
           })
           .catch((err) => {
-            console.log(`Ошибка: ${err}`);
+            console.log(`Ошибка удаления карточки: ${err}`);
           })
           .finally(() => {
             popupDeleteCard.renderLoading(false);
@@ -252,5 +254,5 @@ Promise.all([api.getUserData(), api.getInitialCards()])
     cards.forEach((card) => cardElementsList.addItem(createNewCard(card)));
   })
   .catch((err) => {
-    console.log(err);
+    api.getErrorText(err);
   });
