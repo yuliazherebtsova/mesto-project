@@ -1,5 +1,3 @@
-"use strict";
-
 import "./index.css";
 // импорт главного файла стилей
 import {
@@ -23,17 +21,17 @@ import {
   buttonEditProfile,
   profileAvatarContainer,
   validationConfig,
-} from "../utils/constants.js";
-// ииморт констант (селекторы и пр.)
+} from "../utils/constants";
+// импорт констант (селекторы и пр.)
 
-import Section from "../components/Section.js";
-import Card from "../components/Card.js";
-import FormValidator from "../components/FormValidator.js";
-import PopupWithForm from "../components/PopupWithForm.js";
-import PopupWithApply from "../components/PopupWithApply.js";
-import PopupWithImage from "../components/PopupWithImage.js";
-import Api from "../components/Api.js";
-import UserInfo from "../components/UserInfo.js";
+import Section from "../components/Section";
+import Card from "../components/Card";
+import FormValidator from "../components/FormValidator";
+import PopupWithForm from "../components/PopupWithForm";
+import PopupWithApply from "../components/PopupWithApply";
+import PopupWithImage from "../components/PopupWithImage";
+import Api from "../components/Api";
+import UserInfo from "../components/UserInfo";
 import Loader from "../components/Loader";
 
 const api = new Api({
@@ -67,7 +65,7 @@ const cardElementsList = new Section(
 
 const avatarLoader = new Loader(profileAvatarLoaderSelector);
 
-//--------------- Включение валидации форм на странице ------------------------
+// --------------- Включение валидации форм на странице ------------------------
 const formEditProfileValiadtor = new FormValidator(
   validationConfig,
   formEditProfile
@@ -82,7 +80,7 @@ formEditProfileValiadtor.enableValidation();
 formEditAvatarValiadtor.enableValidation();
 formAddCardValidator.enableValidation();
 
-//-------------- Логика работы модальных окон на странице -----------------------
+// -------------- Логика работы модальных окон на странице -----------------------
 // попап редактирования профиля пользователя
 const popupEditProfile = new PopupWithForm({
   popupSelector: popupEditProfileSelector,
@@ -246,7 +244,7 @@ function createNewCard(cardData) {
   return cardElement;
 }
 
-//-------------------------- Загрузка данных на страницу -------------------------
+// -------------------------- Загрузка данных на страницу -------------------------
 Promise.all([api.getUserData(), api.getInitialCards()])
   // карточки должны отображаться на странице только после получения id пользователя
   .then(([userData, cards]) => {
